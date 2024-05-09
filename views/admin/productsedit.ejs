@@ -1,0 +1,110 @@
+
+
+
+<%- include('./partials/head/head.ejs') %>
+
+
+<!-- <%- include('./partials/header/header.ejs') %> -->
+
+    
+
+        <section class="content-main mt-80 mb-80">
+            <div class="card mx-auto card-login">
+                <div class="card-body">
+                   
+                        <span class="text-danger fw-bold" id="error"></span>
+                        
+                 
+                    <h4 class="card-title mb-4">Edit Product</h4>
+
+                    <form action="/admin/productseditPost?podsId=<%=productsdata._id %>" method="post" enctype="multipart/form-data">
+                       
+
+                        <% if (productsdata) { %>
+                    <div class="card-body">
+                        <div class="mb-4">
+                            <label for="product_name" class="form-label">Product Name</label>
+                            <input type="text" placeholder="Type here" name="name" class="form-control" value="<%= productsdata.name %>" id="product_name">
+                        </div>
+                       
+                        
+             
+                      
+                     
+                            <div class="mb-4">
+                                <label for="product_category" class="form-label">Category
+                                </label>
+
+                                <select name="catagory" id="product_category" required>
+                                    <option value="" selected disabled>choose one</option>
+
+                                    <% for( let i = 0; i < catagorydata.length; i++ ) { %>
+                                       
+                                        <option value="<%= catagorydata[i].name %>"><%= catagorydata[i].name %></option>
+                                        <% } %>
+                                </select>
+                            </div>
+                         
+                        
+                        <div class="mb-4">
+                            <label for="product_stock" class="form-label">Product Stock</label>
+                            <input type="text" placeholder="Type here" name="stock" class="form-control" value="<%= productsdata.stock %>" id="product_stock">
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label">Full description</label>
+                            <textarea placeholder="Type here" class="form-control" name="description" id="product_description" rows="4"><%= productsdata.description %></textarea>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-4">
+                                <div class="mb-8">
+                                    <label class="form-label">Regular price</label>
+                                    <div class="row gx-4">
+                                        <input placeholder="$" type="text" name="price" value="<%= productsdata.price %>" id="product_price" class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+                             
+                    </div>
+                    </div>
+      
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <h4>Product Image</h4>
+                            </div>
+                            
+                            <div class="card-body">
+                            <div class="input-upload">
+                            <input type="file" name="image" class="form-control" id="upload" accept="image/*" onchange="previewImage(event)">
+                            <div id="image-preview" class="mt-3">
+                                 <img src="/productsImages/<%=productsdata.images %>" style="max-width: 100%; max-height: 200px;" alt="Product Image">
+                            </div>
+                            <button id="upload-btn" type="button">Submit Cropped Images</button>
+
+                            </div>
+                            </div>
+                            <div>
+                                <button type="submit" class="btn btn-md rounded font-sm hover-up">Confirm</button>
+                            </div>
+                    </div>
+                    <% } %>
+                </form>
+                    <!-- 
+                        <div class="mb-3">
+                            <input class="form-control" placeholder=" productname" type="text" name="productname">
+                        </div> 
+                        <div class="mb-3">
+                            <input class="form-control" placeholder="Password" type="password" name="password">
+                        </div>
+                        <div class="mb-4">
+                            <button type="submit" class="btn btn-primary w-100"> Login </button>
+                        </div> 
+                    </form> -->
+                    <p class="text-center small text-muted mb-15"></p>
+                    
+                    <p class="text-center mb-4"><a href="#"></a></p>
+                </div>
+            </div>
+        </section>
+        <%- include('./partials/footer/footer.ejs') %>
+       
+   

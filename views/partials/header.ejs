@@ -1,0 +1,61 @@
+
+<!--PreLoader-->
+<div class="loader">
+    <div class="loader-inner">
+        <div class="circle"></div>
+    </div>
+</div>
+<!--PreLoader Ends-->
+
+<!-- header -->
+<div class="top-header-area" id="sticker">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 col-sm-12 text-center">
+                <div class="main-menu-wrap">
+                    <!-- logo -->
+                    <div class="site-logo" style="text-align: center;">
+                        <img src="/assets/img/logo.png" style="width: 6rem; height: 4rem; margin-bottom: 5px;" alt="">
+                        <h6 style="color: darkturquoise; margin: 0;">Metrix</h6>
+                    </div>
+                    
+                    
+                    <!-- logo -->
+
+
+                    <!-- menu start -->
+                    <nav class="main-menu">
+                        <ul>
+                            <li class="current-list-item"><a href="/">Home</a>
+                            </li>
+                            <li><a href="">About</a></li>
+                            </li>
+                            <li><a href="">Contact</a></li>
+                            <li><a href="">Shop</a>
+                            </li>
+                            <li>
+                                <div class="header-icons">
+                                    <!-- <a href="/account"><i class="fas fa-user"></i></a> -->
+                                    <a class="shopping-cart" href="cart.html"><i class="fas fa-shopping-cart"></i></a>
+                                    <a class="mobile-hide search-bar-icon" href=""><i class="fas fa-search"></i></a>
+                                    <% if (user) { %>
+                                        <a href="/logout"><i class="fas fa-"></i>Logout</a>
+
+                                     <% } else { %>
+                                                
+                                    <a href="/login"><i class="fas fa-"></i>Log In</a>
+                                    <% } %>
+                            
+                                </div>
+                            </li>
+                        </ul>
+                    </nav>
+                    <a class="mobile-show search-bar-icon" href=""><i class="fas fa-search"></i></a>
+                    <div class="mobile-menu"></div>
+                    <!-- menu end -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- end header -->

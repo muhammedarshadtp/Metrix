@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+  <head>
+  	<title>Otp verification</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+	<link href="https://fonts.googleapis.com/css?family=Lato:300,400,700&display=swap" rel="stylesheet">
+
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+	
+	<link rel="stylesheet" href="/logincss/style.css">
+
+	</head>
+	<body class="img js-fullheight" style="background-image: url(images/5039684.jpg);">
+	<section class="ftco-section">
+		<div class="container">
+			<div class="row justify-content-center">
+				<div class="col-md-6 text-center mb-5">
+					<h2 class="heading-section">OTP verification</h2>
+				</div>
+			</div>
+			<div class="row justify-content-center">
+				<div class="col-md-6 col-lg-4">
+					<div class="login-wrap p-0">
+		      	
+		      	<form action="/otpverification" class="signin-form" method="post">
+		      		<div class="form-group">
+		      			<input type="number" class="form-control" placeholder="enter otp" name="otp" required>
+		      		</div>
+	           
+	            <div class="form-group">
+	            	<button type="submit" class="form-control btn btn-primary submit px-3">submit</button>
+	            </div>
+                <style>
+                    #countdown {
+                        font-size: 18px;
+                        color: #333;
+                    }
+                </style>
+
+
+<p id="countdown">Waiting for OTP...</p>
+
+<button id="resendButton"  class="btn btn-primary" onclick="resendOTP()" disabled>Resend OTP</button>
+
+<script>
+                    // Start the initial countdown
+                    let countdownValue = 10; // Countdown duration in seconds
+                    let countdownInterval;
+                 
+
+                    function startCountdown() {
+                        countdownInterval = setInterval(function () {
+                            if (countdownValue > 0) {
+                                countdownValue--;
+                                document.getElementById('countdown').innerText = `Resend OTP in ${countdownValue} seconds`;
+                            } else {
+                                clearInterval(countdownInterval);
+                                document.getElementById('countdown').innerText = 'Waiting for OTP...';
+                                document.getElementById('resendButton').disabled = false;
+                            }
+                        }, 1000);
+                    }
+
+                    function resendOTP() {
+                        // Simulate OTP resend logic
+                        
+                        // Replace this with your actual OTP resend logic
+                        window.location.href = "/resend_otp"
+
+                        // Disable the resend button and start the countdown
+                        document.getElementById('resendButton').disabled = true;
+                        countdownValue = 10; // Reset countdown value
+                        startCountdown();
+                    }
+                    startCountdown()
+
+                </script>
+	           
+	            </div>
+	          </form>
+	          <p class="w-100 text-center mb-6 text-white"> You Have an account? <a href="/login">login </a><a type="button" href="/signup" class="btn btn-primary">Back</a></p>
+			  <div class="d-flex justify-content-center">
+			  <%# if(errorMsg){ %>
+				<p id="errorMessage" style="color: red;"> <%#= errorMsg %> </p>
+			<%# } %>
+		</div>
+	          </div>
+		      </div>
+				</div>
+			</div>
+		</div>
+	</section>
+	<script>
+	setTimeout(function(){
+		var errorMessage=document.getElementById("errorMessage")
+		if(errorMessage){
+			errorMessage.style.display = 'none'
+		}
+	},2000)
+</script>
+
+	<script src="js/jquery.min.js"></script>
+  <script src="js/popper.js"></script>
+  <script src="js/bootstrap.min.js"></script>
+  <script src="js/main.js"></script>
+
+	</body>
+</html>

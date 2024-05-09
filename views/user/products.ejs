@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+  <style>
+    .product-image-container {
+      position: relative;
+      display: inline-block;
+      margin-right: 20px; /* Adjust spacing between images */
+    }
+
+    .image-magnifier {
+      width: 400px; /* Adjust as needed */
+      position: relative;
+    }
+
+    .product-image {
+      width: 100%;
+      vertical-align: top;
+    }
+
+    .magnifier {
+      width: 150px; /* Adjust as needed */
+      height: 150px; /* Adjust as needed */
+      position: absolute;
+      border: 2px solid #000;
+      cursor: none;
+      display: none;
+      pointer-events: none;
+      background-size: 800px 800px;
+      background-repeat: no-repeat;
+    }
+  </style>
+  <%- include('../partials/head.ejs') %>
+  <body>
+    <%- include('../partials/header.ejs') %>
+
+    <!-- search area -->
+    <div class="search-area">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-12">
+            <span class="close-btn"><i class="fas fa-window-close"></i></span>
+            <div class="search-bar">
+              <div class="search-bar-tablecell">
+                <h3>Search For:</h3>
+                <input type="text" placeholder="Keywords" />
+                <button type="submit">
+                  Search <i class="fas fa-search"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- end search arewa -->
+
+    <!-- breadcrumb-section -->
+    <div class="breadcrumb-section breadcrumb-bg">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8 offset-lg-2 text-center">
+            <div class="breadcrumb-text">
+              <p>See more Details</p>
+              <h1>Single Product</h1>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- end breadcrumb section -->
+    <%# for( let i = 0; i < product.length; i++ ) { %>
+    <!-- single product -->
+    <!-- single product -->
+    <div class="single-product mt-150 mb-150">
+      <% if (product) { %> <% console.log(product); %>
+      <div class="container">
+        <div class="row">
+          <div class="col-md-5">
+            <div class="single-product-img">
+              <div class="product-image-container">
+                <div class="image-magnifier">
+                  <img
+                    src="/productsImages/<%= product.images[0] %> "
+                    alt="Product Image"
+                    class="product-image"
+                  />
+                  <div class="magnifier"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-7">
+            <div class="single-product-content">
+              <h3><%= product.name %></h3>
+              <p class="single-product-pricing">
+                <span></span>
+                Rs <%= product.price %>
+              </p>
+              <p>
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dicta
+                sint dignissimos, rem commodi cum voluptatem quae reprehenderit
+                repudiandae ea tempora incidunt ipsa, quisquam animi perferendis
+                eos eum modi! Tempora, earum.
+              </p>
+              <div class="single-product-form">
+                <% if (product.stock> 0) { %>
+
+                <input
+                  type="number"
+                  name="test"
+                  min="1"
+                  value="1"
+                  placeholder="1"
+                  id="quantity"
+                  oninput="validity.valid||(value='');"
+                /><br />
+                <% }else{ %>
+                <input
+                  disabled
+                  type="number"
+                  name="test"
+                  min="1"
+                  value="1"
+                  placeholder="1"
+                  id="quantity"
+                  oninput="validity.valid||(value='');"
+                /><br />
+                <% } %> <% if (product.stock> 0) { %>
+
+                <button
+                  onclick="addToCartUsingFetch(`<%= product._id %>`)"
+                  class="cart-btn"
+                >
+                  <i class="fas fa-shopping-cart"></i>
+                  Add to Cart
+                </button>
+                <p>
+                  <% } %>
+                  <strong>Categories: </strong>
+                  <span class="text-primary fw-bold"
+                    ><%= product.catagory.toUpperCase() %></span
+                  >
+                </p>
+                <% if (product.stock <40) { %> <% if (product.stock===0) { %>
+                <p
+                  style="font-weight: bold; font-size: medium"
+                  class="text-danger"
+                >
+                  Product is currently <br />
+                  out of stock!!!
+                </p>
+                <% }else{ %>
+                <p class="product-stock">
+                  <span
+                    class="text-danger"
+                    style="font-weight: bolder; font-size: medium"
+                    >Hot Deal!</span
+                  ><br />
+                  <span
+                    class="text-success"
+                    style="font-size: medium; font-weight: bold"
+                    >In Stock </span
+                  >,only
+                  <span id="stock_<%=  %>"> <%= product.stock %> </span> left
+                </p>
+                <% }} %>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <% } %>
+    </div>
+    <!-- end single product -->
+    <%# } %>
+    <!-- more products -->
+    <div class="more-products mb-150">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8 offset-lg-2 text-center">
+            <div class="section-title">
+              <h3><span class="orange-text">Related</span> Products</h3>
+              <p>
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                Aliquid, fuga quas itaque eveniet beatae optio.
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-4 col-md-6 text-center">
+            <div class="single-product-item">
+              <div class="product-image">
+                <a href="/products"
+                  ><img
+                    src="/assets/img/products/iphone_15_Pro_Max_ja2Cnf7.webp"
+                    alt=""
+                /></a>
+              </div>
+              <h3>I phone 15promax</h3>
+              <p class="product-price"><span></span>RS 100000</p>
+              <a href="cart.html" class="cart-btn"
+                ><i class="fas fa-shopping-cart"></i> Add to Cart</a
+              >
+            </div>
+          </div>
+          <div class="col-lg-4 col-md-6 text-center">
+            <div class="single-product-item">
+              <div class="product-image">
+                <a href="/products"
+                  ><img
+                    src="/assets/img/products/oneplus_11_FUaGeiP.webp"
+                    alt=""
+                /></a>
+              </div>
+              <h3>Oneplus</h3>
+              <p class="product-price"><span></span>RS 65000</p>
+              <a href="cart.html" class="cart-btn"
+                ><i class="fas fa-shopping-cart"></i> Add to Cart</a
+              >
+            </div>
+          </div>
+          <div class="col-lg-4 col-md-6 offset-lg-0 offset-md-3 text-center">
+            <div class="single-product-item">
+              <div class="product-image">
+                <a href="/products"
+                  ><img
+                    src="/assets/img/products/s23_ultra_0vLoFbP.webp"
+                    alt=""
+                /></a>
+              </div>
+              <h3>Samsong</h3>
+              <p class="product-price"><span></span> RS 95000</p>
+              <a href="cart.html" class="cart-btn"
+                ><i class="fas fa-shopping-cart"></i> Add to Cart</a
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- end more products -->
+
+    <!-- end logo carousel -->
+
+    <%- include('../partials/footer.ejs') %>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+      async function addToCartUsingFetch(productId) {
+        const quantity = document.getElementById("quantity").value;
+
+        if (quantity > 10) {
+          Swal.fire({
+            position: "center",
+            icon: "error",
+            title: "Maximum product per person is 10 ",
+            showConfirmButton: false,
+            timer: 1500,
+          });
+        } else {
+          console.log(productId, "product Id is working");
+          await fetch(
+            `/add-to-cart/?productId=${productId}&quantity=${quantity}`,
+            {
+              method: "GET",
+              headers: {
+                "Content-Type": "application/json",
+              },
+            }
+          )
+            .then((response) =>
+              !response.ok
+                ? console.log(
+                    "some network error occurred in product view fetch method"
+                  )
+                : response.json()
+            )
+            .then((data) => {
+              console.log(data.result);
+              data.result === "within limit"
+                ? Swal.fire({
+                    position: "center",
+                    icon: "success",
+                    title: "Successfully product added to cart",
+                    showConfirmButton: false,
+                    timer: 1500,
+                  })
+                : Swal.fire({
+                    position: "center",
+                    icon: "error",
+                    title: "Maximum product limit is exceeded",
+                    showConfirmButton: false,
+                    timer: 1500,
+                  });
+            });
+        }
+      }
+    </script>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        var magnifiers = document.querySelectorAll(".image-magnifier");
+
+        magnifiers.forEach(function (element) {
+          var img = element.querySelector(".product-image");
+          var magnifier = element.querySelector(".magnifier");
+          var magnifierWidth = magnifier.offsetWidth;
+          var magnifierHeight = magnifier.offsetHeight;
+          var ratio = 2; // Adjust as needed for magnification level
+
+          img.addEventListener("mousemove", function (e) {
+            var pos = getCursorPos(e, img);
+            magnify(e, pos);
+          });
+
+          function getCursorPos(e, img) {
+            var a,
+              x = 0,
+              y = 0;
+            e = e || window.event;
+            a = img.getBoundingClientRect();
+            x = e.pageX - a.left;
+            y = e.pageY - a.top;
+            x = x - window.pageXOffset;
+            y = y - window.pageYOffset;
+            return { x: x, y: y };
+          }
+
+          function magnify(e, pos) {
+            var x, y;
+            x = pos.x - magnifierWidth / 2;
+            y = pos.y - magnifierHeight / 2;
+            magnifier.style.left = x + "px";
+            magnifier.style.top = y + "px";
+            magnifier.style.backgroundImage = "url('" + img.src + "')";
+            magnifier.style.backgroundPosition =
+              "-" +
+              (pos.x * ratio - magnifierWidth / 2) +
+              "px -" +
+              (pos.y * ratio - magnifierHeight / 2) +
+              "px";
+          }
+
+          img.addEventListener("mouseenter", function () {
+            magnifier.style.display = "block";
+          });
+
+          img.addEventListener("mouseleave", function () {
+            magnifier.style.display = "none";
+          });
+        });
+      });
+    </script>
+  </body>
+</html>

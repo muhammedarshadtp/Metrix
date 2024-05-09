@@ -1,0 +1,71 @@
+<%- include('./partials/head/head.ejs') %> 
+<%- include('./partials/header/header.ejs') %>
+
+<main class="main-wrap">
+    <section class="content-main">
+        <div class="content-header">
+            <div>
+                <h2 class="content-title card-title">Edit Category</h2>
+                
+
+                <form action="/admin/updatecatagory?id=<%= catagorydata._id %>" method="post">
+            </div>
+        </div>
+        <% if (catagorydata) { %>
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="mb-4">
+                                <label for="name" class="form-label">Name</label>
+                                <input type="text" class="form-control" id="name" name="name" value="<%= catagorydata.name %>" required>
+                            </div>
+
+                            <div class="mb-4">
+                                <label for="description" class="form-label">Description</label>
+                                <textarea class="form-control" id="description" name="description" rows="3" required><%= catagorydata.description%></textarea>
+                            </div>
+
+                            <div class="d-grid">
+                                <button type="submit" class="btn btn-primary">Update Category</button>
+                                <% if (error) { %>
+                                  <p id="errorMessage" style="color: rgb(244, 5, 53);"><%= error %></p>
+
+                                 
+                                <% } %>
+                            </div>
+                        </div>
+                      </form>
+      
+
+                        <!-- .col// -->
+                    </div>
+                    <!-- .row // -->
+                </div>
+               
+                <!-- card body .// -->
+            </div>
+            <% } %> 
+       
+        
+        <!-- card .// -->
+    </section>
+    <!-- content-main end// -->
+    <%- include('./partials/footer/footer.ejs') %>
+</main>
+
+<script>
+    async function hideAndUnhide(){
+        // Implement hide and unhide functionality here
+    }
+</script>
+
+<script>
+  setTimeout(function(){
+    let errorMessage=document.getElementById("errorMessage")
+    if(errorMessage){
+      errorMessage.style.display = 'none'
+    }
+  },2000)
+</script>
+

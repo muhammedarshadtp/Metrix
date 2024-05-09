@@ -1,0 +1,230 @@
+<%- include('./partials/head/head.ejs') %> <%-
+include('./partials/header/header.ejs') %>
+<main class="main-wrap">
+  <header class="main-header navbar">
+    <div class="col-search">
+      <form class="searchform">
+        <div class="input-group">
+          <!-- <input
+            list="search_terms"
+            type="text"
+            class="form-control"
+            placeholder="Search term"
+          /> -->
+          <!-- <button class="btn btn-light bg" type="button">
+            <i class="material-icons md-search"></i>
+          </button> -->
+        </div>
+        <!-- <datalist id="search_terms">
+          <option value="Products"></option>
+          <option value="New orders"></option>
+          <option value="Apple iphone"></option>
+          <option value="Ahmed Hassan"></option>
+        </datalist> -->
+      </form>
+    </div>
+    <div class="col-nav">
+      <button
+        class="btn btn-icon btn-mobile me-auto"
+        data-trigger="#offcanvas_aside"
+      >
+        <i class="material-icons md-apps"></i>
+      </button>
+      <ul class="nav">
+        
+        <li class="nav-item">
+          <a class="nav-link btn-icon darkmode" href="#">
+            <i class="material-icons md-nights_stay"></i>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#" class="requestfullscreen nav-link btn-icon"
+            ><i class="material-icons md-cast"></i
+          ></a>
+        </li>
+        
+        <li class="dropdown nav-item">
+            <a class="dropdown-item text-danger" href="/admin/logout"
+              ><i class="material-icons md-exit_to_app"></i>Logout</a
+            >
+          </div>
+        </li>
+      </ul>
+    </div>
+    
+  </header>
+  
+  <section class="content-main">
+    <div class="content-header">
+      <div>
+       
+        <h2 class="content-title card-title">Categories</h2>
+        <p>Add, edit or delete a category</p>
+      </div>
+      
+    </div>
+    <div class="card">
+      <div class="card-body">
+        <div class="row">
+          <div class="col-md-3">
+            <form action="/admin/addcatagory" method="post">
+              <div class="mb-4">
+                <label for="product_name" class="form-label">Name</label>
+                <input
+                  type="text"
+                  placeholder="Type here"
+                  class="form-control"
+                  id="product_name"
+                  name="name"
+                />
+              </div>
+
+              <div class="mb-4">
+                <label class="form-label" >Description</label>
+                <textarea
+                  placeholder="Type here"
+                  class="form-control"
+                  name="description"
+                ></textarea>
+              </div>
+              <div class="d-grid">
+                <button type="submit" class="btn btn-primary">Add category</button>
+              </div>
+            </form>
+          </div>
+          <div class="col-md-9">
+            <div class="table-responsive">
+              <table class="table table-hover">
+                <thead>
+                  <tr>
+                    <th class="text-center">
+                      <div class="form-check">
+                        
+                      </div>
+                    </th>
+
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>status</th>
+
+                    <th class="text-end">Action</th>
+                  </tr>
+                </thead>
+                
+                   <% for( let i = 0; i < catagorydata.length; i++ ) { %>
+                    <tbody>
+                        <tr>
+                          <td class="text-center">
+                            <div class="form-check">
+                              
+                            </div>
+                          </td>
+                    <td><b><%= catagorydata[i].name  %></b></td>
+                    <td><%= catagorydata[i].description  %></td>
+                    <td><p style="color: rgb(17, 214, 17); font-weight: 24px;"><%= catagorydata[i].status %></p></td>
+                    <td class="text-end">
+                      <a href="/admin/catagoryedit/?id=<%= catagorydata[i]._id %>" class="btn btn-sm font-sm rounded btn-brand">
+                          <i class="material-icons md-edit"></i> Edit
+                      </a>
+                      <!-- <a href="" class="btn btn-sm font-sm btn-light rounded">
+                          <i class="material-icons md-delete_forever"></i> Hide
+                      </a> -->
+                      <button
+                      onclick="hideAndUnhide(`<%= catagorydata[i]._id %>`,`<%= catagorydata[i].status %>`)"
+                      class="btn btn-sm font-sm btn-light rounded" style="width: 5rem;height: 2rem;">
+                      <% if (catagorydata[i].status===true) { %>
+                          Hide
+                          <% }else{ %>
+                              unhide
+                              <% } %>
+
+                  </button>
+                  </td>
+                  
+                  
+                  
+                  </tr>
+                  <tr>
+                    <td class="text-center">
+                      <div class="form-check">
+                       
+                      </div>
+                    </td>
+                    </td>
+                    
+                     
+                </tbody>
+                   
+                   <% } %>
+                    
+                   
+                    
+              </table>
+            </div>
+          </div>
+          <!-- .col// -->
+        </div>
+        <!-- .row // -->
+      </div>
+      <!-- card body .// -->
+    </div>
+    <!-- card .// -->
+  </section>
+  <!-- content-main end// -->
+  <%- include('./partials/footer/footer.ejs') %>
+
+
+</main>
+
+<!-- <script>
+    async function hideAndUnhide(){
+        
+    }
+</script> -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+  async function hideAndUnhide(id, status) {
+      const response = await fetch(`/admin/manage-catagory/${id}?status=${status}`, {
+          method: 'GET',
+          headers: {
+              'Content-Type': 'application/json'
+          }
+      })
+          .then(response => {
+              console.log(response);
+              if (!response.ok) {
+                  console.log('some kind of network problem');
+              }
+              return response.json()
+          }).then(data => {
+            console.log(data.success);
+              if (data.success==='hide') {
+                  Swal.fire({
+                      position: "center",
+                      icon: "success",
+                      title: "catagory hide successfully",
+                      showConfirmButton: false,
+                      timer: 1500
+                  }).then(()=>{
+                      location.reload()
+                  })
+                  
+                  console.log('data fetched successfully');
+              } else {
+                  Swal.fire({
+                      position: "center",
+                      icon: "success",
+                      title: "catagory unhide successfully",
+                      showConfirmButton: false,
+                      timer: 1500
+                  }).then(()=>{
+                      location.reload()
+                  })
+                  console.log('data fetcted error');
+              }
+          }).catch(err => {
+              console.log(err, 'error occured');
+          })
+  }
+</script>

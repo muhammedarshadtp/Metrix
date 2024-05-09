@@ -1,0 +1,221 @@
+<%- include('./partials/head/head.ejs') %> 
+<%- include('./partials/header/header.ejs') %>
+
+<style>
+    .alert-success {
+        color: green;
+    }
+
+    .alert-danger {
+        color: red;
+    }
+</style>
+
+
+
+        <main class="main-wrap">
+            <header class="main-header navbar">
+                <div class="col-search">
+                    <!-- <form class="searchform">
+                    <div class="input-group">
+                        <input list="search_terms" type="text" class="form-control" placeholder="Search term">
+                        <button class="btn btn-light bg" type="button"> <i class="material-icons md-search"></i></button>
+                    </div>
+                    
+                </form> -->
+                </div>
+                <div class="col-nav">
+                    <button class="btn btn-icon btn-mobile me-auto" data-trigger="#offcanvas_aside"> <i
+                            class="material-icons md-apps"></i> </button>
+                    <ul class="nav">
+
+                        <li class="nav-item">
+                            <a class="nav-link btn-icon darkmode" href="#"> <i
+                                    class="material-icons md-nights_stay"></i> </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="requestfullscreen nav-link btn-icon"><i
+                                    class="material-icons md-cast"></i></a>
+                        </li>
+
+                        <li class="dropdown nav-item">
+
+                            <a class="dropdown-item text-danger" href="/admin/Logout"><i
+                                    class="material-icons md-exit_to_app"></i>Logout</a>
+                </div>
+                </li>
+                </ul>
+                </div>
+            </header>
+            <section class="content-main">
+                <div class="content-header">
+                    <div>
+                        <h2 class="content-title card-title">Products List</h2>
+
+                    </div>
+                    <div>
+
+                        <a href="/admin/adminaddproducts" class="btn btn-primary btn-sm rounded">add products</a>
+                    </div>
+                </div>
+                <div class="card mb-4">
+                    <header class="card-header">
+                        <div class="card-header">
+                            <div class="row align-items-center fw-bold fs-5">
+                                <!-- <div class="col col-check flex-grow-0">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox">
+                                </div>
+                            </div> -->
+                                <div class="col-lg-4 col-sm-4 col-8 flex-grow-1 col-name ">
+                                    <span>Item Name</span>
+                                </div>
+                                <div class="col-lg-2 col-sm-2 col-4 col-price ">
+                                    <span>Price</span>
+                                </div>
+                                <div class="col-lg-2 col-sm-2 col-4 col-status">
+                                    <span>Status</span>
+                                </div>
+                                <!-- <div class="col-lg-1 col-sm-2 col-4 col-date">
+                                <span>Date</span>
+                            </div> -->
+                                <div class="col-lg-2 col-sm-2 col-4 col-action text-end">
+                                    <span>Action</span>
+                                </div>
+                            </div>
+                        </div>
+                    </header>
+                    <!-- card-header end// -->
+                    <% for( let i=0; i < products.length; i++ ) { %>
+                        <div class="card-body">
+                            <article class="itemlist">
+                                <div class="row align-items-center">
+                                    <!-- <div class="col col-check flex-grow-0">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox">
+                                </div>
+                            </div> -->
+                                    <div class="col-lg-4 col-sm-4 col-8 flex-grow-1 col-name">
+                                        <a class="itemside" href="#">
+                                            <div class="left">
+                                                <img src="/productsImages/<%= products[i].images %>"
+                                                    class="img-sm img-thumbnail" alt="Item">
+                                            </div>
+                                            <div class="info">
+                                                <h6 class="mb-0">
+                                                    <%= products[i].name %>
+                                                </h6>
+                                            </div>
+                                        </a>
+                                    </div>
+                                    <div class="col-lg-2 col-sm-2 col-4 col-price"> <span>
+                                            <%= products[i].price %>
+                                        </span> </div>
+                                        <div class="col-lg-2 col-sm-2 col-4 col-status">
+                                            <span class="badge rounded-pill <%= products[i].status ? 'alert-success' : 'alert-danger' %>">
+                                                <%= products[i].status ? 'true' : 'false' %>
+                                            </span>
+                                        </div>
+                                        
+                                    <!-- <div class="col-lg-1 col-sm-2 col-4 col-date">
+                                <span>02.11.2021</span>
+                            </div> -->
+                                    <div class="col-lg-2 col-sm-2 col-4 col-action text-end">
+                                        <a href="/admin/productsedit/?id=<%= products[i]._id %>"
+                                            class="btn btn-sm font-sm rounded btn-brand">
+                                            <i class="material-icons md-edit"></i> Edit
+                                        </a>
+                                        <button
+                                            onclick="hideAndUnhide(`<%= products[i]._id %>`,`<%= products[i].status %>`)"
+                                            class="btn btn-sm font-sm btn-light rounded" style="width: 5rem;height: 2rem;">
+                                            <% if (products[i].status===true) { %>
+                                                Hide
+                                                <% }else{ %>
+                                                    unhide
+                                                    <% } %>
+
+                                        </button>
+                                    </div>
+                                </div> <!-- row .// -->
+                            </article> <!-- itemlist  .// -->
+                        </div> <!-- card-body end// -->
+                        <% } %>
+                </div> <!-- card end// -->
+                <div class="pagination-area mt-30 mb-50">
+                    <nav aria-label="Page navigation example">
+                        <ul class="pagination justify-content-start">
+                            <li class="page-item active"><a class="page-link" href="#">01</a></li>
+                            <li class="page-item"><a class="page-link" href="#">02</a></li>
+                            <li class="page-item"><a class="page-link" href="#">03</a></li>
+                            <li class="page-item"><a class="page-link dot" href="#">...</a></li>
+                            <li class="page-item"><a class="page-link" href="#">16</a></li>
+                            <li class="page-item"><a class="page-link" href="#"><i
+                                        class="material-icons md-chevron_right"></i></a></li>
+                        </ul>
+                    </nav>
+                </div>
+            </section> <!-- content-main end// -->
+            <footer class="main-footer font-xs">
+                <div class="row pb-30 pt-15">
+                    <div class="col-sm-6">
+                        <script>
+                            document.write(new Date().getFullYear())
+                        </script> ©, Evara - HTML Ecommerce Template .
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="text-sm-end">
+                            All rights reserved
+                        </div>
+                    </div>
+                </div>
+            </footer>
+            <%- include('./partials/footer/footer.ejs') %>
+        </main>
+
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
+        <script>
+            async function hideAndUnhide(id, status) {
+                const response = await fetch(`/admin/manage-products/${id}?status=${status}`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                })
+                    .then(response => {
+                        console.log(response);
+                        if (!response.ok) {
+                            console.log('some kind of network problem');
+                        }
+                        return response.json()
+                    }).then(data => {
+                        if (data.success==='hide') {
+                            Swal.fire({
+                                position: "center",
+                                icon: "success",
+                                title: "product hide successfully",
+                                showConfirmButton: false,
+                                timer: 1500
+                            }).then(()=>{
+                                location.reload()
+                            })
+                            
+                            console.log('data fetched successfully');
+                        } else {
+                            Swal.fire({
+                                position: "center",
+                                icon: "success",
+                                title: "product unhide successfully",
+                                showConfirmButton: false,
+                                timer: 1500
+                            }).then(()=>{
+                                location.reload()
+                            })
+                            console.log('data fetcted error');
+                        }
+                    }).catch(err => {
+                        console.log(err, 'error occured');
+                    })
+            }
+        </script>
