@@ -8,7 +8,11 @@ const catagory=async(req,res)=>{
 
    try {
     const catagorydata=await catagoryCollection.find()
-    res.render('catagory',{catagorydata:catagorydata})
+    const error = req.session.catagoryError
+    req.session.catagoryError = '' 
+
+    res.render('catagory',{catagorydata:catagorydata,error:error})
+    
 
    } catch (error) {
     console.log("catagory error");

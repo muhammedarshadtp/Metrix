@@ -15,7 +15,7 @@ const home = async (req, res) => {
     const user = req.session.isAuth
     const id = req.session.userid
     const userDetail = await userCollection.find({_id:id})
-    console.log(userDetail[0]?.status,"gcfgc");
+    console.log(userDetail[0]?.status);
     console.log(id)
     if( userDetail[0]?.status===true){
         
@@ -23,7 +23,9 @@ const home = async (req, res) => {
     }else{
         req.session.isAuth=false
         return res.redirect('/login')
+
     }
+    
     } catch (error) {
         console.log(error);
     }
@@ -91,8 +93,8 @@ const loginpost = async (req, res) => {
         };
         console.log(data)
         const emailcollect = await userCollection.findOne({ email: req.body.email })
-        console.log(emailcollect,"ithu login");
-        console.log(emailcollect._id.toString(),"ithu mongoose");
+        console.log(emailcollect);
+        console.log(emailcollect._id.toString());
         if (emailcollect.password == req.body.password) {
             req.session.isAuth = true
             req.session.userid=emailcollect._id.toString()
@@ -105,7 +107,7 @@ const loginpost = async (req, res) => {
 
 
     } catch (error) {
-
+        console.log(error);
     }
 }
 
@@ -181,16 +183,29 @@ const account = async (req, res) => {
 
 
 const products = async (req, res) => {
-   
-        const productId = req.query.id
-
-        const user=req.session.isAuth
-
-        const product = await productsCollection.findById(productId)
-        res.render('products',{product,user:user})
+   try {
+    const product = await productsCollection.find({status:true}).populate("catagory")
+    const products = product.filter(product=>product.catagory.status===true)
+    console.log(products,'products filtered is success');
+    res.render('products',{data:products})
+   } catch (error) {
+    
+   }
     
 }
 
+
+const productDetail = async (req, res) => {
+    try {
+        const productData = req.params.id
+     const productDetail = await productsCollection.findOne({_id:productData}).populate("catagory")
+     console.log(productDetail,'---------------------------data is founded...');
+     res.render('productDetail',{data:productDetail})
+    } catch (error) {
+     
+    }
+     
+ }
 
 
 const user_forgotpassword=async(req,res)=>{
@@ -264,9 +279,13 @@ const logout = async (req, res) => {
 }
 
 const google=async(req,res)=>{
-    console.log(userProfile,'==============================');
+    console.log(userProfile);
     req.session.userid=userProfile._id
 
+}
+
+const cart = async(req,res)=>{
+    res.render('cart')
 }
 
 
@@ -291,5 +310,7 @@ module.exports = {
     resetPasswordPost,
     logout,
     google,
+    cart,
+    productDetail,
 
 }

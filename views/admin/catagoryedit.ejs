@@ -8,7 +8,7 @@
                 <h2 class="content-title card-title">Edit Category</h2>
                 
 
-                <form action="/admin/updatecatagory?id=<%= catagorydata._id %>" method="post">
+               
             </div>
         </div>
         <% if (catagorydata) { %>
@@ -16,6 +16,7 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col-md-12">
+                            <form action="/admin/updatecatagory?id=<%= catagorydata._id %>" method="post">
                             <div class="mb-4">
                                 <label for="name" class="form-label">Name</label>
                                 <input type="text" class="form-control" id="name" name="name" value="<%= catagorydata.name %>" required>
@@ -34,8 +35,8 @@
                                  
                                 <% } %>
                             </div>
+                        </form>
                         </div>
-                      </form>
       
 
                         <!-- .col// -->

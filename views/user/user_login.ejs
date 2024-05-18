@@ -1,117 +1,111 @@
-<!doctype html>
-<html lang="en">
-  <head>
-  	<title>Login</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<%- include('../partials/head') %>
 
-	<link href="https://fonts.googleapis.com/css?family=Lato:300,400,700&display=swap" rel="stylesheet">
+<body>
+ <%# include('../partials/header') %>
+    <!-- Offcanvas Overlay -->
+    <div class="offcanvas-overlay"></div>
 
-	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-	
-	<link rel="stylesheet" href="/logincss/style.css">
+    <!-- ...:::: Start Breadcrumb Section:::... -->
+    <div class="breadcrumb-section breadcrumb-bg-color--golden">
+        <div class="breadcrumb-wrapper">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12">
+                        <h3 class="breadcrumb-title">Login</h3>
+                        <div class="breadcrumb-nav breadcrumb-nav-color--black breadcrumb-nav-hover-color--golden">
+                            <nav aria-label="breadcrumb">
+                                <ul>
+                                    <li><a href="/">Home</a></li>
+                                    <!-- <li><a href="shop-grid-sidebar-left.html">Shop</a></li> -->
+                                    <li class="active" aria-current="page">Login</li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> <!-- ...:::: End Breadcrumb Section:::... -->
 
-	</head>
-	<body class="img js-fullheight" style="background-image: url(images/5039684.jpg);">
-	<section class="ftco-section">
-		<div class="container">
-			<div class="row justify-content-center">
-				<div class="col-md-6 text-center mb-5">
-					<h2 class="heading-section">Login </h2>
-				</div>
-			</div>
-			
-			<div class="row justify-content-center">
-				<div class="col-md-6 col-lg-4">
-					<div class="login-wrap p-0">
-						<% if (messages.success) { %>
-							<div class="alert alert-success">
-								<%= messages.success %>
-							</div>
-						<% } %>
-					
-						<!-- Display error flash message -->
-						<% if (messages.error) { %>
-							<div id="error" style="color:rgb(193, 249, 11); font-size: 20px; font-weight: bold;">
-								<%= messages.error %>
-							</div>
-						<% } %>
-		      	
-		      	<form action="/login" class="signin-form" method="post">
-		      		<div class="form-group">
-		      			<input type="email" class="form-control" placeholder="email" name="email" required>
-		      		</div>
-	            <div class="form-group">
-	              <input id="password-field" type="password" class="form-control"  name="password" placeholder="Password" required>
-	              <span toggle="#password-field" class="fa fa-fw fa-eye field-icon toggle-password"></span>
-	            </div>
-	            <div class="form-group">
-	            	<button type="submit" class="form-control btn btn-primary submit px-3">Sign In</button>
-	            </div>
+    <!-- ...:::: Start Customer Login Section :::... -->
+    <div class="customer-login">
+        <div class="container">
+            <div class="row">
+                <!--login area start-->
+                <div id="login-start" class="col-lg-6 col-md-6 text-center"> <!-- Added text-center class here -->
+                    <div class="account_form mx-auto" data-aos="fade-up" data-aos-delay="0">
+                        <h3>login</h3>
+                        <form action="/login" method="POST">
+                            <div class="default-form-box">
+                                <label>Username or email <span>*</span></label>
+                                <input type="email" class="form-control" placeholder="email" name="email" required>
+                            </div>
+                            <div class="default-form-box">
+                                <label>Passwords <span>*</span></label>
+                                <input id="password-field" type="password" class="form-control"  name="password" placeholder="Password" required>
+                            </div>
+                            <div class="row mt-4">
+                                <div class="col">
+                                    <a href="/auth/auth/google" class="btn btn-dark btn-block font-sm" style="text-decoration: none; color: aliceblue;">
+                                        <svg aria-hidden="true" class="icon-svg" width="20" height="20" viewBox="0 0 20 20">
+                                            <path
+                                                d="M16.51 8H8.98v3h4.3c-.18 1-.74 1.48-1.6 2.04v2.01h2.6a7.8 7.8 0 002.38-5.88c0-.57-.05-.66-.15-1.18z"
+                                                fill="#4285F4"></path>
+                                            <path
+                                                d="M8.98 17c2.16 0 3.97-.72 5.3-1.94l-2.6-2a4.8 4.8 0 01-7.18-2.54H1.83v2.07A8 8 0 008.98 17z"
+                                                fill="#34A853"></path>
+                                            <path d="M4.5 10.52a4.8 4.8 0 010-3.04V5.41H1.83a8 8 0 000 7.18l2.67-2.07z"
+                                                fill="#FBBC05">
+                                            </path>
+                                            <path
+                                                d="M8.98 4.18c1.17 0 2.23.4 3.06 1.2l2.3-2.3A8 8 0 001.83 5.4L4.5 7.49a4.77 4.77 0 014.48-3.3z"
+                                                fill="#EA4335"></path>
+                                        </svg> Continue Using Google
+                                    </a>
+                                </div>
+                            </div>
+                            <br>
+                            <div class="login_submit">
+                                <button class="btn btn-md btn-black-default-hover mb-4" type="submit">login</button>
+                               
+                                <a href="/user_forgotpassword">Lost your password?</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <!--login area end-->
+    
+                <!--register area start-->
+                <!-- <div class="col-lg-6 col-md-6">
+                    <div class="account_form register" data-aos="fade-up" data-aos-delay="200">
+                        <h3>Register</h3>
+                        <form action="#">
+                            <div class="default-form-box">
+                                <label>Email address <span>*</span></label>
+                                <input type="text">
+                            </div>
+                            <div class="default-form-box">
+                                <label>Passwords <span>*</span></label>
+                                <input type="password">
+                            </div>
+                            <div class="login_submit">
+                                <button class="btn btn-md btn-black-default-hover" type="submit">Register</button>
+                            </div>
+                        </form>
+                    </div>
+                </div> -->
+                <!--register area end-->
+            </div>
+        </div>
+    </div> <!-- ...:::: End Customer Login Section :::... -->
+    
+    
+    
+    
 
-				<div class="row mt-4">
-					<div class="col">
-						<a href="/auth/auth/google" class="btn btn-dark btn-block font-sm" style="text-decoration: none;">
-							<svg aria-hidden="true" class="icon-svg" width="20" height="20" viewBox="0 0 20 20">
-								<path
-									d="M16.51 8H8.98v3h4.3c-.18 1-.74 1.48-1.6 2.04v2.01h2.6a7.8 7.8 0 002.38-5.88c0-.57-.05-.66-.15-1.18z"
-									fill="#4285F4"></path>
-								<path
-									d="M8.98 17c2.16 0 3.97-.72 5.3-1.94l-2.6-2a4.8 4.8 0 01-7.18-2.54H1.83v2.07A8 8 0 008.98 17z"
-									fill="#34A853"></path>
-								<path d="M4.5 10.52a4.8 4.8 0 010-3.04V5.41H1.83a8 8 0 000 7.18l2.67-2.07z"
-									fill="#FBBC05">
-								</path>
-								<path
-									d="M8.98 4.18c1.17 0 2.23.4 3.06 1.2l2.3-2.3A8 8 0 001.83 5.4L4.5 7.49a4.77 4.77 0 014.48-3.3z"
-									fill="#EA4335"></path>
-							</svg> Continue Using Google
-						</a>
-					</div>
-				</div>
-	           
-	            </div>
-	          </form>
-             
-			  <br>
-                
-				<p class="w-100 text-center mb-6 text-white"> forgotpassword <a href="/user_forgotpassword"> click Here </a></p>
-            
-	          <p class="w-100 text-center mb-6 text-white"> You Have an account?<a href="/signup">Sign Up </a></p>
-			  <div class="d-flex justify-content-center">
-			  <% if(errorMsg){ %>
-				<p id="errorMessage" style="color: red;"> <%= errorMsg %> </p>
-			<% } %>
-		</div>
-	          </div>
-		      </div>
-				</div>
-			</div>
-		</div>
-	</section>
-	<script>
-	setTimeout(function(){
-		var errorMessage=document.getElementById("errorMessage")
-		if(errorMessage){
-			errorMessage.style.display = 'none'
-		}
-	},2000)
-</script>
-<script> 
-	reload()
-	const error = document.getElementById('error')
-	function reload(){
+    <%- include('../partials/footer') %>
+   
+</body>
 
-		setTimeout(()=>{
-			error.innerHTML=''
-		},3000)
-	}
-       </script>
 
-	<script src="js/jquery.min.js"></script>
-  <script src="js/popper.js"></script>
-  <script src="js/bootstrap.min.js"></script>
-  <script src="js/main.js"></script>
-
-	</body>
 </html>

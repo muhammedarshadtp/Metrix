@@ -15,9 +15,13 @@ const productsedit = async(req,res)=>{
 
 const productseditPost = async(req,res)=>{
     try {
+        console.log(req.body.old_images);
      const productstext = await productsCollection.find({_id:req.query.podsId})
-     if(req.file){
-         const productseditdatas= await productsCollection.updateOne({_id:req.query.podsId},{$set:{name:req.body.name,catagory:req.body.catagory,description:req.body.description, stock:req.body.stock, price:req.body.price,images:req.file.filename}})
+     const catagory = await catagoryCollection.findOne({name:req.body.catagory})
+     console.log(req.files,"-----------");
+     if(req.body.old_images){
+
+         const productseditdatas= await productsCollection.updateOne({_id:req.query.podsId},{$set:{name:req.body.name,catagory:catagory,description:req.body.description, stock:req.body.stock, price:req.body.price,images:req.body.old_images}})
          console.log(productseditdatas);
      }else{
         const productseditdatas= await productsCollection.updateOne({_id:req.query.podsId},{$set:{name:req.body.name,catagory:req.body.catagory,description:req.body.description, stock:req.body.stock, price:req.body.price}})

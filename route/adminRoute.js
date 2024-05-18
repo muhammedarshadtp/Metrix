@@ -4,14 +4,14 @@ const routerAdmin = express.Router();
 const adminController = require('../controllers/adminController/adminview');
 const userlist = require('../controllers/adminController/userlist');
 const dashboard = require('../controllers/adminController/dashboard');
-const catagory = require("../controllers/adminController/catagory");
-const addcatagory = require("../controllers/adminController/addcatagory");
-const products = require("../controllers/adminController/products");
-const addproducts = require("../controllers/adminController/addproducts");
+const catagory = require("../controllers/catagoryController/catagory");
+const addcatagory = require("../controllers/catagoryController/addcatagory");
+const products = require("../controllers/productsController/products");
+const addproducts = require("../controllers/productsController/addproducts");
 const { upload } = require("../middleware/multer");
 const admin_auth = require("../middleware/adminAuth");
-const  productsedit  = require("../controllers/adminController/productsedit");
-const  catagoryedit  = require("../controllers/adminController/catagoryedit");
+const  productsedit  = require("../controllers/productsController/productsedit");
+const  catagoryedit  = require("../controllers/catagoryController/catagoryedit");
 
 
 
@@ -47,11 +47,11 @@ routerAdmin.get('/manage-products/:id',products.admin_manageProducts)
 
 routerAdmin.get('/adminaddproducts', admin_auth, addproducts.addproducts)
 
-routerAdmin.post('/adminaddproducts', upload.array('image',3), addproducts.addproductspost)
+routerAdmin.post('/adminaddproducts', upload.array('image',5), addproducts.addproductspost)
 
 routerAdmin.get('/productsedit',productsedit.productsedit)
 
-routerAdmin.post('/productseditPost',upload.array('image',3), productsedit.productseditPost)
+routerAdmin.post('/productseditPost',upload.array('image',5), productsedit.productseditPost)
 
 
 

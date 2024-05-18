@@ -16,6 +16,8 @@ const addproducts = async (req, res) => {
 const addproductspost = async (req, res) => {
 
     try {
+        const catagory= await catagoryCollection.findOne({name:req.body.catagory})
+        console.log(catagory,"-----------------------------------catagory");
         let imageMultiple = []
         let count = 0
         console.log(req.files.filename);
@@ -26,7 +28,7 @@ const addproductspost = async (req, res) => {
         console.log(imageMultiple,'imageMultiple is shiwubg');
         const productsdatas = {
             name: req.body.name,
-            catagory: req.body.catagory,
+            catagory:catagory,
             description: req.body.description,
             stock: req.body.stock,
             price: req.body.price,

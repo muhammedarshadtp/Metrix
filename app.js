@@ -43,7 +43,7 @@ app.set('views',[
 
 
 app.get('/admin',(req,res)=>{
-    res.render('admin_login')
+    res.render('admin_login',{error:''})
 })
 
 

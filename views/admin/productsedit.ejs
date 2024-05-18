@@ -73,11 +73,17 @@
                             </div>
                             
                             <div class="card-body">
+                                <% for( let j = 0; j < productsdata.images.length; j++ ) { %>
+                                
+                                
                             <div class="input-upload">
-                            <input type="file" name="image" class="form-control" id="upload" accept="image/*" onchange="previewImage(event)">
+                            
                             <div id="image-preview" class="mt-3">
-                                 <img src="/productsImages/<%=productsdata.images %>" style="max-width: 100%; max-height: 200px;" alt="Product Image">
+                                 <img src="/productsImages/<%=productsdata.images[j] %>" style="max-width: 100%; max-height: 200px;" alt="Product Image">
                             </div>
+                            <input type="text" name="old_images" value="<%=productsdata.images[j] %>" hidden id="">
+                            <% } %>
+                            <input type="file" name="image" class="form-control" id="upload" accept="image/*" onchange="previewImage(event)" multiple>
                             <button id="upload-btn" type="button">Submit Cropped Images</button>
 
                             </div>

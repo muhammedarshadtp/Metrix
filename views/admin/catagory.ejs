@@ -89,6 +89,12 @@ include('./partials/header/header.ejs') %>
               </div>
               <div class="d-grid">
                 <button type="submit" class="btn btn-primary">Add category</button>
+                <% if (error) { %>
+                  <p id="errorMessage" style="color: rgb(244, 5, 53);"><%= error %></p>
+
+                 
+                <% } %>
+              
               </div>
             </form>
           </div>
@@ -175,6 +181,24 @@ include('./partials/header/header.ejs') %>
 
 
 </main>
+
+<script>
+ const errMsg = document.getElementById('error')
+  reload()
+  function reload(){
+    setTimeout(()=>{
+      errMsg.innerHTML = ''
+    },3000)
+  }
+</script>
+<script>
+  setTimeout(function(){
+    let errorMessage=document.getElementById("errorMessage")
+    if(errorMessage){
+      errorMessage.style.display = 'none'
+    }
+  },2000)
+</script>
 
 <!-- <script>
     async function hideAndUnhide(){

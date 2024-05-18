@@ -31,7 +31,9 @@ router.get('/resend_otp',userController.resend_otp)
 
 router.get('/account',userController.account)
 
-router.get('/products', status,userController.products)
+router.get('/products',userController.products)
+
+router.get('/productDetail/:id',userController.productDetail)
 
 router.get('/logout',status,userController.logout)
 

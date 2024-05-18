@@ -1,12 +1,14 @@
 const mongoose = require('mongoose')
+const catagoryCollection = require('./catagory-schema')
 
-const productsschema= mongoose.Schema({
+const productsschema= new mongoose.Schema({
     name:{
         type:String,
         required:true,
     },
     catagory:{
-        type:String,
+        type:mongoose.Schema.Types.ObjectId,
+        ref:catagoryCollection,
         required:true,
     },
     stock:{
@@ -34,6 +36,6 @@ const productsschema= mongoose.Schema({
 
 })
 
-const productsCollection= mongoose.model('products',productsschema)
+const productsCollection = new mongoose.model('products',productsschema)
 
 module.exports=productsCollection

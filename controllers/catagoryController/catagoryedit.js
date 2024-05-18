@@ -21,23 +21,37 @@ const updatecatagory = async (req, res) => {
     try {
         const data = req.body;
         console.log(data);
-        const existingcatagory = await catagoryCollection.findOne({ name: data.name });
+        const catagoryId = req.query.id
+        console.log(catagoryId);
+        const catagorydata = await catagoryCollection.findById(catagoryId)
+        const existingcatagoryname = await catagoryCollection.findOne({name:data.name})
 
-        if (existingcatagory && !data.name === existingcatagory.name) {
-            console.log("Category already exists");
-            // Send an error response with a status code and error message
-            res.render('catagoryedit',{ catagorydata:data.name, error: "Category name already exists" });
-        } else {
+        function existOrNot (data){
+            return data !== null ? 'exist' : 'not exist'
+        }
+       const result = existOrNot(existingcatagoryname)
+       console.log(result);
+        console.log(existingcatagoryname,'existitng');
+
+        if (result === 'not exist' || catagorydata.name === data.name) {
             const catagoryupdate = await catagoryCollection.updateOne(
                 { _id: req.query.id },
                 { $set: { name: req.body.name, description: req.body.description } }
             );
             console.log(catagoryupdate);
             res.redirect('/admin/catagory');
+        } else {
+            
+            req.session.catagoryError = 'Category already Exists'
+            console.log("Category already exists");
+            const error = req.session.catagoryError
+            // Send an error response with a status code and error message
+            res.render('catagoryedit',{ catagorydata:data, error: error });
         }
     } catch (error) {
         console.log(error);
-        return res.render('catagoryedit', { catagorydata: {}, error: error.message });
+       
+        
     }
 };
 
