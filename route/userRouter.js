@@ -23,9 +23,9 @@ router.get('/user_forgotpassword',userController.user_forgotpassword)
 
 router.post('/user_forgotpasswordPost',userController.user_forgotpasswordPost)
 
-router.get('/resetPassword',status,userController.resetPassword)
+router.get('/resetPassword',userController.resetPassword)
 
-router.post('/resetPasswordPost',status,userController.resetPasswordPost)
+router.post('/resetPasswordPost',userController.resetPasswordPost)
 
 router.get('/resend_otp',userController.resend_otp)
 
@@ -35,7 +35,7 @@ router.get('/products',userController.products)
 
 router.get('/productDetail/:id',userController.productDetail)
 
-router.get('/logout',status,userController.logout)
+router.get('/logout',userController.logout)
 
 router.get('/success',userController.google)
 

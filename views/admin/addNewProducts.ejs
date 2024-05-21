@@ -77,8 +77,8 @@
                                         </div>
                                     <% } %>
                                     <div class="mb-4">
-                                        <label for="product_stock" class="form-label">Product Stock</label>
-                                        <input type="text" placeholder="Type here" name="stock" class="form-control" id="product_stock" required>
+                                      <label for="product_stock" class="form-label">Product Stock</label>
+                                        <input type="number" oninput="validity.valid||(value='')" min="1" placeholder="Type here" name="stock" class="form-control" id="product_stock" required>
                                     </div>
                                     <div class="mb-4">
                                         <label class="form-label">Full description</label>
@@ -89,7 +89,7 @@
                                             <div class="mb-4">
                                                 <label class="form-label">Regular price</label>
                                                 <div class="row gx-2">
-                                                    <input placeholder="$" type="text" name="price" id="product_price" class="form-control" required>
+                                                    <input placeholder="$" oninput="validity.valid||(value='')" min="1" type="number" name="price" id="product_price" class="form-control" required>
                                                 </div>
                                             </div>
                                         </div>

@@ -34,6 +34,10 @@
                 <!--login area start-->
                 <div id="login-start" class="col-lg-6 col-md-6 text-center"> <!-- Added text-center class here -->
                     <div class="account_form mx-auto" data-aos="fade-up" data-aos-delay="0">
+                        <% if ( errorMsg) { %>
+                            <span class="text-danger fw-bold" id="errorMsg"><%= errorMsg %></span>
+                            
+                        <% } %>
                         <h3>login</h3>
                         <form action="/login" method="POST">
                             <div class="default-form-box">
@@ -68,7 +72,8 @@
                             <div class="login_submit">
                                 <button class="btn btn-md btn-black-default-hover mb-4" type="submit">login</button>
                                
-                                <a href="/user_forgotpassword">Lost your password?</a>
+                                <a href="/user_forgotpassword">Lost your password?</a><br>
+                                <a href="/signup">Do you have an account? press Me</a>
                             </div>
                         </form>
                     </div>
@@ -104,6 +109,15 @@
     
 
     <%- include('../partials/footer') %>
+    <script>
+        reload()
+        const errMsg = document.getElementById('errorMsg')
+        function reload(){
+            setTimeout(()=>{
+                errMsg.innerHTML = ''
+            },5000)
+        }
+    </script>
    
 </body>
 

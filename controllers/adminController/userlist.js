@@ -28,6 +28,7 @@ const userlist=async(req,res)=>{
         console.log(userid);
         if(userstatus==="true"){
             console.log("hide")
+            req.session.isAuth = false
             await userCollection.findByIdAndUpdate({ _id:new ObjectId(userid) },{ $set: { status: false } });
             res.json({success:'hide'})
         }else{
