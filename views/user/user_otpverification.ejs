@@ -1,110 +1,121 @@
-<!doctype html>
-<html lang="en">
-  <head>
-  	<title>Otp verification</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<%- include('../partials/head') %>
 
-	<link href="https://fonts.googleapis.com/css?family=Lato:300,400,700&display=swap" rel="stylesheet">
+<body>
+ <%# include('../partials/header') %>
+    <!-- Offcanvas Overlay -->
+    <div class="offcanvas-overlay"></div>
 
-	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-	
-	<link rel="stylesheet" href="/logincss/style.css">
+    <!-- ...:::: Start Breadcrumb Section:::... -->
+    <div class="breadcrumb-section"  style="background-image: url(https://www.oneplus.in/content/dam/oasis/page/2024/in/home/benz/3_Benz-desktop.jpg.thumb.webp);background-size:cover">
+        <div class="breadcrumb-wrapper">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12">
+                        <h3 class="breadcrumb-title">Otp verification</h3>
+                        <div class="breadcrumb-nav breadcrumb-nav-color--black breadcrumb-nav-hover-color--golden">
+                            <nav aria-label="breadcrumb">
+                                <ul>
+                                    <li><a href="/">Home</a></li>
+                                    <!-- <li><a href="shop-grid-sidebar-left.html">Shop</a></li> -->
+                                    <li class="active" aria-current="page">Otp verification</li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> <!-- ...:::: End Breadcrumb Section:::... -->
 
-	</head>
-	<body class="img js-fullheight" style="background-image: url(images/5039684.jpg);">
-	<section class="ftco-section">
-		<div class="container">
-			<div class="row justify-content-center">
-				<div class="col-md-6 text-center mb-5">
-					<h2 class="heading-section">OTP verification</h2>
-				</div>
-			</div>
-			<div class="row justify-content-center">
-				<div class="col-md-6 col-lg-4">
-					<div class="login-wrap p-0">
-		      	
-		      	<form action="/otpverification" class="signin-form" method="post">
-		      		<div class="form-group">
-		      			<input type="number" class="form-control" placeholder="enter otp" name="otp" required>
-		      		</div>
-	           
-	            <div class="form-group">
-	            	<button type="submit" class="form-control btn btn-primary submit px-3">submit</button>
-	            </div>
-                <style>
-                    #countdown {
-                        font-size: 18px;
-                        color: #333;
-                    }
-                </style>
+    <!-- ...:::: Start Customer Login Section :::... -->
+    <div class="customer-login">
+        <div class="container">
+            <div class="row">
+                <!--login area start-->
+                <div id="login-start" class="col-lg-6 col-md-6 text-center"> <!-- Added text-center class here -->
+                    <div class="account_form mx-auto" data-aos="fade-up" data-aos-delay="0">
+                        <% if(otpexp){%>
+                            <div   class="error-message alter text-danger text-start"><%=otpexp%></div>
+                
+                        <%}%>
+                        <% if(errorOtp){%>
+                            <div   class="error-message alter text-danger text-start"><%=errorOtp%></div>
+                
+                        <%}%>
+                        <h3>Otp verification</h3>
+                        <form action="/otpverification" class="signin-form" method="post">
+							<div class="form-group">
+								<input type="number" class="form-control" placeholder="enter otp" name="otp" required>
+							</div>
+                            <br>
+							<div class="form-group">
+								<button type="submit" class="form-control btn btn-primary submit px-3">submit</button>
+							</div>
+							<style>
+								#countdown {
+									font-size: 18px;
+									color: #333;
+								}
+							</style>
+							<p id="countdown">Waiting for OTP...</p>
+                        </form>
+						<button id="resendButton"  class="btn btn-primary" onclick="resendOTP()" disabled>Resend OTP</button>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    </div> <!-- ...:::: End Customer Login Section :::... -->
+    
+    
+    
+    
 
-
-<p id="countdown">Waiting for OTP...</p>
-
-<button id="resendButton"  class="btn btn-primary" onclick="resendOTP()" disabled>Resend OTP</button>
-
-<script>
-                    // Start the initial countdown
-                    let countdownValue = 29; // Countdown duration in seconds
-                    let countdownInterval;
-                 
-
-                    function startCountdown() {
-                        countdownInterval = setInterval(function () {
-                            if (countdownValue > 0) {
-                                countdownValue--;
-                                document.getElementById('countdown').innerText = `Resend OTP in ${countdownValue} seconds`;
-                            } else {
-                                clearInterval(countdownInterval);
-                                document.getElementById('countdown').innerText = 'Waiting for OTP...';
-                                document.getElementById('resendButton').disabled = false;
-                            }
-                        }, 1000);
-                    }
-
-                    function resendOTP() {
-                        // Simulate OTP resend logic
-                        
-                        // Replace this with your actual OTP resend logic
-                        window.location.href = "/resend_otp"
-
-                        // Disable the resend button and start the countdown
-                        document.getElementById('resendButton').disabled = true;
-                        countdownValue = 29; // Reset countdown value
-                        startCountdown();
-                    }
-                    startCountdown()
-
-                </script>
-	           
-	            </div>
-	          </form>
-	          <p class="w-100 text-center mb-6 text-white"> You Have an account? <a href="/login">login </a><a type="button" href="/signup" class="btn btn-primary">Back</a></p>
-			  <div class="d-flex justify-content-center">
-			  <%# if(errorMsg){ %>
-				<p id="errorMessage" style="color: red;"> <%#= errorMsg %> </p>
-			<%# } %>
-		</div>
-	          </div>
-		      </div>
-				</div>
-			</div>
-		</div>
-	</section>
+    <%- include('../partials/footer') %>
 	<script>
-	setTimeout(function(){
-		var errorMessage=document.getElementById("errorMessage")
-		if(errorMessage){
-			errorMessage.style.display = 'none'
+		// Start the initial countdown
+		let countdownValue = 29; // Countdown duration in seconds
+		let countdownInterval;
+	 
+
+		function startCountdown() {
+			countdownInterval = setInterval(function () {
+				if (countdownValue > 0) {
+					countdownValue--;
+					document.getElementById('countdown').innerText = `Resend OTP in ${countdownValue} seconds`;
+				} else {
+					clearInterval(countdownInterval);
+					document.getElementById('countdown').innerText = 'Waiting for OTP...';
+					document.getElementById('resendButton').disabled = false;
+				}
+			}, 1000);
 		}
-	},2000)
-</script>
 
-	<script src="js/jquery.min.js"></script>
-  <script src="js/popper.js"></script>
-  <script src="js/bootstrap.min.js"></script>
-  <script src="js/main.js"></script>
+		function resendOTP() {
+			// Simulate OTP resend logic
+			
+			// Replace this with your actual OTP resend logic
+			window.location.href = "/resend_otp"
 
-	</body>
+			// Disable the resend button and start the countdown
+			document.getElementById('resendButton').disabled = true;
+			countdownValue = 29; // Reset countdown value
+			startCountdown();
+		}
+		startCountdown()
+
+	</script>
+<script>
+    setTimeout(function() {
+   const errMsg = document.querySelectorAll('.error-message');
+   errMsg.forEach(function(message) {
+     message.innerHTML = '';
+   });
+ }, 4000);
+ 
+     </script>
+   
+</body>
+
+
 </html>

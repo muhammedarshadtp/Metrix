@@ -1,5 +1,5 @@
 const validateName = (name) => {
-    // Name should be at least 4 characters long and can contain letters and spaces
+    // Name should be at least 6 characters long and can contain letters and spaces
     const nameRegex = /^[a-zA-Z\s]{6,}$/;
     name=name.trim()
     return nameRegex.test(name);

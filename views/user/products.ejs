@@ -8,7 +8,7 @@
     <div class="offcanvas-overlay"></div>
 
     <!-- ...:::: Start Breadcrumb Section:::... -->
-    <div class="breadcrumb-section breadcrumb-bg-color--golden">
+    <div class="breadcrumb-section" style="background-image: url(https://www.oneplus.in/content/dam/oasis/page/2024/in/home/benz/3_Benz-desktop.jpg.thumb.webp);background-size:cover">
       <div class="breadcrumb-wrapper">
         <div class="container">
           <div class="row">
@@ -133,7 +133,9 @@
                                                         data-bs-target="#modalAddcart">Add to Cart</a>
                                                 </div>
                                                 <div class="action-link-right">
-                                                    <a href="/productDetail/<%= data[i]._id %>" class="quickview-btn" data-bs-toggle="modal"  data-index="<%= i %>">
+                                                    <a href="/productDetail/<%= data[i]._id %>" 
+                                                      class="quickview-btn" data-bs-toggle="modal" 
+                                                       data-index="<%= i %>">
                                                         <i class="icon-magnifier"></i>
                                                     </a>
                                                     <a href="wishlist.html"><i
@@ -238,7 +240,7 @@
                                   <a
                                     href="/productDetail/<%= data[j]._id %>"
                                     data-bs-toggle="modal"
-                                    data-bs-target="#modalQuickview"
+                                    data-bs-target="<%= j %>"
                                     class="btn btn-lg btn-black-default-hover"
                                     ><i class="icon-magnifier"></i
                                   ></a>

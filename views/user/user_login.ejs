@@ -6,7 +6,7 @@
     <div class="offcanvas-overlay"></div>
 
     <!-- ...:::: Start Breadcrumb Section:::... -->
-    <div class="breadcrumb-section breadcrumb-bg-color--golden">
+    <div class="breadcrumb-section"  style="background-image: url(https://www.oneplus.in/content/dam/oasis/page/2024/in/home/benz/3_Benz-desktop.jpg.thumb.webp);background-size:cover">
         <div class="breadcrumb-wrapper">
             <div class="container">
                 <div class="row">
@@ -34,20 +34,28 @@
                 <!--login area start-->
                 <div id="login-start" class="col-lg-6 col-md-6 text-center"> <!-- Added text-center class here -->
                     <div class="account_form mx-auto" data-aos="fade-up" data-aos-delay="0">
-                        <% if ( errorMsg) { %>
-                            <span class="text-danger fw-bold" id="errorMsg"><%= errorMsg %></span>
-                            
-                        <% } %>
+                        <% if(statusError){%>
+                            <div   class="error-message alter text-danger text-start"><%=statusError%></div>
+                
+                        <%}%>
                         <h3>login</h3>
                         <form action="/login" method="POST">
                             <div class="default-form-box">
                                 <label>Username or email <span>*</span></label>
-                                <input type="email" class="form-control" placeholder="email" name="email" required>
+                                <input type="email" class="form-control" placeholder="email" name="email">
                             </div>
+                            <% if(emailError){%>
+                                <div   class="error-message alter text-danger text-start"><%=emailError%></div>
+                    
+                            <%}%>
                             <div class="default-form-box">
                                 <label>Passwords <span>*</span></label>
-                                <input id="password-field" type="password" class="form-control"  name="password" placeholder="Password" required>
+                                <input id="password-field" type="password" class="form-control"  name="password" placeholder="Password">
                             </div>
+                            <% if(passError){%>
+                                <div   class="error-message alter text-danger text-start"><%=passError%></div>
+                    
+                            <%}%>
                             <div class="row mt-4">
                                 <div class="col">
                                     <a href="/auth/auth/google" class="btn btn-dark btn-block font-sm" style="text-decoration: none; color: aliceblue;">
@@ -70,7 +78,7 @@
                             </div>
                             <br>
                             <div class="login_submit">
-                                <button class="btn btn-md btn-black-default-hover mb-4" type="submit">login</button>
+                                <button class="btn btn-md btn-black-default-hover mb-4" type="submit" style="margin: 0 auto">login</button>
                                
                                 <a href="/user_forgotpassword">Lost your password?</a><br>
                                 <a href="/signup">Do you have an account? press Me</a>
@@ -110,13 +118,13 @@
 
     <%- include('../partials/footer') %>
     <script>
-        reload()
-        const errMsg = document.getElementById('errorMsg')
-        function reload(){
-            setTimeout(()=>{
-                errMsg.innerHTML = ''
-            },5000)
-        }
+   setTimeout(function() {
+  const errMsg = document.querySelectorAll('.error-message');
+  errMsg.forEach(function(message) {
+    message.innerHTML = '';
+  });
+}, 4000);
+
     </script>
    
 </body>

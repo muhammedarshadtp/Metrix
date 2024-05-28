@@ -1,23 +1,61 @@
+const { render } = require("ejs")
 const catagoryCollection = require("../../model/catagory-schema")
 const productsCollection = require("../../model/products-schema")
-
+const {AlphaOnly,onlyNumbers} =require('../../utils/validation/adminValidation')
 
 
 const addproducts = async (req, res) => {
 
     try {
         const catagory = await catagoryCollection.find()
-        res.render('addNewProducts', { catagory: catagory })
+        res.render('addNewProducts', { catagory: catagory,
+            nameError:req.flash('nameError'),
+            stockError:req.flash('stockError'),
+            discError:req.flash('discError'),
+            priceError:req.flash('priceError'),
+        })
     } catch (error) {
         console.log("addproducts error");
+        return res.render('error-page')
     }
 }
 
 const addproductspost = async (req, res) => {
 
     try {
-        const catagory= await catagoryCollection.findOne({name:req.body.catagory})
-        console.log(catagory,"-----------------------------------catagory");
+        // const catagory= await catagoryCollection.findOne({name:req.body.catagory})
+       const data = req.body;
+
+       const nameValid=AlphaOnly(data.name)
+       console.log(nameValid);
+       const discValid=AlphaOnly(data.description)
+       const stockValid=onlyNumbers(data.stock)
+       const priceValid=onlyNumbers(data.price)
+        if(!nameValid){
+            req.flash('nameError','Product name must be at least 3 characters long')
+            return res.redirect('/admin/adminaddproducts')
+        }
+        else if(!stockValid){
+            req.flash('stockError','Stock must be a positive integer')
+            return res.redirect('/admin/adminaddproducts')
+        }
+        else if(!discValid){
+            req.flash('discError','Product description must be at least 4 characters long')
+            return res.redirect('/admin/adminaddproducts')
+        }
+        else if(!priceValid){
+            req.flash('priceError','Price must be a positive number')
+            return res.redirect('/admin/adminaddproducts')
+        }
+         // Validate images
+         else if (!req.files || req.files.length === 0) {
+            req.flash('error_MSG', 'Please upload at least one image');
+            return res.redirect('/admin/adminaddproducts');
+        
+        }
+        else{
+        
+
         let imageMultiple = []
         let count = 0
         console.log(req.files.filename);
@@ -35,16 +73,17 @@ const addproductspost = async (req, res) => {
             images: imageMultiple,
         }
 
+
         console.log(productsdatas);
+        
+
         const products = await productsCollection.insertMany([productsdatas])
         console.log(products, "productsupload successfully");
-        // const file = req.file
-        // const imageFileName = req.file.filename
-        // console.log(file, 'file data============================');
-        // console.log(productsdatas, 'productsdatas');
+        
         res.redirect('/admin/products')
+    }
     } catch (error) {
-        console.log("add products post error");
+        console.log(error,"add products post error");
     }
 }
 

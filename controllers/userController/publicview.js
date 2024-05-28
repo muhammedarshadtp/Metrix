@@ -35,7 +35,13 @@ const home = async (req, res) => {
 
 
 const signup = async (req, res) => {
-    res.render('user_signup', { errorMsg: false })
+    res.render('user_signup',{
+        existingError:req.flash('existingError'),
+        userError:req.flash('userError'),
+        emailError:req.flash('emailError'),
+        passError:req.flash('passError')
+
+    })
 }
 
 
@@ -53,14 +59,18 @@ const signupPost = async (req, res) => {
 
         const existingUser = await userCollection.findOne({ email: data.email });
         if (existingUser) {
-            return res.render('user_signup', { errorMsg: "User with this email already exists" });
+            req.flash('existingError', 'User with this email already exists');
+            return res.redirect('/signup');
         }
         if (!validateName(data.username)) {
-            return res.render('user_signup', { errorMsg: "Username must  contain capital letter and small letters at least 6 letter " });
+            req.flash('userError', 'Username must contain capital letter and small letters, at least 6 characters');
+            return res.redirect('/signup');
         } else if (!validateEmail(data.email)) {
-            return res.render('user_signup', { errorMsg: "Invalid email address. Please enter a valid format (e.g., user@example.com)." });
+            req.flash('emailError', 'Invalid email address. Please enter a valid format (e.g., user@example.com).');
+            return res.redirect('/signup');
         } else if (!validatePassword(data.password)) {
-            return res.render('user_signup', { errorMsg:  "Invalid password. It must be at least 6 characters long, contain at least one uppercase letter, one lowercase letter, and one digit."});
+            req.flash('passError', 'Invalid password. It must be at least 6 characters long, contain at least one uppercase letter, one lowercase letter, and one digit.');
+            return res.redirect('/signup');
         }
 
         const otp = await otpGenerator()
@@ -73,67 +83,69 @@ const signupPost = async (req, res) => {
         res.redirect('/otpverification');
     } catch (error) {
         console.log(error);
+        return res.render('error_page')
     }
 }
 
 
 
 const login = async (req, res) => {
-    const errorMsg = req.session.errorMsg
-    console.log('login controller',req.session.isAuth)
+    try {
     if (!req.session.isAuth) {
        
-        res.render('user_login', { errorMsg })
+        res.render('user_login', {
+ 
+            emailError: req.flash('emailError'),
+            statusError: req.flash('statusError'),
+            passError: req.flash('passError'),
+        
+
+        })
     } else {
         res.redirect('/')
+    }
+    } catch (error) {
+        console.log(error);
+        return res.render('error_page')
     }
 
 }
 
 const loginpost = async (req, res) => {
     try {
-        const data = {
-            email: req.body.email,
-            password: req.body.password
-        };
-        console.log(data);
-        
-        const emailcollect = await userCollection.findOne({ email: req.body.email });
-        console.log(emailcollect);
-        
-        
-        if (!emailcollect) {
-            // If email is not found in the database
-            req.session.errorMsg = "Email not found";
-            res.redirect('/login');
-            return;
-        }
-        if (!emailcollect.status) {
-            // If user account is disabled by admin
-            req.session.errorMsg = "User account is disabled. Please contact support.";
-            console.log(req.session.errorMsg );
-            res.redirect('/login');
-            return;
-        }
-
-        console.log(emailcollect._id.toString());
-        
-        if (emailcollect.password === req.body.password) {
-            req.session.isAuth = true;
-            req.session.userid = emailcollect._id.toString();
-            req.session.errorMsg = null; 
-            res.redirect('/');
-        } else {
-            // If password is incorrect
-            req.session.errorMsg = "Invalid password";
-            res.redirect('/login');
-        }
+      const data = {
+        email: req.body.email,
+        password: req.body.password
+      };
+  
+      const emailcollect = await userCollection.findOne({ email: data.email });
+  
+      if (!emailcollect) {
+        req.flash('emailError', 'Email not found.'); // Set specific error message
+        return res.redirect('/login');
+      }
+  
+      if (!emailcollect.status) {
+        req.flash('statusError', 'Your account has been disabled. Please contact support for assistance.');
+        return res.redirect('/login');
+      }
+  
+      if (emailcollect.password !== data.password) {
+        req.flash('passError', 'Invalid password.');
+        console.log('Flash message:', req.flash('error'));
+        return res.redirect('/login');
+      }
+  
+      // Successful login logic
+      req.session.isAuth = true;
+      req.session.userid = emailcollect._id.toString();
+      req.session.errorMsg = null; // Clear any previous error messages
+      res.redirect('/');
     } catch (error) {
-        console.log(error);
-        req.session.errorMsg = "An error occurred during login. Please try again later.";
-        res.redirect('/login');
+      req.flash('error', 'An error occurred during login. Please try again later.');
+      res.redirect('/login');
     }
-}
+  };
 
 
 
@@ -148,7 +160,11 @@ const otpverification = async (req, res) => {
     console.log(req.session.userdata);
 
     // const { email } = req.session.userdata.email
-    res.render('user_otpverification')
+    res.render('user_otpverification',{
+
+        otpexp: req.flash('otpexp'),
+        errorOtp: req.flash('errorOtp'),
+    })
 }
 
 
@@ -179,6 +195,7 @@ const otpverificationpost = async (req, res) => {
                 res.redirect('/');
             } else {
                 console.log('OTP expired');
+                req.flash('otpexp','Otp Expired');
                 res.redirect('/otpverification');
             }
         } else if (otp === forgotOtp) {
@@ -187,15 +204,17 @@ const otpverificationpost = async (req, res) => {
                 res.redirect('/resetPassword');
             } else {
                 console.log('OTP expired');
+                req.flash('otpexp','Otp Expired');
                 res.redirect('/otpverification');
             }
         } else {
             console.log('Invalid OTP');
+            req.flash('errorOtp','Wrong otp');
             res.redirect('/otpverification');
         }
     } catch (error) {
         console.log(error, "user otp verification post");
-        res.status(500).send("Internal Server Error");
+       return res.render('error_page')
     }
 };
 
@@ -216,6 +235,7 @@ const resend_otp = async (req, res) => {
         res.redirect('/otpverification')
     } catch (error) {
         console.log(error, "resend otp get");
+        return res.render('error_page')
 
     }
 }
@@ -234,7 +254,8 @@ const products = async (req, res) => {
         console.log(products, 'products filtered is success');
         res.render('products', { data: products, user })
     } catch (error) {
-
+        console.log('products keri');
+        return res.render('error_page')
     }
 
 }
@@ -248,6 +269,8 @@ const productDetail = async (req, res) => {
         console.log(productDetail, '---------------------------data is founded...');
         res.render('productDetail', { data: productDetail, user })
     } catch (error) {
+        console.log('productsDetails keri');
+        return res.render(' error_page')
 
     }
 
@@ -331,6 +354,10 @@ const google = async (req, res) => {
 
 }
 
+const error_page = async(req,res)=>{
+    res.render('error_page')
+}
+
 const cart = async (req, res) => {
     res.render('cart')
 }
@@ -359,5 +386,6 @@ module.exports = {
     google,
     cart,
     productDetail,
+    error_page,
 
 }

@@ -15,7 +15,8 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
 const path = require('path');
 const nocache = require("nocache");
-const flash = require('express-flash');
+// const flash = require('express-flash');
+const flash = require('connect-flash');
 const userCollection = require("./model/user-schema");
 
 require('./utils/auth')
@@ -31,6 +32,13 @@ app.use(session({
     resave: false,
     saveUninitialized: false
 }));
+
+app.use((req, res, next) => {
+    
+    res.locals.error_MSG = req.flash('error_MSG');
+    res.locals.error_msg = req.flash('error_msg');
+    next();
+});
 
 
 

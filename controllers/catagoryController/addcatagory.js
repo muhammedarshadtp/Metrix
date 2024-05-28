@@ -15,33 +15,37 @@ const addcatagory=async(req,res)=>{
       const validatedName=  validateName(catagorydata.name)
       const validatedDesc = validateName(catagorydata.description)
       console.log(validatedName);
-        if(!validatedName || !validatedDesc){
-            req.session.catagoryError = 'Category name or description not valid'
-            const error=req.session.catagoryError
+        if(!validatedName){
+            req.flash('error_msg', 'Please enter a valid Category name');
             
-             res.redirect('/admin/catagory')
+            return res.redirect('/admin/catagory')
              
+        }
+        if(!validatedDesc){
+            req.flash('error_msg', 'Please enter a valid Category description');
+            
+             return res.redirect('/admin/catagory')
         }
         console.log(req.body);
         const existingCatagory=await catagoryCollection.findOne({name:catagorydata.name})
          
         if(existingCatagory){
             console.log("Category already exists:");
-
-            req.session.catagoryError = 'Category already Exist'
+            req.flash('error_msg', 'Category already exists');
             
-            res.redirect('/admin/catagory')
+            return res.redirect('/admin/catagory')
            
 
         }else{
             const catagory= await catagoryCollection.create([catagorydata])
-            res.redirect('/admin/catagory')
+            return res.redirect('/admin/catagory')
         }
         
     
    
     } catch (error) {
         console.log(error);
+        return res.render('error_page')
     }
 
 }

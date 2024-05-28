@@ -5,7 +5,7 @@ const userCollection = require("../../model/user-schema")
 const admin_loginGet = async (req, res) => {
     try {
         if (req.session.isAdminAuth) {
-            res.redirect('/admin/dashboard')
+          return   res.redirect('/admin/dashboard')
         } else {
 
             const error = req.session.adminError
@@ -23,16 +23,20 @@ const admin_loginPost = async (req, res) => {
 
     try {
 
-        const isAdmin = await userCollection.findOne({ email: req.body.email })
+        const isAdmin = await userCollection.findOne({ email: req.body.email,admin:true })
         console.log('adminloginpost');
-        console.log(isAdmin)
+        console.log(isAdmin,"admin kitty")
         if (isAdmin) {
-            console.log('isadminif')
-            if (isAdmin.password === req.body.password && isAdmin.admin == true) {
+            console.log('isadmin')
+            if (isAdmin.password === req.body.password) {
                 console.log('if')
                 req.session.isAdminAuth = true
                 res.redirect('/admin/dashboard')
-            } 
+            } else{
+                console.log('else')
+                req.session.adminError = 'incorrect password'
+                res.redirect('/admin/login')
+            }
         }else {
             console.log('else')
             req.session.adminError = 'admin is not valid'
@@ -43,15 +47,19 @@ const admin_loginPost = async (req, res) => {
 
 
     } catch (error) {
-
+        console.log(error);
     }
 
 }
 
 
 const admin_logoutGet = async (req, res) => {
+   try {
     req.session.isAdminAuth = false
     res.redirect('/admin')
+   } catch (error) {
+    console.log(error);
+   }
 }
 
 

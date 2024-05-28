@@ -1,116 +1,248 @@
+<%- include('./partials/head/head.ejs') %> <%-
+include('./partials/header/header.ejs') %>
+<script defer src="https://cdn.crop.guide/loader/l.js?c=HQYZHP"></script>
+<main class="main-wrap">
+  <section class="container-fluid">
+    <div class="mx-auto">
+      <div class="card-body">
+        <span class="text-danger fw-bold" id="error"></span>
 
-
-
-<%- include('./partials/head/head.ejs') %>
-
-
-<!-- <%- include('./partials/header/header.ejs') %> -->
-
-    
-
-        <section class="content-main mt-80 mb-80">
-            <div class="card mx-auto card-login">
-                <div class="card-body">
-                   
-                        <span class="text-danger fw-bold" id="error"></span>
-                        
-                 
-                    <h4 class="card-title mb-4">Edit Product</h4>
-
-                    <form action="/admin/productseditPost?podsId=<%=productsdata._id %>" method="post" enctype="multipart/form-data">
-                       
-
-                        <% if (productsdata) { %>
-                    <div class="card-body">
-                        <div class="mb-4">
-                            <label for="product_name" class="form-label">Product Name</label>
-                            <input type="text" placeholder="Type here" name="name" class="form-control" value="<%= productsdata.name %>" id="product_name">
-                        </div>
-                       
-                        
-             
-                      
-                     
-                            <div class="mb-4">
-                                <label for="product_category" class="form-label">Category
-                                </label>
-
-                                <select name="catagory" id="product_category" required>
-                                    <option value="" selected disabled>choose one</option>
-
-                                    <% for( let i = 0; i < catagorydata.length; i++ ) { %>
-                                       
-                                        <option value="<%= catagorydata[i].name %>"><%= catagorydata[i].name %></option>
-                                        <% } %>
-                                </select>
-                            </div>
-                         
-                        
-                        <div class="mb-4">
-                            <label for="product_stock" class="form-label">Product Stock</label>
-                            <input type="text" placeholder="Type here" name="stock" class="form-control" value="<%= productsdata.stock %>" id="product_stock">
-                        </div>
-                        <div class="mb-4">
-                            <label class="form-label">Full description</label>
-                            <textarea placeholder="Type here" class="form-control" name="description" id="product_description" rows="4"><%= productsdata.description %></textarea>
-                        </div>
-                        <div class="row">
-                            <div class="col-lg-4">
-                                <div class="mb-8">
-                                    <label class="form-label">Regular price</label>
-                                    <div class="row gx-4">
-                                        <input placeholder="$" type="text" name="price" value="<%= productsdata.price %>" id="product_price" class="form-control">
-                                    </div>
-                                </div>
-                            </div>
-                             
-                    </div>
-                    </div>
-      
-                        <div class="card mb-4">
-                            <div class="card-header">
-                                <h4>Product Image</h4>
-                            </div>
-                            
-                            <div class="card-body">
-                                <% for( let j = 0; j < productsdata.images.length; j++ ) { %>
-                                
-                                
-                            <div class="input-upload">
-                            
-                            <div id="image-preview" class="mt-3">
-                                 <img src="/productsImages/<%=productsdata.images[j] %>" style="max-width: 100%; max-height: 200px;" alt="Product Image">
-                            </div>
-                            <input type="text" name="old_images" value="<%=productsdata.images[j] %>" hidden id="">
-                            <% } %>
-                            <input type="file" name="image" class="form-control" id="upload" accept="image/*" onchange="previewImage(event)" multiple>
-                            <button id="upload-btn" type="button">Submit Cropped Images</button>
-
-                            </div>
-                            </div>
-                            <div>
-                                <button type="submit" class="btn btn-md rounded font-sm hover-up">Confirm</button>
-                            </div>
-                    </div>
-                    <% } %>
-                </form>
-                    <!-- 
-                        <div class="mb-3">
-                            <input class="form-control" placeholder=" productname" type="text" name="productname">
-                        </div> 
-                        <div class="mb-3">
-                            <input class="form-control" placeholder="Password" type="password" name="password">
-                        </div>
-                        <div class="mb-4">
-                            <button type="submit" class="btn btn-primary w-100"> Login </button>
-                        </div> 
-                    </form> -->
-                    <p class="text-center small text-muted mb-15"></p>
-                    
-                    <p class="text-center mb-4"><a href="#"></a></p>
-                </div>
+        <h4 class="card-title mb-4">Edit Product</h4>
+        <form
+          action="/admin/productseditPost?podsId=<%= productsdata._id%>"
+          method="post"
+          enctype="multipart/form-data"
+        >
+        <% if (productsdata) { %>
+          <div class="card-body">
+            <div class="mb-4">
+              <label for="product_name" class="form-label">Product Name</label>
+              <input
+                type="text"
+                placeholder="Type here"
+                name="name"
+                class="form-control"
+                value="<%= productsdata.name %>"
+                id="product_name"
+              
+              />
             </div>
-        </section>
-        <%- include('./partials/footer/footer.ejs') %>
-       
-   
+            <!-- --------nameValid---------- -->
+            <% if(nameError){%>
+              <div  class="error-message alter text-danger text-start"><%=nameError%></div>
+  
+          <%}%>
+            <div class="mb-4">
+              <label for="product_category" class="form-label">Category </label>
+
+              <select name="catagory" id="product_category" required>
+                <option value="<%= productsdata.catagory.name %>">
+                  <%= productsdata.catagory.name %>
+                </option>
+
+                <% for( let i = 0; i < catagorydata.length; i++ ) { %> <% if
+                (productsdata.catagory.name!= catagorydata[i].name) { %>
+                <option value="<%= catagorydata[i].name %>">
+                  <%= catagorydata[i].name %>
+                </option>
+
+                <% } %> <% } %>
+              </select>
+            </div>
+
+            <div class="mb-4">
+              <label for="product_stock" class="form-label"
+                >Product Stock</label
+              >
+              <input
+                type="number"
+                oninput="validity.valid||(value='')"
+                min="1"
+                max="100"
+                placeholder="Type here"
+                name="stock"
+                class="form-control"
+                value="<%= productsdata.stock %>"
+                id="product_stock"
+          
+              />
+            </div>
+            <!-- -----------stockValidate------- -->
+            <% if(stockError){%>
+              <div  class="error-message alter text-danger text-start"><%=stockError%></div>
+  
+          <%}%>
+          <div class="mb-4">
+            <label class="form-label">Full description</label>
+            <textarea class="form-control" name="description" rows="4"><%= productsdata.description %></textarea>
+        </div>
+        
+            <!-- -----------DiscValid-------- -->
+            <% if(discError){%>
+              <div  class="error-message alter text-danger text-start"><%=discError%></div>
+  
+          <%}%>
+            <div class="row">
+              <div class="col-lg-4">
+                <div class="mb-8">
+                  <label class="form-label">Regular price</label>
+                  <div class="row gx-4">
+                    <input
+                      placeholder=""
+                      type="number"
+                      min="1"
+                      max="200000"
+                      oninput="validity.valid||(value='')"
+                      name="price"
+                      value="<%= productsdata.price %>"
+                      id="product_price"
+                      class="form-control"
+                      
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- ---------priceValid-------- -->
+            <% if(priceError){%>
+              <div  class="error-message alter text-danger text-start"><%=priceError%></div>
+  
+          <%}%>
+            <div class="card mb-4">
+              <div class="card-header">
+                <h4>Product Image</h4>
+              </div>
+
+              <div class="card-body">
+                <% for( let j = 0; j < productsdata.images.length; j++ ) { %>
+
+                <div class="input-upload">
+                  <div id="image-preview" class="mt-3">
+                    <img
+                      src="/productsImages/<%=productsdata.images[j] %>"
+                      style="max-width: 100%; max-height: 200px"
+                      alt="Product Image"
+                    />
+                    <div class="d-flex pt-3">
+                      <a
+                        class="btn btn-outline-danger m-auto btn-sm"
+                        href="/admin/productImageDelete/<%= productsdata._id%>/<%= productsdata.images[j]  %>"
+                        onclick="return confirm('do you want to delete the image')"
+                        >Delete</a
+                      >
+                    </div>
+                  </div>
+                  <input
+                    type="text"
+                    name="old_images"
+                    value="<%=productsdata.images[j] %>"
+                    hidden
+                    id=""
+                  />
+
+                  <% } %>
+                  <input
+                  type="file"
+                  name="image"
+                  class="form-control"
+                  id="imageInput"
+                  onchange="previewImage(event)"
+                  multiple
+                />
+                  <!-- <button id="upload-btn" type="button">Submit Cropped Images</button> -->
+                  <div id="imagePreview"></div>
+                </div>
+              </div>
+              <div>
+                        <button
+                        onclick="check()"
+                          style="cursor: pointer"
+                          type="submit"
+                          class="btn btn-md rounded font-sm hover-up"
+                        >
+                          Confirm
+                        </button>
+                      </div>
+            </div>
+            <!-- --------imageValidate--------- -->
+            <% if (error_MSG) { %>
+              <div class="error-message alter text-danger text-start"><%= error_MSG %></div>
+          <% } %>
+          </div>
+          <% } %>
+        </form>
+
+        <p class="text-center small text-muted mb-15"></p>
+
+        <p class="text-center mb-4"><a href="#"></a></p>
+      </div>
+    </div>
+  </section>
+</main>
+<script>
+  function check() {
+    console.log("coming");
+  }
+</script>
+
+<script>
+  setTimeout(function() {
+    let errorMessages = document.querySelectorAll(".error-message");
+    errorMessages.forEach(function(message) {
+      message.innerHTML = '';
+    });
+  }, 4000);
+</script>
+
+
+<script>
+	// Function to preview uploaded images
+	function previewImage(event) {
+	  const imagePreview = document.getElementById("imagePreview");
+	  imagePreview.innerHTML = ""; // Clear previous preview
+  
+	  const files = event.target.files;
+	  for (let i = 0; i < files.length; i++) {
+		const file = files[i];
+		const reader = new FileReader();
+  
+		reader.onload = function (e) {
+		  // Create image element for preview
+		  const img = document.createElement("img");
+		  img.src = e.target.result;
+		  img.classList.add("img-thumbnail");
+		  img.style.maxWidth = "200px";
+		  img.style.maxHeight = "200px";
+  
+		  // Create button for image removal
+		  const removeBtn = document.createElement("button");
+		  removeBtn.textContent = "Remove";
+		  removeBtn.classList.add("btn", "btn-danger", "btn-sm", "mt-1");
+		  removeBtn.onclick = function () {
+			// Remove the corresponding image and button from the preview
+			removeImage(img, removeBtn);
+			// Clear the file input value to allow selecting the same file again
+			// document.getElementById('imageInput').value = '';
+		  };
+  
+		  // Append image and remove button to the preview container
+		  imagePreview.appendChild(img);
+		  imagePreview.appendChild(removeBtn);
+		};
+  
+		// Read the image file as a data URL
+		reader.readAsDataURL(file);
+		console.log(reader);
+	  }
+	}
+  
+	// Function to remove image and button
+	function removeImage(img, btn) {
+	  console.log(img, "================");
+	  console.log(btn, "---------------------------");
+	  img.remove();
+	  btn.remove();
+	}
+  </script>
+
+<%- include('./partials/footer/footer.ejs') %>

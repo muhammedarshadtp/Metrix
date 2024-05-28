@@ -6,7 +6,7 @@
     <div class="offcanvas-overlay"></div>
 
     <!-- ...:::: Start Breadcrumb Section:::... -->
-    <div class="breadcrumb-section breadcrumb-bg-color--golden">
+    <div class="breadcrumb-section"  style="background-image: url(https://www.oneplus.in/content/dam/oasis/page/2024/in/home/benz/3_Benz-desktop.jpg.thumb.webp);background-size:cover">
         <div class="breadcrumb-wrapper">
             <div class="container">
                 <div class="row">
@@ -35,29 +35,41 @@
                 <div id="login-start" class="col-lg-6 col-md-6 text-center"> <!-- Added text-center class here -->
                     <div class="account_form mx-auto" data-aos="fade-up" data-aos-delay="0">
                         <h3>signup</h3>
-                        <% if ( errorMsg) { %>
-                            <span class="text-danger fw-bold" id="errorMsg"><%= errorMsg %></span>
-                            
-                        <% } %>
+                        <% if(existingError){%>
+                            <div  class="error-message alter text-danger text-start"><%=existingError%></div>
+                
+                        <%}%>
                         <form action="/signup" method="POST">
                             <div class="default-form-box">
                                 <label>Username  <span>*</span></label>
-                                <input type="text" class="form-control" placeholder="name" name="username" required>
+                                <input type="text" class="form-control" placeholder="name" name="username">
                             </div>
+                            <% if(userError){%>
+                                <div  class="error-message alter text-danger text-start"><%=userError%></div>
+                    
+                            <%}%>
                             <div class="default-form-box">
                                 <label> email <span>*</span></label>
-                                <input type="email" class="form-control" placeholder="email" name="email" required>
+                                <input type="email" class="form-control" placeholder="email" name="email">
                             </div>
+                            <% if(emailError){%>
+                                <div  class="error-message alter text-danger text-start"><%=emailError%></div>
+                    
+                            <%}%>
                             <div class="default-form-box">
                                 <label>Passwords <span>*</span></label>
-                                <input id="password-field" type="password" class="form-control"  name="password" placeholder="Password" required>
+                                <input id="password-field" type="password" class="form-control"  name="password" placeholder="Password">
                             </div>
+                            <% if(passError){%>
+                                <div  class="error-message alter text-danger text-start"><%=passError%></div>
+                    
+                            <%}%>
                             <div class="default-form-box">
                                 <label> Conform Passwords <span>*</span></label>
-                                <input id="password-field" type="password" class="form-control"  name="Conform password" placeholder="Conform Password" required>
+                                <input id="password-field" type="password" class="form-control"  name="Conform password" placeholder="Conform Password">
                             </div>
                             <div class="login_submit">
-                                <button class="btn btn-md btn-black-default-hover mb-4" type="submit">signin</button>
+                                <button class="btn btn-md btn-black-default-hover mb-4" type="submit" style="margin: 0 auto">signup</button>
                                 <!-- <label class="checkbox-default mb-4" for="offer">
                                     <input type="checkbox" id="offer">
                                     <span>Remember me</span>
@@ -99,14 +111,13 @@
 
     <%- include('../partials/footer') %>
     <script>
-        reload()
-        const errMsg = document.getElementById('errorMsg')
-        function reload(){
-            setTimeout(()=>{
-                errMsg.innerHTML = ''
-            },5000)
-        }
-    </script>
+        setTimeout(function() {
+          let errorMessages = document.querySelectorAll(".error-message");
+          errorMessages.forEach(function(message) {
+            message.innerHTML = '';
+          });
+        }, 5000);
+      </script>
    
 </body>
 

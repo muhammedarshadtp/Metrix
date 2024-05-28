@@ -1,15 +1,23 @@
 const catagoryCollection = require("../../model/catagory-schema")
+const {AlphaOnly,alphanumValid} =require('../../utils/validation/adminValidation')
 
-
+const mongoose = require('mongoose');
+const ObjectId = mongoose.Types.ObjectId;
 
 const catagoryedit=async(req,res)=>{
     try {
-        const catagoryId =req.query.id
-        console.log(req.query.id);
+        const catagoryId =req.params.id
+        console.log(req.params.id,"hvhgcbvc");
         const catagorydata= await catagoryCollection.findById(catagoryId)
-        console.log(catagorydata);
-        res.render('catagoryedit', { catagorydata: catagorydata, error: undefined });
-
+       console.log(catagorydata);
+       res.render("catagoryedit", {
+        catagorydata: catagorydata,
+        caterror: req.flash('caterror'),
+        catDesError: req.flash('catDesError'),
+        catNameError: req.flash('catNameError')
+      });
+      
+  
 
     } catch (error) {
         console.log(error);
@@ -20,34 +28,46 @@ const catagoryedit=async(req,res)=>{
 const updatecatagory = async (req, res) => {
     try {
         const data = req.body;
-        console.log(data);
-        const catagoryId = req.query.id
-        console.log(catagoryId);
-        const catagorydata = await catagoryCollection.findById(catagoryId)
-        const existingcatagoryname = await catagoryCollection.findOne({name:data.name})
+        const id = req.query.id
+        console.log(data,"data kitty")
 
-        function existOrNot (data){
-            return data !== null ? 'exist' : 'not exist'
+        const existingcatagoryname = await catagoryCollection.findOne({ name:{ $regex: new RegExp("^" + data.name + "$", "i") }})
+        
+        const catNameValid=alphanumValid(data.name)
+        console.log(existingcatagoryname,"ithu exist");
+        const descNameValid=alphanumValid(data.description)
+        console.log(catNameValid,descNameValid);
+         if (!catNameValid) {
+            req.flash('catNameError','Invalid category Name')
+            return res.redirect(`/admin/catagoryedit/${id}`)
+          }
+          else if (!descNameValid) {
+            console.log("kaarinnnindu");
+            req.flash('catDesError','Invalid category Description')
+            return res.redirect(`/admin/catagoryedit/${id}`)
+          }
+        else if(existingcatagoryname&&existingcatagoryname._id.toString()=== id){
+            await catagoryCollection.updateOne(
+                { _id: id },
+                { name: data.name, description: data.description }
+              )
+            return res.redirect("/admin/catagory");
         }
-       const result = existOrNot(existingcatagoryname)
-       console.log(result);
-        console.log(existingcatagoryname,'existitng');
+        else if(existingcatagoryname){
+            req.flash("caterror","category already exist")
+            return res.redirect(`/admin/catagoryedit/${id}`)
+        } 
+          else{
+            console.log("update aaind");
+            await catagoryCollection.updateOne(
+                { _id: id },
+                { name: data.name, description: data.description }
+              );
+              return res.redirect("/admin/catagory");
 
-        if (result === 'not exist' || catagorydata.name === data.name) {
-            const catagoryupdate = await catagoryCollection.updateOne(
-                { _id: req.query.id },
-                { $set: { name: req.body.name, description: req.body.description } }
-            );
-            console.log(catagoryupdate);
-            res.redirect('/admin/catagory');
-        } else {
+          }
             
-            req.session.catagoryError = 'Category already Exists'
-            console.log("Category already exists");
-            const error = req.session.catagoryError
-            // Send an error response with a status code and error message
-            res.render('catagoryedit',{ catagorydata:data, error: error });
-        }
+        
     } catch (error) {
         console.log(error);
        

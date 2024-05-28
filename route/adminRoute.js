@@ -33,27 +33,27 @@ routerAdmin.get('/userstatus/:id', admin_auth, userlist.userstatus)
 
 routerAdmin.get('/catagory', admin_auth, catagory.catagory)
 
-routerAdmin.get('/manage-catagory/:id',catagory.admin_manageCatagory)
+routerAdmin.get('/manage-catagory/:id',admin_auth,catagory.admin_manageCatagory)
 
-routerAdmin.post('/addcatagory', addcatagory.addcatagory)
+routerAdmin.post('/addcatagory',admin_auth, addcatagory.addcatagory)
 
-routerAdmin.get('/catagoryedit',catagoryedit.catagoryedit)
+routerAdmin.get('/catagoryedit/:id',admin_auth,catagoryedit.catagoryedit)
 
-routerAdmin.post('/updatecatagory',catagoryedit.updatecatagory)
+routerAdmin.post('/updatecatagory',admin_auth,catagoryedit.updatecatagory)
 
 routerAdmin.get('/products', admin_auth, products.products)
 
-routerAdmin.get('/manage-products/:id',products.admin_manageProducts)
+routerAdmin.get('/manage-products/:id',admin_auth,products.admin_manageProducts)
 
 routerAdmin.get('/adminaddproducts', admin_auth, addproducts.addproducts)
 
-routerAdmin.post('/adminaddproducts', upload.array('image',5), addproducts.addproductspost)
+routerAdmin.post('/adminaddproducts',admin_auth, upload.array('image',5), addproducts.addproductspost)
 
-routerAdmin.get('/productsedit',productsedit.productsedit)
+routerAdmin.get('/productsedit',admin_auth,productsedit.productsedit)
 
-routerAdmin.post('/productseditPost',upload.array('image',5), productsedit.productseditPost)
+routerAdmin.post('/productseditPost',admin_auth,upload.array('image',5), productsedit.productseditPost)
 
-
+routerAdmin.get('/productImageDelete/:id/:images',admin_auth,productsedit.deleteImages)
 
 
 

@@ -89,11 +89,15 @@ include('./partials/header/header.ejs') %>
               </div>
               <div class="d-grid">
                 <button type="submit" class="btn btn-primary">Add category</button>
-                <% if (error) { %>
-                  <p id="errorMessage" style="color: rgb(244, 5, 53);"><%= error %></p>
+                <br>
+              <% if (error_msg) { %>
+                  <div  class="error-message alter text-danger text-start"><%= error_msg %></div>
+              <% } %>
+                <%# if (error) { %>
+                  <!-- <p id="errorMessage" style="color: rgb(244, 5, 53);"><%# error %></p> -->
 
                  
-                <% } %>
+                <%# } %>
               
               </div>
             </form>
@@ -127,9 +131,9 @@ include('./partials/header/header.ejs') %>
                           </td>
                     <td><b><%= catagorydata[i].name  %></b></td>
                     <td><%= catagorydata[i].description  %></td>
-                    <td><p style="color: rgb(17, 214, 17); font-weight: 24px;"><%= catagorydata[i].status %></p></td>
+                    <td><span class="badge rounded-pill <%= catagorydata[i].status ? 'alert-success' : 'alert-danger' %>" ><%= catagorydata[i].status  ? 'true' : 'false' %></span></td>
                     <td class="text-end">
-                      <a href="/admin/catagoryedit/?id=<%= catagorydata[i]._id %>" class="btn btn-sm font-sm rounded btn-brand">
+                      <a href="/admin/catagoryedit/<%= catagorydata[i]._id %>" class="btn btn-sm font-sm rounded btn-brand">
                           <i class="material-icons md-edit"></i> Edit
                       </a>
                       <!-- <a href="" class="btn btn-sm font-sm btn-light rounded">
@@ -182,29 +186,37 @@ include('./partials/header/header.ejs') %>
 
 </main>
 
-<script>
+<!-- <script>
  const errMsg = document.getElementById('error')
   reload()
   function reload(){
     setTimeout(()=>{
       errMsg.innerHTML = ''
-    },3000)
+    },4000)
   }
-</script>
-<script>
+</script> -->
+<!-- <script>
   setTimeout(function(){
     let errorMessage=document.getElementById("errorMessage")
     if(errorMessage){
       errorMessage.style.display = 'none'
     }
-  },2000)
-</script>
+  },4000)
+</script> -->
 
 <!-- <script>
     async function hideAndUnhide(){
         
     }
 </script> -->
+<script>
+  setTimeout(function() {
+    let errorMessages = document.querySelectorAll(".error-message");
+    errorMessages.forEach(function(message) {
+      message.innerHTML = '';
+    });
+  }, 3000);
+</script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>

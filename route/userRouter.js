@@ -35,9 +35,11 @@ router.get('/products',userController.products)
 
 router.get('/productDetail/:id',userController.productDetail)
 
-router.get('/logout',userController.logout)
+router.get('/logout',user_auth,userController.logout)
 
 router.get('/success',userController.google)
+
+router.get('/error_page',user_auth,userController.error_page)
 
 
 

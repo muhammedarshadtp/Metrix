@@ -1,36 +1,117 @@
 const catagoryCollection = require("../../model/catagory-schema")
 const productsCollection = require("../../model/products-schema")
-
+const { products } = require("./products")
+const {AlphaOnly,onlyNumbers,alphanumValid} =require('../../utils/validation/adminValidation')
 
 const productsedit = async(req,res)=>{
    try {
     const productId=req.query.id
-    const productsdata= await productsCollection.findById(productId)
+    let productsdata;
+    if(productId){
+         productsdata= await productsCollection.findById(productId).populate('catagory')
+
+         req.session.productsdata=productsdata
+    }else{
+        productsdata=req.session.productsdata
+    }
+    console.log(productsdata);
     const catagorydata=await catagoryCollection.find()
-    res.render('productsedit',{productsdata:productsdata,catagorydata:catagorydata})
+    res.render('productsedit',{productsdata:productsdata,catagorydata:catagorydata,
+        nameError:req.flash('nameError'),
+        stockError:req.flash('stockError'),
+        discError:req.flash('discError'),
+        priceError:req.flash('priceError'),})
    } catch (error) {
     console.log(error);
    }
 }
-
-const productseditPost = async(req,res)=>{
+const productseditPost = async (req, res) => {
     try {
-        console.log(req.body.old_images);
-     const productstext = await productsCollection.find({_id:req.query.podsId})
-     const catagory = await catagoryCollection.findOne({name:req.body.catagory})
-     console.log(req.files,"-----------");
-     if(req.body.old_images){
-
-         const productseditdatas= await productsCollection.updateOne({_id:req.query.podsId},{$set:{name:req.body.name,catagory:catagory,description:req.body.description, stock:req.body.stock, price:req.body.price,images:req.body.old_images}})
-         console.log(productseditdatas);
-     }else{
-        const productseditdatas= await productsCollection.updateOne({_id:req.query.podsId},{$set:{name:req.body.name,catagory:req.body.catagory,description:req.body.description, stock:req.body.stock, price:req.body.price}})
-     }
+        console.log('==========================');
+        const data = req.body;
+        const podsId = req.query.podsId;
+        const nameValid=alphanumValid(data.name)
+        const stockValid=onlyNumbers(data.stock)
+        const discValid=AlphaOnly(data.description)
+        const priceValid=onlyNumbers(data.price)
+         if(!nameValid){
+             req.flash('nameError','Product name must be at least 3 characters long')
+             return res.redirect('/admin/productsedit')
+         }
+         else if(!stockValid){
+             req.flash('stockError','Stock must be a positive integer')
+             return res.redirect('/admin/productsedit')
+         }
+         else if(!discValid){
+             req.flash('discError','Product description must be at least 4 characters long')
+             return res.redirect('/admin/productsedit')
+         }
+         else if(!priceValid){
+             req.flash('priceError','Price must be a positive number')
+             return res.redirect('/admin/productsedit')
+         }
+         else{
+            if(!req.body.old_images){
+                if (!req.files || req.files.length === 0) {
+                    req.flash('error_MSG', 'Please upload at least one image');
+                    return res.redirect('/admin/productsedit');
+                
+                }
+            }
+        const podsId= req.query.podsId
+        console.log(podsId,"sanam kitty");
         
-      
-        res.redirect('/admin/products')
+        const product = await productsCollection.findById(podsId);
+        console.log(products,'products kitty');
+        const catagory = await catagoryCollection.findOne({ name: req.body.catagory });
+        console.log(catagory,'catagory kitty');
+        if (!product || !catagory) {
+            return res.status(404).send('Product or Category not found');
+        }
+
+        let updatedImages = req.body.old_images || product.images;
+
+        // If new images are uploaded, handle them
+        if (req.files && req.files.length > 0) {
+            const newImages = req.files.map(file => file.filename);
+            updatedImages = updatedImages.concat(newImages);
+        }
+
+        const updatedProductData = {
+            name: req.body.name,
+            catagory: catagory,
+            description: req.body.description,
+            stock: req.body.stock,
+            price: req.body.price,
+            images: updatedImages
+        };
+
+        const result = await productsCollection.updateOne(
+            { _id:podsId },
+            { $set: updatedProductData }
+        );
+
+        console.log(result);
+
+        res.redirect('/admin/products');
+         }
     } catch (error) {
-        console.log(error);
+        console.error(error);
+        res.status(500).send('Internal Server Error');
+    }
+};
+
+const deleteImages=async(req,res)=>{
+    try {
+        console.log(req.params);
+        const imagesdelete = await productsCollection.updateOne(
+            { _id: req.params.id },
+            { $pull: { images: req.params.images } } // Correct structure for $pull
+          );          
+     console.log(imagesdelete,'vsdhfghg');
+     res.redirect(`/admin/productsedit?id=${req.params.id}`)
+    } catch (error) {
+        
     }
 }
 
@@ -39,5 +120,6 @@ const productseditPost = async(req,res)=>{
 module.exports={
     productsedit,
     productseditPost,
+    deleteImages,
     
 }

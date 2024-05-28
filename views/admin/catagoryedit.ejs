@@ -2,6 +2,11 @@
 <%- include('./partials/header/header.ejs') %>
 
 <main class="main-wrap">
+    <style>
+        .alter{
+            color: red;
+        }
+    </style>
     <section class="content-main">
         <div class="content-header">
             <div>
@@ -19,22 +24,30 @@
                             <form action="/admin/updatecatagory?id=<%= catagorydata._id %>" method="post">
                             <div class="mb-4">
                                 <label for="name" class="form-label">Name</label>
-                                <input type="text" class="form-control" id="name" name="name" value="<%= catagorydata.name %>" required>
+                                <input type="text" class="form-control" id="name" name="name" value="<%= catagorydata.name %>">
                             </div>
+                            <% if(catNameError){%>
+                                <div  class="error-message alter text-danger text-start"><%=catNameError%></div>
+                    
+                            <%}%>
 
                             <div class="mb-4">
                                 <label for="description" class="form-label">Description</label>
                                 <textarea class="form-control" id="description" name="description" rows="3" required><%= catagorydata.description%></textarea>
                             </div>
+                            <% if(catDesError){%>
+                                <div   class="error-message alter text-danger text-start"><%=catDesError%></div>
+                    
+                            <%}%>
 
                             <div class="d-grid">
                                 <button type="submit" class="btn btn-primary">Update Category</button>
-                                <% if (error) { %>
-                                  <p id="errorMessage" style="color: rgb(244, 5, 53);"><%= error %></p>
-
-                                 
-                                <% } %>
+                              
                             </div>
+                            <% if(caterror){%>
+                                <div  class="error-message alter text-danger text-start"><%=caterror%></div>
+                    
+                            <%}%>
                         </form>
                         </div>
       
@@ -62,11 +75,11 @@
 </script>
 
 <script>
-  setTimeout(function(){
-    let errorMessage=document.getElementById("errorMessage")
-    if(errorMessage){
-      errorMessage.style.display = 'none'
-    }
-  },2000)
+  setTimeout(function() {
+    let errorMessages = document.querySelectorAll(".error-message");
+    errorMessages.forEach(function(message) {
+      message.innerHTML = '';
+    });
+  }, 2000);
 </script>
 

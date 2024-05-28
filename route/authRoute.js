@@ -35,7 +35,7 @@ router.get('/auth/google/callback',
           if(alreadyLoginUserData.status==false){
             
             req.session.isAuth=false;
-            req.session.errorMsg="User account is disabled. Please contact support."
+            req.flash('statusError', 'User account is disabled. Please contact support.');
             return res.redirect('/login')
           }else{
             req.session.isAuth=true
