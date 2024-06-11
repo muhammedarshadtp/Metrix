@@ -6,7 +6,7 @@
     <div class="offcanvas-overlay"></div>
 
     <!-- ...:::: Start Breadcrumb Section:::... -->
-    <div class="breadcrumb-section"  style="background-image: url(https://www.oneplus.in/content/dam/oasis/page/2024/in/home/benz/3_Benz-desktop.jpg.thumb.webp);background-size:cover">
+    <div class="breadcrumb-section"  style="background-image: url(/productsImages/image-1716997441769-355989791.webp);background-size:cover">
         <div class="breadcrumb-wrapper">
             <div class="container">
                 <div class="row">
@@ -34,8 +34,8 @@
                 <!--login area start-->
                 <div id="login-start" class="col-lg-6 col-md-6 text-center"> <!-- Added text-center class here -->
                     <div class="account_form mx-auto" data-aos="fade-up" data-aos-delay="0">
-                        <% if(statusError){%>
-                            <div   class="error-message alter text-danger text-start"><%=statusError%></div>
+                        <% if(locals.statusError){%>
+                            <div   class="error-message alter text-danger text-start"><%= statusError%></div>
                 
                         <%}%>
                         <h3>login</h3>
@@ -44,7 +44,7 @@
                                 <label>Username or email <span>*</span></label>
                                 <input type="email" class="form-control" placeholder="email" name="email">
                             </div>
-                            <% if(emailError){%>
+                            <% if(locals.emailError){%>
                                 <div   class="error-message alter text-danger text-start"><%=emailError%></div>
                     
                             <%}%>
@@ -52,10 +52,17 @@
                                 <label>Passwords <span>*</span></label>
                                 <input id="password-field" type="password" class="form-control"  name="password" placeholder="Password">
                             </div>
-                            <% if(passError){%>
+                            <% if(locals.passError){%>
                                 <div   class="error-message alter text-danger text-start"><%=passError%></div>
                     
                             <%}%>
+                            
+                            
+                            <div class="login_submit">
+                                <button class="btn btn-md btn-black-default-hover mb-4" type="submit" style="margin: 0 auto">login</button>
+                               
+                                
+                            </div>
                             <div class="row mt-4">
                                 <div class="col">
                                     <a href="/auth/auth/google" class="btn btn-dark btn-block font-sm" style="text-decoration: none; color: aliceblue;">
@@ -75,13 +82,12 @@
                                         </svg> Continue Using Google
                                     </a>
                                 </div>
-                            </div>
-                            <br>
+                            </div> <br>
                             <div class="login_submit">
-                                <button class="btn btn-md btn-black-default-hover mb-4" type="submit" style="margin: 0 auto">login</button>
+                                
                                
-                                <a href="/user_forgotpassword">Lost your password?</a><br>
-                                <a href="/signup">Do you have an account? press Me</a>
+                                <a style="color: black;" href="/user_forgotpassword">Lost your password?</a><br>
+                                <a style="color: black;" href="/signup">Do you have an account? press Me</a>
                             </div>
                         </form>
                     </div>

@@ -54,13 +54,13 @@
                             <li>
                                 <a href="#offcanvas-wishlish" class="offcanvas-toggle">
                                     <i class="icon-heart"></i>
-                                    
+                                    <span class="item-count">4</span>
                                 </a>
                             </li>
                             <li>
                                 <a href="#offcanvas-add-cart" class="offcanvas-toggle">
                                     <i class="icon-bag"></i>
-                                    <!-- <span class="item-count"></span> -->
+                                    <span class="item-count"><%= cartCount %></span>
                                 </a>
                             </li>
                             <li>
@@ -165,7 +165,7 @@
                         
                     </li>
                     <li>
-                        <a href="/"><span>Shop</span></a>
+                        <a href="/products"><span>Shop</span></a>
                     </li>
                     <li><a href="about-us.html">About Us</a></li>
                     <li><a href="contact-us.html">Contact Us</a></li>
@@ -248,70 +248,41 @@
     <!-- Start  Offcanvas Addcart Wrapper -->
     <div class="offcanvas-add-cart-wrapper">
         <h4 class="offcanvas-title">Shopping Cart</h4>
-        <ul class="offcanvas-cart">
+<ul class="offcanvas-cart">
+    <% if (cart && cart.items && cart.items.length > 0) { %>
+        
+        <% for (let i = 0; i < cart.items.length; i++) { %>
             <li class="offcanvas-cart-item-single">
                 <div class="offcanvas-cart-item-block">
                     <a href="#" class="offcanvas-cart-item-image-link">
-                        <img src="/assets/images/product/default/home-3/default-1.jpg" alt=""
-                            class="offcanvas-cart-image">
+                        <img src="/productsImages/<%= cart.items[i].images %>" alt="" class="offcanvas-cart-image">
                     </a>
                     <div class="offcanvas-cart-item-content">
-                        <a href="#" class="offcanvas-cart-item-link">Car Wheel</a>
+                        <a href="" class="offcanvas-cart-item-link"><%= cart.items[i].productId.name %></a>
                         <div class="offcanvas-cart-item-details">
-                            <span class="offcanvas-cart-item-details-quantity">1 x </span>
-                            <span class="offcanvas-cart-item-details-price">$49.00</span>
+                            <span class="offcanvas-cart-item-details-quantity"><%= cart.items[i].quantity %>x</span>
+                            <span class="offcanvas-cart-item-details-price"><%= cart.items[i].price %></span>
                         </div>
                     </div>
                 </div>
-                <div class="offcanvas-cart-item-delete text-right">
+                <!-- <div class="offcanvas-cart-item-delete text-right">
                     <a href="#" class="offcanvas-cart-item-delete"><i class="fa fa-trash-o"></i></a>
-                </div>
+                </div> -->
             </li>
-            <li class="offcanvas-cart-item-single">
-                <div class="offcanvas-cart-item-block">
-                    <a href="#" class="offcanvas-cart-item-image-link">
-                        <img src="/assets/images/product/default/home-2/default-1.jpg" alt=""
-                            class="offcanvas-cart-image">
-                    </a>
-                    <div class="offcanvas-cart-item-content">
-                        <a href="#" class="offcanvas-cart-item-link">Car Vails</a>
-                        <div class="offcanvas-cart-item-details">
-                            <span class="offcanvas-cart-item-details-quantity">3 x </span>
-                            <span class="offcanvas-cart-item-details-price">$500.00</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="offcanvas-cart-item-delete text-right">
-                    <a href="#" class="offcanvas-cart-item-delete"><i class="fa fa-trash-o"></i></a>
-                </div>
-            </li>
-            <li class="offcanvas-cart-item-single">
-                <div class="offcanvas-cart-item-block">
-                    <a href="#" class="offcanvas-cart-item-image-link">
-                        <img src="/assets/images/product/default/home-3/default-1.jpg" alt=""
-                            class="offcanvas-cart-image">
-                    </a>
-                    <div class="offcanvas-cart-item-content">
-                        <a href="#" class="offcanvas-cart-item-link">Shock Absorber</a>
-                        <div class="offcanvas-cart-item-details">
-                            <span class="offcanvas-cart-item-details-quantity">1 x </span>
-                            <span class="offcanvas-cart-item-details-price">$350.00</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="offcanvas-cart-item-delete text-right">
-                    <a href="#" class="offcanvas-cart-item-delete"><i class="fa fa-trash-o"></i></a>
-                </div>
-            </li>
-        </ul>
-        <div class="offcanvas-cart-total-price">
-            <span class="offcanvas-cart-total-price-text">Subtotal:</span>
-            <span class="offcanvas-cart-total-price-value">$170.00</span>
-        </div>
-        <ul class="offcanvas-cart-action-button">
-            <li><a href="cart.html" class="btn btn-block btn-pink">View Cart</a></li>
-            <li><a href="compare.html" class=" btn btn-block btn-pink mt-5">Checkout</a></li>
-        </ul>
+        <% } %>
+    <% } else { %>
+        <li>No items in the cart.</li>
+    <% } %>
+</ul>
+<div class="offcanvas-cart-total-price">
+    <span class="offcanvas-cart-total-price-text">Subtotal:</span>
+    <span class="offcanvas-cart-total-price-value"><%= cart && cart.Total ? cart.Total : '0.00' %></span>
+</div>
+<ul class="offcanvas-cart-action-button">
+    <li><a href="/cartpage" class="btn btn-block btn-pink">View Cart</a></li>
+    <li><a href="/checkout" class="btn btn-block btn-pink mt-5">Checkout</a></li>
+</ul>
+
     </div> <!-- End  Offcanvas Addcart Wrapper -->
 
 </div> <!-- End  Offcanvas Addcart Section -->

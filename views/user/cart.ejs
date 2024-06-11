@@ -1,0 +1,312 @@
+<%- include('../partials/head') %>
+
+    <body>
+        <%- include('../partials/header') %>
+
+            <style>
+                .input-group {
+                    display: flex;
+                    align-items: center;
+                }
+
+                .input-group-button {
+                    display: flex;
+                    align-items: center;
+                }
+
+                .input-group-field {
+                    width: 50px;
+                    /* Adjust width as needed */
+                    text-align: center;
+                }
+
+                .hollow {
+                    border-radius: 50%;
+                    padding: 0.25em 0.8em;
+                    color: black;
+                    background-color: rgb(233, 233, 238);
+                }
+
+                .button i {
+                    margin: auto;
+                }
+
+                .plus-minus-input {
+                    align-items: center;
+
+                    .input-group-field {
+                        text-align: center;
+                        margin-left: 0.5rem;
+                        margin-right: 0.5rem;
+                        padding: 1rem;
+
+                        &::-webkit-inner-spin-button,
+                        ::-webkit-outer-spin-button {
+                            appearance: none;
+                        }
+                    }
+
+                    .input-group-button {
+
+                        border-radius: 50%;
+                        padding: 0.25em 0.8em;
+                        align-items: center;
+
+                    }
+                }
+            </style>
+
+            <!-- Offcanvas Overlay -->
+            <div class="offcanvas-overlay"></div>
+
+            <!-- ...:::: Start Breadcrumb Section:::... -->
+            <div class="breadcrumb-section breadcrumb-bg-color--golden">
+                <div class="breadcrumb-wrapper">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-12">
+                                <h3 class="breadcrumb-title">Cart</h3>
+                                <div
+                                    class="breadcrumb-nav breadcrumb-nav-color--black breadcrumb-nav-hover-color--golden">
+                                    <nav aria-label="breadcrumb">
+                                        <ul>
+                                            <li><a href="/">Home</a></li>
+                                            <li><a href="/products">Shop</a></li>
+                                            <li class="active" aria-current="page">Cart</li>
+                                        </ul>
+                                    </nav>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- ...:::: Start Cart Section:::... -->
+            <div class="cart-section">
+                <!-- Start Cart Table -->
+                <div class="cart-table-wrapper" data-aos="fade-up" data-aos-delay="0">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="table_desc">
+                                    <div class="table_page table-responsive">
+                                        <table>
+                                            <!-- Start Cart Table Head -->
+                                            <thead>
+                                                <tr>
+                                                    <th class="product_thumb">Image</th>
+                                                    <th class="product_name">Product Name</th>
+                                                    <th class="product-price">Price</th>
+                                                    <th class="product_quantity">Quantity</th>
+                                                    <th class="product_total">Total</th>
+                                                    <th class="product_remove">Delete</th>
+                                                </tr>
+                                            </thead> <!-- End Cart Table Head -->
+                                            <tbody>
+                                                <!-- Start Cart Single Item-->
+                                                <% if (cart && cart.items && cart.items.length> 0) { %>
+                                                    <% cart.items.forEach((item, index)=> { %>
+
+                                                        <tr>
+
+                                                            <td class="product_thumb"><a
+                                                                    href="/productDetail/<%= item.productId._id %>"><img
+                                                                        src="/productsImages/<%= item.images %>"
+                                                                        alt=""></a></td>
+                                                            <td class="product_name"><a href="">
+                                                                    <%= item.productId.name %>
+                                                                </a></td>
+                                                            <td class="product-price">
+                                                                <%= item.productId.price %>
+                                                            </td>
+                                                            <td>
+                                                                <div class="input-group plus-minus-input">
+                                                                    <div class="input-group-button">
+                                                                        <button
+                                                                            onclick="updateQuantity('<%= cart._id %>','<%= item._id %>', '<%= item.price %>', '<%= index %>', -1)"
+                                                                            type="button"
+                                                                            class=" reduced button hollow circle"
+                                                                            data-quantity="minus" data-field="quantity">
+                                                                            <i class="fa fa-minus"
+                                                                                aria-hidden="true"></i>
+                                                                        </button>
+                                                                    </div>
+                                                                    <input id="sst<%= index %>"
+                                                                        class="input-group-field" type="text"
+                                                                        name="quantity" value="<%= item.quantity %>"
+                                                                        min="0" max="10" readonly>
+                                                                    <div class="input-group-button">
+                                                                        <button
+                                                                            onclick="updateQuantity('<%= cart._id %>','<%= item._id %>', '<%= item.price %>', '<%= index %>', 1)"
+                                                                            type="button"
+                                                                            class="button hollow circle increase"
+                                                                            data-quantity="plus" data-field="quantity">
+                                                                            <i class="fa fa-plus"
+                                                                                aria-hidden="true"></i>
+                                                                        </button>
+                                                                    </div>
+                                                                </div>
+                                                            </td>
+                                                            <!-- <td class="product_quantity"><label></label> <input min="1"
+                                                    max="10" value="<%#= items.quantity %>" type="number"></td> -->
+                                                            <td id="total<%= index%>" class="product_total">
+                                                                <%= item.Total %>
+                                                            </td>
+                                                            <td class="product_remove">
+                                                                <button type="button"
+                                                                    onclick="deleteCart('<%= item._id %>')"
+                                                                    style="background: none; border: none; padding: 0; cursor: pointer;">
+                                                                    <i class="fa fa-trash-o"></i>
+                                                                </button>
+
+                                                            </td>
+                                                        </tr>
+                                                        <!-- End Cart Single Item-->
+
+                                                        <% }) %>
+                                                            <% } else { %>
+                                                                <tr>
+                                                                    <td colspan="6">No products in cart</td>
+                                                                </tr>
+                                                                <% } %>
+                                            </tbody>
+
+                                        </table>
+                                    </div>
+                                    <!-- <div class="cart_submit">
+                                <button class="btn btn-md btn-golden" type="submit">Process to Checkout</button>
+                            </div> -->
+                                </div>
+                                <!-- <div>
+                            <button onclick="history.back()">Go Back</button>
+                        </div> -->
+                            </div>
+                        </div>
+                    </div>
+                </div> <!-- End Cart Table -->
+
+                <!-- Start Coupon Start -->
+                <div class="coupon_area">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-lg-6 col-md-6">
+                                <!-- <div class="coupon_code left" data-aos="fade-up" data-aos-delay="200">
+                            <h3>Coupon</h3>
+                            <div class="coupon_inner">
+                                <p>Enter your coupon code if you have one.</p>
+                                <input class="mb-2" placeholder="Coupon code" type="text">
+                                <button type="submit" class="btn btn-md btn-golden">Apply coupon</button>
+                            </div>
+                        </div> -->
+                            </div>
+                            <div class="col-lg-6 col-md-6">
+                                <div class="coupon_code right" data-aos="fade-up" data-aos-delay="400">
+                                    <h3>Cart Totals</h3>
+                                    <div class="coupon_inner">
+                                        <!-- <div class="cart_subtotal">
+                                    <p>Subtotal</p>
+                                    <p class="cart_amount">$215.00</p>
+                                </div> -->
+                                        <!-- <div class="cart_subtotal ">
+                                    <p>Shipping</p>
+                                    <p class="cart_amount"><span>Flat Rate:</span> $255.00</p>
+                                </div> -->
+                                        <!-- <a href="#">Calculate shipping</a> -->
+
+                                        <div class="cart_subtotal">
+                                            <p>Total</p>
+                                            <p class="cart_amount" id="total">RS:<%= cart && cart.Total ? cart.Total
+                                                    : '0.00' %>
+                                            </p>
+                                        </div>
+                                        <div class="checkout_btn">
+                                            <a href="/checkout" class="btn btn-md btn-golden">Proceed to Checkout</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- End Coupon Start -->
+            </div> <!-- ...:::: End Cart Section:::... -->
+
+            <!-- Start Footer Section -->
+            <%- include('../partials/footer') %>
+                <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
+                <script>
+                    async function deleteCart(productId) {
+                        console.log('showing');
+                        const response = await fetch(`/deletecart/${productId}`, {
+                            method: 'GET',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            }
+                        })
+                        console.log(response, 'response is showing');
+                        if (!response.ok) {
+                            throw new Error('some error occured while deleteing cart product using fetch')
+                        }
+                        const data = await response.json()
+                        console.log(data, 'data is showing');
+                        if (data.result === 'success') {
+                            Swal.fire('Product Removed Successfully').then(() => {
+                                location.reload()
+                            })
+                        }
+
+                    }
+                </script>
+
+                <script>
+                    async function updateQuantity(cartId, productId, price, index, count) {
+                        try {
+
+                            let quantityInput = document.getElementById(`sst${index}`);
+                            let currentQuantity = parseInt(quantityInput.value);
+
+                            console.log("sdhfgasjhfcgsjhCvbJHCvbsdcjhG", cartId, productId, price, index, count)
+                            const response = await fetch(`/update-cart-quantity/${productId}`, {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify({
+                                    cartId: cartId,
+                                    action: count,
+                                    newQuantity: count + currentQuantity,
+                                })
+                            });
+                            const data = await response.json();
+                            console.log(data, "xssxasxaxasxasxasxas");
+
+                            if (data.success) {
+                                quantityInput.value = data.newQuantity;
+                                document.getElementById(`total${index}`).innerText = `₹ ${(price * data.newQuantity).toFixed(2)}`;
+
+
+                                document.getElementById('total').innerText = `₹ ${data.total}`;
+                                enableButtons();
+                            }
+                            else if (data.error) {
+                                Swal.fire(data.error)
+                            } else {
+                                console.error('Failed to update quantity:', data.error);
+
+                            }
+
+                        } catch (error) {
+                            console.error('Error parsing cart JSON:', error);
+
+                        }
+                    }
+
+                </script>
+    </body>
+
+
+    </html>

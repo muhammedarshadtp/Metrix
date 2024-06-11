@@ -68,19 +68,18 @@
                                     <%}%>
                                     <% if (catagory) { %>
                                         <div class="mb-4">
-                                            <label for="product_category" class="form-label">Category
-                                            </label>
-
-                                            <select name="catagory" id="product_category" required>
-                                                
-                                                <% for( cate of catagory ) { %>
-
-                                                    <option value="" selected disabled></option>
-                                                    <option value=""><%= cate.name %></option>
+                                            <label for="product_category" class="form-label">Category</label>
+                                    
+                                            <label for="catagory" class="form-label">Category:</label>
+                                            <select class="form-select" id="catagory" name="catagory" required>
+                                                <option value="" disabled selected>Select Category</option>
+                                                <% for (let cate of catagory) { %>
+                                                    <option value="<%= cate.id %>"><%= cate.name %></option>
                                                 <% } %>
                                             </select>
                                         </div>
                                     <% } %>
+                                    
                                     <div class="mb-4">
                                       <label for="product_stock" class="form-label">Product Stock</label>
                                         <input type="number" oninput="validity.valid||(value='')" min="0" max="20" placeholder="Type here" name="stock" class="form-control" id="product_stock">
@@ -207,6 +206,7 @@
                 document.getElementById('uploadForm').addEventListener('submit', function (event) {
                     const fileInput = document.getElementById('upload');
                     const file = fileInput.files[0];
+                    console.log(file);
                     if (!file || !file.type.match('image/jpeg|image/png')) {
                         alert('Please select a valid JPEG or PNG image file.');
                         event.preventDefault();
@@ -235,12 +235,12 @@
     function previewImages(event) {
       const imagePreview = document.getElementById('imagePreview');
       imagePreview.innerHTML = ''; // Clear previous preview
-  
+
       const files = event.target.files;
       for (let i = 0; i < files.length; i++) {
         const file = files[i];
         const reader = new FileReader();
-  
+
         reader.onload = function (e) {
           // Create image element for preview
           const img = document.createElement('img');
@@ -248,27 +248,44 @@
           img.classList.add('img-thumbnail');
           img.style.maxWidth = '200px';
           img.style.maxHeight = '200px';
-  
+
           // Create button for image removal
           const removeBtn = document.createElement('button');
           removeBtn.textContent = 'Remove';
-          removeBtn.classList.add('btn', 'btn-danger', 'btn-sm' ,'mt-1');
+          removeBtn.classList.add('btn', 'btn-danger', 'btn-sm', 'mt-1');
           removeBtn.onclick = function () {
             // Remove the corresponding image and button from the preview
             removeImage(img, removeBtn);
             // Clear the file input value to allow selecting the same file again
             // document.getElementById('imageInput').value = '';
           };
-  
+
           // Append image and remove button to the preview container
           imagePreview.appendChild(img);
           imagePreview.appendChild(removeBtn);
+
+          // Create a JPEG file from the base64 data URL
+          const jpegFile = dataURLToFile(e.target.result, file.name);
+          console.log(jpegFile); // You can use this file object to upload
         };
-  
+
         // Read the image file as a data URL
         reader.readAsDataURL(file);
-        console.log(reader);
       }
+    }
+
+    function removeImage(img, btn) {
+      img.remove();
+      btn.remove();
+    }
+
+    function dataURLToFile(dataurl, filename) {
+      var arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1],
+      bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
+      while(n--){
+          u8arr[n] = bstr.charCodeAt(n);
+      }
+      return new File([u8arr], filename, {type:mime});
     }
   
     // Function to remove image and button

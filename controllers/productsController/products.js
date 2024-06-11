@@ -5,6 +5,8 @@ const productsCollection = require("../../model/products-schema")
 
 const products = async (req, res) => {
     try {
+        
+
         const products = await productsCollection.find()
         res.render('adminProducts', { products })
     } catch (error) {

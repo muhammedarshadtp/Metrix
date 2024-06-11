@@ -27,7 +27,7 @@ const addcatagory=async(req,res)=>{
              return res.redirect('/admin/catagory')
         }
         console.log(req.body);
-        const existingCatagory=await catagoryCollection.findOne({name:catagorydata.name})
+        const existingCatagory=await catagoryCollection.findOne({ name:{ $regex: new RegExp("^" + catagorydata.name + "$", "i") }});
          
         if(existingCatagory){
             console.log("Category already exists:");

@@ -140,7 +140,7 @@ include('./partials/header/header.ejs') %>
                           <i class="material-icons md-delete_forever"></i> Hide
                       </a> -->
                       <button
-                      onclick="hideAndUnhide(`<%= catagorydata[i]._id %>`,`<%= catagorydata[i].status %>`)"
+                      onclick="conformation(`<%= catagorydata[i]._id %>`,`<%= catagorydata[i].status %>`)"
                       class="btn btn-sm font-sm btn-light rounded" style="width: 5rem;height: 2rem;">
                       <% if (catagorydata[i].status===true) { %>
                           Hide
@@ -178,6 +178,27 @@ include('./partials/header/header.ejs') %>
       </div>
       <!-- card body .// -->
     </div>
+    <div class="pagination-area mt-15 mb-50">
+      <nav aria-label="Page navigation example">
+          <ul class="pagination justify-content-start">
+              <% if (page > 1) { %>
+                  <li class="page-item">
+                      <a class="page-link" href="/admin/catagory/?page=<%= page - 1 %>">Prev</a>
+                  </li>
+              <% } %>
+              <% for (let i = 1; i <= totalPages; i++) { %>
+                  <li class="page-item <%= page === i ? 'active' : '' %>">
+                      <a class="page-link" href="/admin/catagory/?page=<%= i %>"><%= i %></a>
+                  </li>
+              <% } %>
+              <% if (page < totalPages) { %>
+                  <li class="page-item">
+                      <a class="btn" href="/admin/catagory/?page=<%= page + 1 %>">Next</a>
+                  </li>
+              <% } %>
+          </ul>
+      </nav>
+          </div>
     <!-- card .// -->
   </section>
   <!-- content-main end// -->
@@ -220,6 +241,33 @@ include('./partials/header/header.ejs') %>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
+  async function conformation(id,status){
+    let action=''
+    if(status=="true"){
+      action="hide"
+    }else{
+      action="unhide"
+    }
+    Swal.fire({
+  title: "Are you sure?",
+  text: "",
+  icon: "warning",
+  showCancelButton: true,
+  confirmButtonColor: "#3085d6",
+  cancelButtonColor: "#d33",
+  confirmButtonText: "Yes, confirm it!"
+}).then((result) => {
+  if (result.isConfirmed) {
+    // Swal.fire({
+    //   title: "success!",
+    //   text: `Your file has been ${action}`,
+    //   icon: "success"
+    // }).then(()=>{
+      hideAndUnhide(id, status)
+    // })
+  }
+});
+  }
   async function hideAndUnhide(id, status) {
       const response = await fetch(`/admin/manage-catagory/${id}?status=${status}`, {
           method: 'GET',

@@ -1,45 +1,72 @@
 const express=require("express")
 const router = express.Router();
 
-const userController=require('../controllers/userController/publicview');
+const userController=require('../controllers/userController/userLogin');
+const userHome= require('../controllers/userController/userHome')
+const userSignin = require('../controllers/userController/userSignin')
+const userProducts=require('../controllers/userController/userProducts')
+const userCart=require('../controllers/userController/userCart')
+const account=require('../controllers/userController/accounts')
+const errorpage=require('../controllers/userController/errorPage')
+const google=require('../controllers/userController/googleAuth')
+const logout=require('../controllers/userController/userLogout')
+const forRe = require('../controllers/userController/userForgotpassword')
+const checkout=require('../controllers/userController/checkout')
+const otp=require('../controllers/userController/userOtp')
 const {user_auth,status} = require("../middleware/userAuth");
 
-router.get('/',userController.home)
+const {whishlistcart}= require('../utils/validationNavbar')
+
+router.use(whishlistcart)
+
+router.get('/',userHome.home)
 
 
-router.get('/signup',userController.signup)
+router.get('/signup',userSignin.signup)
 
-router.post('/signup',userController.signupPost)
+router.post('/signup',userSignin.signupPost)
 
 router.get('/login',userController.login)
 
 router.post('/login',userController.loginpost)
 
-router.get('/otpverification',userController.otpverification)
+router.get('/otpverification',otp.otpverification)
 
-router.post('/otpverification',userController.otpverificationpost)
+router.post('/otpverification',otp.otpverificationpost)
 
-router.get('/user_forgotpassword',userController.user_forgotpassword)
+router.get('/user_forgotpassword',forRe.user_forgotpassword)
 
-router.post('/user_forgotpasswordPost',userController.user_forgotpasswordPost)
+router.get('/resend_otp',otp.resend_otp)
 
-router.get('/resetPassword',userController.resetPassword)
+router.post('/user_forgotpasswordPost',forRe.user_forgotpasswordPost)
 
-router.post('/resetPasswordPost',userController.resetPasswordPost)
+router.get('/resetPassword',forRe.resetPassword)
 
-router.get('/resend_otp',userController.resend_otp)
+router.post('/resetPasswordPost',forRe.resetPasswordPost)
 
-router.get('/account',userController.account)
+router.get('/account',account.account)
 
-router.get('/products',userController.products)
+router.get('/products',userProducts.products)
 
-router.get('/productDetail/:id',userController.productDetail)
+router.get('/productDetail/:id',userProducts.productDetail)
 
-router.get('/logout',user_auth,userController.logout)
+router.get('/cartpage',user_auth,userCart.showcart)
 
-router.get('/success',userController.google)
+router.get('/cart',user_auth,userCart.cart)
 
-router.get('/error_page',user_auth,userController.error_page)
+router.get('/deletecart/:id',user_auth, userCart.deletecart)
+
+router.post('/update-cart-quantity/:productId/',user_auth,userCart.updatecart)
+
+router.get('/checkout',user_auth,checkout.checkout)
+
+router.post('/checkouts',user_auth,checkout.checkoutPost)
+
+router.get('/logout',logout.logout)
+
+router.get('/success',google.google)
+
+router.get('/error_page',errorpage.error_page)
 
 
 

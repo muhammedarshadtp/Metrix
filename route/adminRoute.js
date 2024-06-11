@@ -12,6 +12,7 @@ const { upload } = require("../middleware/multer");
 const admin_auth = require("../middleware/adminAuth");
 const  productsedit  = require("../controllers/productsController/productsedit");
 const  catagoryedit  = require("../controllers/catagoryController/catagoryedit");
+const order = require('../controllers/orderContoller/order')
 
 
 
@@ -54,6 +55,8 @@ routerAdmin.get('/productsedit',admin_auth,productsedit.productsedit)
 routerAdmin.post('/productseditPost',admin_auth,upload.array('image',5), productsedit.productseditPost)
 
 routerAdmin.get('/productImageDelete/:id/:images',admin_auth,productsedit.deleteImages)
+
+routerAdmin.get('/order',admin_auth,order.order)
 
 
 

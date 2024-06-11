@@ -23,8 +23,9 @@ const addproducts = async (req, res) => {
 const addproductspost = async (req, res) => {
 
     try {
-        // const catagory= await catagoryCollection.findOne({name:req.body.catagory})
+        const catagory= await catagoryCollection.findOne({_id:req.body.catagory})
        const data = req.body;
+    
 
        const nameValid=AlphaOnly(data.name)
        console.log(nameValid);

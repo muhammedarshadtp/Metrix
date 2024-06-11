@@ -10,14 +10,14 @@ const userRouter=require('./route/userRouter')
 const adminRouter=require('./route/adminRoute')
 const authRouter = require('./route/authRoute')
 app.set('view engine', 'ejs')
-
+app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
 const path = require('path');
 const nocache = require("nocache");
 // const flash = require('express-flash');
 const flash = require('connect-flash');
-const userCollection = require("./model/user-schema");
+
 
 require('./utils/auth')
 const passport = require('passport')

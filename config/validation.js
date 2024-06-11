@@ -1,7 +1,10 @@
 const validateName = (name) => {
     // Name should be at least 6 characters long and can contain letters and spaces
+    if (name.trim() === '') {
+      return false; // Return false for empty strings
+  }
     const nameRegex = /^[a-zA-Z\s]{6,}$/;
-    name=name.trim()
+    // name=name.trim()
     return nameRegex.test(name);
   };
   
@@ -17,5 +20,6 @@ const validateName = (name) => {
     return passwordRegex.test(password);
     
   };
+  
   
   module.exports = { validateName, validateEmail, validatePassword, };

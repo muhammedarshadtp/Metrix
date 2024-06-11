@@ -4,16 +4,12 @@ const userCollection = require("../../model/user-schema")
 
 const admin_loginGet = async (req, res) => {
     try {
-        if (req.session.isAdminAuth) {
-          return   res.redirect('/admin/dashboard')
-        } else {
+        
 
             const error = req.session.adminError
             req.session.adminError = null
             console.log(error, '././././');
             res.render('admin_login', { error })
-           
-        }
     } catch (error) {
         console.log(error);
     }

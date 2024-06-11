@@ -2,41 +2,45 @@
 
 
 
-<%- include('./partials/header/header.ejs') %>
-  
-    <main class="main-wrap">
-        <header class="main-header navbar">
-            <div class="col-search">
-            
-            </div>
-            <div class="col-nav">
-                <button class="btn btn-icon btn-mobile me-auto" data-trigger="#offcanvas_aside"> <i class="material-icons md-apps"></i> </button>
-                <ul class="nav">
-                    <li class="nav-item">     
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link btn-icon darkmode" href=""> <i class="material-icons md-nights_stay"></i> </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="" class="requestfullscreen nav-link btn-icon"><i class="material-icons md-cast"></i></a>
-                    </li>
-                    <li class="dropdown nav-item">
-                            <a class="dropdown-item text-danger" href="/admin/Adminlogout"><i class="material-icons md-exit_to_app"></i>Logout</a>
-                        </div>
-                    </li>
+    <%- include('./partials/header/header.ejs') %>
+
+        <main class="main-wrap">
+            <header class="main-header navbar">
+                <div class="col-search">
+
+                </div>
+                <div class="col-nav">
+                    <button class="btn btn-icon btn-mobile me-auto" data-trigger="#offcanvas_aside"> <i
+                            class="material-icons md-apps"></i> </button>
+                    <ul class="nav">
+                        <li class="nav-item">
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link btn-icon darkmode" href=""> <i class="material-icons md-nights_stay"></i>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="" class="requestfullscreen nav-link btn-icon"><i
+                                    class="material-icons md-cast"></i></a>
+                        </li>
+                        <li class="dropdown nav-item">
+                            <a class="dropdown-item text-danger" href="/admin/Adminlogout"><i
+                                    class="material-icons md-exit_to_app"></i>Logout</a>
+                </div>
+                </li>
                 </ul>
-            </div>
-        </header>
-        <section class="content-main">
-            <div class="content-header">
-                <h2 class="content-title">Users list</h2>
-                <!-- <div>
+                </div>
+            </header>
+            <section class="content-main">
+                <div class="content-header">
+                    <h2 class="content-title">Users list</h2>
+                    <!-- <div>
                     <a href="#" class="btn btn-primary"><i class="material-icons md-plus"></i> Create new</a>
                 </div> -->
-            </div>
-            <div class="card mb-4">
-                <!-- <header class="card-header">
+                </div>
+                <div class="card mb-4">
+                    <!-- <header class="card-header">
                     <div class="row gx-3">
                         <div class="col-lg-4 col-md-6 me-auto">
                             <input type="text" placeholder="Search..." class="form-control">
@@ -44,130 +48,180 @@
                      
                     </div>
                 </header> -->
-                <div class="card-body">
-                    <div class="table-responsive">
-                        <table class="table table-hover">
-                            <thead>
-                                <tr>
-                                    <th>User name</th>
-                                    <th>Email</th>
-                                    <th>Status</th>
-                                   
-                                    <th class="text-end"> Action </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <% for( let i = 0; i < userdatas.length; i++ ) { %>
-                                <tr>
-    
-                                    
-                                    
-                                    <td width="40%">
-                                        <a href="" class="itemside">
-                                            <!-- <div class="left">
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>User name</th>
+                                        <th>Email</th>
+                                        <th>Status</th>
+
+                                        <th class="text-end"> Action </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% for( let i=0; i < userdatas.length; i++ ) { %>
+                                        <tr>
+
+
+
+                                            <td width="40%">
+                                                <a href="" class="itemside">
+                                                    <!-- <div class="left">
                                                 <img src="assets/imgs/people/avatar1.jpg" class="img-sm img-avatar" alt="Userpic">
                                             </div> -->
-                                            <div class="info pl-3">
-                                                <h6 class="mb-0 title"><%=userdatas[i].username  %></h6>
-                                                <small class="text-muted"></small>
-                                            </div>
-                                        </a>
-                                    </td>
-                                    <td> <span><%= userdatas[i].email %></span></td>
-                                    <td>
-                                        <% if (userdatas[i].status===true) { %>
-                                         
-                                            <span class="badge rounded-pill alert-success"><%= userdatas[i].status %></span>
-                                        <% }else{ %>
-                                        <span class="badge rounded-pill alert-danger"><%= userdatas[i].status %></span>
+                                                    <div class="info pl-3">
+                                                        <h6 class="mb-0 title">
+                                                            <%=userdatas[i].username %>
+                                                        </h6>
+                                                        <small class="text-muted"></small>
+                                                    </div>
+                                                </a>
+                                            </td>
+                                            <td> <span>
+                                                    <%= userdatas[i].email %>
+                                                </span></td>
+                                            <td>
+                                                <% if (userdatas[i].status===true) { %>
+
+                                                    <span class="badge rounded-pill alert-success">
+                                                        <%= userdatas[i].status %>
+                                                    </span>
+                                                    <% }else{ %>
+                                                        <span class="badge rounded-pill alert-danger">
+                                                            <%= userdatas[i].status %>
+                                                        </span>
+                                                        <% } %>
+                                            </td>
+
+                                            <% if (userdatas[i].status) { %>
+                                                <td class="text-end">
+                                                    <button
+                                                        onclick="conformation(`<%= userdatas[i]._id %>`,`<%= userdatas[i].status %>`)"
+                                                        class="btn btn-sm btn-brand rounded font-sm mt-15"
+                                                        style="width: 80px;">Block</a>
+                                                </td>
+
+                                                <% } else { %>
+                                                    <td class="text-end">
+                                                        <button
+                                                            onclick="conformation(`<%= userdatas[i]._id %>`,`<%= userdatas[i].status %>`)"
+                                                            class="btn btn-sm btn-brand rounded font-sm mt-15"
+                                                            style="width: 80px;">Un block</a>
+                                                    </td>
+                                                    <% } %>
+
+
+
+                                        </tr>
                                         <% } %>
-                                    </td>
-                                        
-                                    <% if (userdatas[i].status) { %>
-                                        <td class="text-end">
-                                            <button onclick="hideAndUnhide(`<%= userdatas[i]._id %>`,`<%= userdatas[i].status %>`)" class="btn btn-sm btn-brand rounded font-sm mt-15" style="width: 80px;">Block</a>
-                                        </td>
 
-                                     <% } else { %>
-                                        <td class="text-end">
-                                            <button onclick="hideAndUnhide(`<%= userdatas[i]._id %>`,`<%= userdatas[i].status %>`)" class="btn btn-sm btn-brand rounded font-sm mt-15" style="width: 80px;">Un block</a>
-                                        </td>
-                                    <% } %>
-                                 
-                                   
-                                    
-                                </tr>
-                                <% } %>
-                                
-                            </tbody>
-                        </table> <!-- table-responsive.// -->
-                    </div>
-                </div> <!-- card-body end// -->
-            </div> <!-- card end// -->
-            <div class="pagination-area mt-15 mb-50">
-                <nav aria-label="Page navigation example">
-                    <ul class="pagination justify-content-start">
-                        <li class="page-item active"><a class="page-link" href="">01</a></li>
-                        <li class="page-item"><a class="page-link" href="">02</a></li>
-                        <li class="page-item"><a class="page-link" href="">03</a></li>
-                        <li class="page-item"><a class="page-link dot" href="">...</a></li>
-                        <li class="page-item"><a class="page-link" href="">16</a></li>
-                        <li class="page-item"><a class="page-link" href=""><i class="material-icons md-chevron_right"></i></a></li>
-                    </ul>
-                </nav>
-            </div>
-        </section> <!-- content-main end// -->
-       
-        <%- include('./partials/footer/footer.ejs') %>
+                                </tbody>
+                            </table> <!-- table-responsive.// -->
+                        </div>
+                    </div> <!-- card-body end// -->
+                </div> <!-- card end// -->
+                <div class="pagination-area mt-15 mb-50">
+                    <nav aria-label="Page navigation example">
+                        <ul class="pagination justify-content-start">
+                            <% if (page > 1) { %>
+                                <li class="page-item">
+                                    <a class="page-link" href="/admin/users_list/?page=<%= page - 1 %>">Prev</a>
+                                </li>
+                            <% } %>
+                            <% for (let i = 1; i <= totalPages; i++) { %>
+                                <li class="page-item <%= page === i ? 'active' : '' %>">
+                                    <a class="page-link" href="/admin/users_list/?page=<%= i %>"><%= i %></a>
+                                </li>
+                            <% } %>
+                            <% if (page < totalPages) { %>
+                                <li class="page-item">
+                                    <a class="page-link btn btn-primary" href="/admin/users_list/?page=<%= page + 1 %>">Next</a>
+                                </li>
+                            <% } %>
+                        </ul>
+                    </nav>
+                </div>
+            </section> <!-- content-main end// -->
+
+            <%- include('./partials/footer/footer.ejs') %>
 
 
 
-        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+                <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 
-        <script>
-            async function hideAndUnhide(id, status) {
-                console.log("inaside fuctin");
-                const response = await fetch(`/admin/userstatus/${id}?status=${status}`, {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json'
+                <script>
+                    async function conformation(id, status) {
+                        let action = ''
+                        if (status == "true") {
+                            action = "hide"
+                        } else {
+                            action = "unhide"
+                        }
+                        Swal.fire({
+                            title: "Are you sure?",
+                            text: "",
+                            icon: "warning",
+                            showCancelButton: true,
+                            confirmButtonColor: "#3085d6",
+                            cancelButtonColor: "#d33",
+                            confirmButtonText: "Yes, confirm it!"
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                // Swal.fire({
+                                //   title: "success!",
+                                //   text: `Your file has been ${action}`,
+                                //   icon: "success"
+                                // }).then(()=>{
+                                hideAndUnhide(id, status)
+                                // })
+                            }
+                        });
                     }
-                })
-                    .then(response => {
-                        console.log(response);
-                        if (!response.ok) {
-                            console.log('some kind of network problem');
-                        }
-                        return response.json()
-                    }).then(data => {
-                        if (data.success==='hide') {
-                            Swal.fire({
-                                position: "center",
-                                icon: "success",
-                                title: "user hide successfully",
-                                showConfirmButton: false,
-                                timer: 1500
-                            }).then(()=>{
-                                location.reload()
+                    async function hideAndUnhide(id, status) {
+                        console.log("inaside fuctin");
+                        const response = await fetch(`/admin/userstatus/${id}?status=${status}`, {
+                            method: 'GET',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            }
+                        })
+                            .then(response => {
+                                console.log(response);
+                                if (!response.ok) {
+                                    console.log('some kind of network problem');
+                                }
+                                return response.json()
+                            }).then(data => {
+                                if (data.success === 'hide') {
+                                    Swal.fire({
+                                        position: "center",
+                                        icon: "success",
+                                        title: "user hide successfully",
+                                        showConfirmButton: false,
+                                        timer: 1500
+                                    }).then(() => {
+                                        location.reload()
+                                    })
+
+                                    console.log('data fetched successfully');
+                                } if (data.success === 'unhide') {
+                                    Swal.fire({
+                                        position: "center",
+                                        icon: "success",
+                                        title: "user unhide successfully",
+                                        showConfirmButton: false,
+                                        timer: 1500
+                                    }).then(() => {
+                                        location.reload()
+                                    })
+                                    console.log('data fetcted error');
+                                }
+                            }).catch(err => {
+                                window.location.reload()
+                                console.log(err, 'error occured');
                             })
-                            
-                            console.log('data fetched successfully');
-                        } if(data.success==='unhide') {
-                            Swal.fire({
-                                position: "center",
-                                icon: "success",
-                                title: "user unhide successfully",
-                                showConfirmButton: false,
-                                timer: 1500
-                            }).then(()=>{
-                                location.reload()
-                            })
-                            console.log('data fetcted error');
-                        }
-                    }).catch(err => {
-                        window.location.reload()
-                        console.log(err, 'error occured');
-                    })
-            }
-        </script>
+                    }
+                </script>

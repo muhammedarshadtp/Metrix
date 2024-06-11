@@ -7,11 +7,21 @@ const catagoryCollection = require("../../model/catagory-schema")
 const catagory=async(req,res)=>{
 
    try {
-    const catagorydata=await catagoryCollection.find()
+    const limit = 6; 
+    let page = Number(req.query.page) || 1; 
+        
+    const TOTAL_COUNT_OF_CATAGORY = await catagoryCollection.countDocuments()
+    const totalPages = Math.ceil(TOTAL_COUNT_OF_CATAGORY / limit);
+    console.log(TOTAL_COUNT_OF_CATAGORY,'total count is showing');
+    page = Math.max(1, Math.min(page, totalPages));
+
+    const skip = (page - 1) * limit;
+
+    const catagorydata=await catagoryCollection.find().skip(skip).limit(limit)
     const error = req.session.catagoryError
     req.session.catagoryError = '' 
 
-    res.render('catagory',{catagorydata:catagorydata,error:error})
+    res.render('catagory',{catagorydata:catagorydata,error:error,page,totalPages, count: TOTAL_COUNT_OF_CATAGORY})
     
 
    } catch (error) {
