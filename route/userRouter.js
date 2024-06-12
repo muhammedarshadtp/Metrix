@@ -6,7 +6,6 @@ const userHome= require('../controllers/userController/userHome')
 const userSignin = require('../controllers/userController/userSignin')
 const userProducts=require('../controllers/userController/userProducts')
 const userCart=require('../controllers/userController/userCart')
-const account=require('../controllers/userController/accounts')
 const errorpage=require('../controllers/userController/errorPage')
 const google=require('../controllers/userController/googleAuth')
 const logout=require('../controllers/userController/userLogout')
@@ -15,7 +14,9 @@ const checkout=require('../controllers/userController/checkout')
 const otp=require('../controllers/userController/userOtp')
 const {user_auth,status} = require("../middleware/userAuth");
 
-const {whishlistcart}= require('../utils/validationNavbar')
+const {whishlistcart}= require('../utils/validationNavbar');
+const { user_orderHistory,order_placed } = require("../controllers/userController/order");
+const  account  = require("../controllers/userController/accounts");
 
 router.use(whishlistcart)
 
@@ -46,6 +47,10 @@ router.post('/resetPasswordPost',forRe.resetPasswordPost)
 
 router.get('/account',account.account)
 
+router.post('/addAddress',account.addAddress)
+
+router.get('/deleteAddress',account.deleteAddress)
+
 router.get('/products',userProducts.products)
 
 router.get('/productDetail/:id',userProducts.productDetail)
@@ -60,7 +65,10 @@ router.post('/update-cart-quantity/:productId/',user_auth,userCart.updatecart)
 
 router.get('/checkout',user_auth,checkout.checkout)
 
-router.post('/checkouts',user_auth,checkout.checkoutPost)
+
+router.get('/order_placed',order_placed)
+
+router.get('/order-history',user_orderHistory)
 
 router.get('/logout',logout.logout)
 

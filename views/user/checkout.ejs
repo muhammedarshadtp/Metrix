@@ -1,320 +1,259 @@
 <%- include('../partials/head') %>
 
-<body>
- <%- include('../partials/header') %>
+    <body>
+        <%- include('../partials/header') %>
 
-    <!-- Offcanvas Overlay -->
-    <div class="offcanvas-overlay"></div>
+            <!-- Offcanvas Overlay -->
+            <div class="offcanvas-overlay"></div>
 
-    <!-- ...:::: Start Breadcrumb Section:::... -->
-    <div class="breadcrumb-section breadcrumb-bg-color--golden">
-        <div class="breadcrumb-wrapper">
-            <div class="container">
-                <div class="row">
-                    <div class="col-12">
-                        <h3 class="breadcrumb-title">Checkout</h3>
-                        <div class="breadcrumb-nav breadcrumb-nav-color--black breadcrumb-nav-hover-color--golden">
-                            <nav aria-label="breadcrumb">
-                                <ul>
-                                    <li><a href="">Home</a></li>
-                                    <li><a href="/products">Shop</a></li>
-                                    <li class="active" aria-current="page">Checkout</li>
-                                </ul>
-                            </nav>
+            <!-- ...:::: Start Breadcrumb Section:::... -->
+            <div class="breadcrumb-section breadcrumb-bg-color--golden">
+                <div class="breadcrumb-wrapper">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-12">
+                                <h3 class="breadcrumb-title">Checkout</h3>
+                                <div
+                                    class="breadcrumb-nav breadcrumb-nav-color--black breadcrumb-nav-hover-color--golden">
+                                    <nav aria-label="breadcrumb">
+                                        <ul>
+                                            <li><a href="">Home</a></li>
+                                            <li><a href="/products">Shop</a></li>
+                                            <li class="active" aria-current="page">Checkout</li>
+                                        </ul>
+                                    </nav>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
-    </div> <!-- ...:::: End Breadcrumb Section:::... -->
+            </div> <!-- ...:::: End Breadcrumb Section:::... -->
 
-    <!-- ...:::: Start Checkout Section:::... -->
-    <div class="checkout-section">
-        <div class="container">
-            <div class="row">
-                <!-- User Quick Action Form -->
-                <div class="col-12">
-                    <div class="user-actions accordion" data-aos="fade-up" data-aos-delay="200">
-                        <h3>
-                            <i class="fa fa-file-o" aria-hidden="true"></i>
-                           Have a coupon?
-                            <a class="Returning" href="#" data-bs-toggle="collapse" data-bs-target="#checkout_coupon"
-                                aria-expanded="true">Click here to enter your code</a>
+            <!-- ...:::: Start Checkout Section:::... -->
+            <div class="checkout-section">
+                <div class="container">
+                    <div class="row">
+                        <!-- User Quick Action Form -->
+                        <div class="col-12">
+                            <div class="user-actions accordion" data-aos="fade-up" data-aos-delay="200">
+                                <h3>
+                                    <i class="fa fa-file-o" aria-hidden="true"></i>
+                                    Have a coupon?
+                                    <a class="Returning" href="#" data-bs-toggle="collapse"
+                                        data-bs-target="#checkout_coupon" aria-expanded="true">Click here to enter your
+                                        code</a>
 
-                        </h3>
-                        <div id="checkout_coupon" class="collapse checkout_coupon" data-parent="#checkout_coupon">
-                            <div class="checkout_info">
-                                <form action="#">
-                                    <input placeholder="Coupon code" type="text">
-                                    <button class="btn btn-md btn-black-default-hover" type="submit">Apply
-                                        coupon</button>
+                                </h3>
+                                <div id="checkout_coupon" class="collapse checkout_coupon"
+                                    data-parent="#checkout_coupon">
+                                    <div class="checkout_info">
+                                        <form action="#">
+                                            <input placeholder="Coupon code" type="text">
+                                            <button class="btn btn-md btn-black-default-hover" type="submit">Apply
+                                                coupon</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- User Quick Action Form -->
+                    </div>
+
+
+
+
+                    <div class="row" style="display: flex; ">
+
+
+                        <% if (address) { %>
+                            <!-- <div > -->
+                            <% for( let i=0; i < address.length; i++ ) { %>
+
+                                <div class="card" style="width: 400px;margin-right: 5%;">
+                                    <div class="card-body">
+                                        <div class="radio-container">
+                                            <input type="radio" style="align-items:start ;"
+                                                onclick="selectAddress('<%= i %>')" name="name">
+                                            <label style="font-weight: 800;font-size: larger;">Select</label>
+                                        </div>
+                                        <h5 class="card-title">Address of <%#= address[i].address %>
+                                        </h5>
+                                        <h6 class="card-subtitle mb-2 text-body-secondary">
+                                            <%= address[i].name %>
+                                        </h6>
+                                        <p class="card-text">
+                                            <%= address[i].address %> ,<%= address[i].street %>
+                                        </p>
+                                        <p class="card-text">
+                                            <%= address[i].city %> ,<%= address[i].state %>
+                                        </p>
+                                        <p class="card-text">Pincode: <%= address[i].pincode %>
+                                        </p>
+                                        <p class="card-text">Mobile: <%= address[i].phone %>
+                                        </p>
+                                        <div class="mb-4">
+                                            <a class="btn btn-warning" href="/checkOutEditeAddress/<%= i %>"> Edit </a>
+                                            <a class="btn btn-success" onclick="delAddress('<%= address[i]._id %>')">Delete</a>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <% } %>
+
+                                    <% } %>
+
+                    </div>
+                    <!-- Start User Details Checkout Form -->
+                    <div class="checkout_form" data-aos="fade-up" data-aos-delay="400">
+                        <div class="row">
+                            <div class="col-lg-6 col-md-6">
+                                <form id="formData">
+                                    <h3>Add Address Details</h3>
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <label class="checkbox-default" for="newShipping" data-bs-toggle="collapse"
+                                                data-bs-target="#anotherShipping">
+                                                <input type="checkbox" id="newShipping">
+                                                <span>Add new address</span>
+                                            </label>
+                                            <div id="anotherShipping" class="collapse mt-3"
+                                                data-parent="#anotherShipping">
+                                                <div class="row">
+                                                    <div class="col-lg-6">
+                                                        <div class="default-form-box">
+                                                            <label>Name <span>*</span></label>
+                                                            <input type="text" placeholder="Name" name="name" required>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-12">
+                                                        <div class="select_form_select default-form-box">
+                                                            <label for="country_name">Country <span>*</span></label>
+                                                            <select class="niceselect_option wide" name="country"
+                                                                id="country_name" required>
+                                                                <option value="America">America</option>
+                                                                <option value="India">India</option>
+                                                                <!-- Add other countries as needed -->
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-12">
+                                                        <div class="default-form-box">
+                                                            <label>Street address <span>*</span></label>
+                                                            <input name="address"
+                                                                placeholder="House number and street name" type="text"
+                                                                required>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-12">
+                                                        <div class="default-form-box">
+                                                            <input name="street"
+                                                                placeholder="Apartment, suite, unit etc. (optional)"
+                                                                type="text">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-12">
+                                                        <div class="default-form-box">
+                                                            <label>City <span>*</span></label>
+                                                            <input name="city" type="text" required>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-12">
+                                                        <div class="default-form-box">
+                                                            <label>State <span>*</span></label>
+                                                            <input name="state" type="text" required>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-6">
+                                                        <div class="default-form-box">
+                                                            <label>Pincode <span>*</span></label>
+                                                            <input name="pincode" type="text" required>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-6">
+                                                        <div class="default-form-box">
+                                                            <label>Phone <span>*</span></label>
+                                                            <input name="phone" type="text" required>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="order_button pt-3">
+                                        <button class="btn btn-md btn-black-default-hover" type="submit">Add
+                                            address</button>
+                                    </div>
                                 </form>
                             </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- User Quick Action Form -->
-            </div>
+                            <div class="col-lg-6 col-md-6">
 
+                                <h3>Your order</h3>
+                                <div class="order_table table-responsive">
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                                <th>Product</th>
+                                                <th>Quantity</th>
+                                                <th>Total</th>
+                                            </tr>
+                                        </thead>
+                                        <% if (cart && cart.items && cart.items.length> 0) { %>
+                                            <% cart.items.forEach((item, index)=> { %>
+                                                <tbody>
+                                                    <tr>
+                                                        <td>
+                                                            <%= item.productId.name %>
+                                                        </td>
+                                                        <td>
+                                                            <%= item.quantity %> <span class="fw-bold">x <%= item.price
+                                                                        %></span>
+                                                        </td>
+                                                        <td>
+                                                            <%= item.price * item.quantity %>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                                <% }) %>
+                                                    <% } %>
+                                                        <tfoot>
 
-
-
-            <div class="row" style="display: flex; ">
-
-
-                <% if (address) { %>
-                  <!-- <div > -->
-                  <% for( let i=0; i < address.length; i++ ) { %>
-
-                    <div class="card" style="width: 400px;margin-right: 5%;">
-                      <div class="card-body">
-                        <div class="">
-                          <input type="radio" onclick="selectAddress('<%= i %>')" name="name">
-                          <label style="font-weight: 800;font-size: larger;">Select</label>
-                        </div>
-                        <h5 class="card-title">Address of <%#= address[i].address %>
-                        </h5>
-                        <h6 class="card-subtitle mb-2 text-body-secondary">
-                          <%= address[i].name %>
-                        </h6>
-                        <p class="card-text">
-                          <%= address[i].address %> ,<%= address[i].street %>
-                        </p>
-                        <p class="card-text">
-                          <%= address[i].city %> ,<%= address[i].state %>
-                        </p>
-                        <p class="card-text">Pincode: <%= address[i].pincode %>
-                        </p>
-                        <p class="card-text">Mobile: <%= address[i].phone %>
-                        </p>
-                        <div class="mb-4">
-                          <a class="btn btn-warning" href="/checkOutEditeAddress/<%= i %>"> Edit </a>
-                          <a class="btn btn-success" onclick="delAddress('<%= i %>')">Delete</a>
-                        </div>
-                      </div>
-
-                    </div>
-
-                    <% } %>
-
-                      <% } %>
-
-            </div>
-            <!-- Start User Details Checkout Form -->
-            <div class="checkout_form" data-aos="fade-up" data-aos-delay="400">
-                <div class="row">
-                    <div class="col-lg-6 col-md-6">
-                        <form action="/checkouts" method="post">
-                            <h3>Billing Details</h3>
-                            <div class="row">
-                                <div class="col-lg-6">
-                                    <div class="default-form-box">
-                                        <label> Name <span>*</span></label>
-                                        <input type="text" placeholder="Name" name="name">
-                                    </div>
-                                </div>
-                                <div class="col-12">
-                                    <div class="default-form-box">
-                                        <label for="country">country <span>*</span></label>
-                                        <select class="country_option nice-select wide" name="country" id="country">
-                                            <option value="America">America</option>
-                                            <option value="India">India</option>
-                                            <option value="Afghanistan">Afghanistan</option>
-                                            <option value="Ghana">Ghana</option>
-                                            <option value="Albania">Albania</option>
-                                            <option value="Bahrain">Bahrain</option>
-                                            <option value="Colombia">Colombia</option>
-                                            <option value="Dominican Republi">Dominican Republic</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-12">
-                                    <div class="default-form-box">
-                                        <label>Street address <span>*</span></label>
-                                        <input placeholder="House number and street name" type="text" name="address">
-                                    </div>
-                                </div>
-                                <div class="col-12">
-                                    <div class="default-form-box">
-                                        <input placeholder="Apartment, suite, unit etc. (optional)" type="text" name="street">
-                                    </div>
-                                </div>
-                                <div class="col-12">
-                                    <div class="default-form-box">
-                                        <label>Town / City <span>*</span></label>
-                                        <input type="text" name="city">
-                                    </div>
-                                </div>
-                                <div class="col-12">
-                                    <div class="default-form-box">
-                                        <label>State  <span>*</span></label>
-                                        <input type="text" name="state">
-                                    </div>
-                                </div>
-                                <div class="col-lg-6">
-                                    <div class="default-form-box">
-                                        <label>pincode<span>*</span></label>
-                                        <input type="number" name="pincode">
-                                    </div>
-                                </div>
-                                <div class="col-lg-6">
-                                    <div class="default-form-box">
-                                        <label>Phone <span>*</span></label>
-                                        <input type="text" name="phone">
-                                    </div>
-                                </div>
-                                <!-- <div class="col-12">
-                                    <label class="checkbox-default" for="newAccount" data-bs-toggle="collapse"
-                                        data-bs-target="#newAccountPassword">
-                                        <input type="checkbox" id="newAccount">
-                                        <span>Create an account?</span>
-                                    </label>
-                                    <div id="newAccountPassword" class="collapse mt-3"
-                                        data-parent="#newAccountPassword">
-                                        <div class="card-body1 default-form-box">
-                                            <label> Account password <span>*</span></label>
-                                            <input placeholder="password" type="password">
-                                        </div>
-                                    </div>
-                                </div> -->
-                                <div class="col-12">
-                                    <label class="checkbox-default" for="newShipping" data-bs-toggle="collapse"
-                                        data-bs-target="#anotherShipping">
-                                        <input type="checkbox" id="newShipping">
-                                        <span>Ship to a different address?</span>
-                                    </label>
-
-                                    <div id="anotherShipping" class="collapse mt-3" data-parent="#anotherShipping">
-                                        <div class="row">
-                                            <div class="col-lg-6">
-                                                <div class="default-form-box">
-                                                    <label> Name <span>*</span></label>
-                                                    <input type="text" placeholder="Name">
-                                                </div>
-                                            </div>
-                                            <div class="col-12">
-                                                <div class="select_form_select default-form-box">
-                                                    <label for="countru_name">country <span>*</span></label>
-                                                    <select class="niceselect_option wide" name="cuntry"
-                                                        id="countru_name">
-                                                        <option value="America">America</option>
-                                                        <option value="India">India</option>
-                                                        <option value="Afghanistan">Afghanistan</option>
-                                                        <option value="Ghana">Ghana</option>
-                                                        <option value="Albania">Albania</option>
-                                                        <option value="Bahrain">Bahrain</option>
-                                                        <option value="Colombia">Colombia</option>
-                                                        <option value="Dominican Republi">Dominican Republic</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-
-                                            <div class="col-12">
-                                                <div class="default-form-box">
-                                                    <label>Street address <span>*</span></label>
-                                                    <input placeholder="House number and street name" type="text">
-                                                </div>
-                                            </div>
-                                            <div class="col-12">
-                                                <div class="default-form-box">
-                                                    <input placeholder="Apartment, suite, unit etc. (optional)"
-                                                        type="text">
-                                                </div>
-                                            </div>
-                                            <div class="col-12">
-                                                <div class="default-form-box">
-                                                    <label> City <span>*</span></label>
-                                                    <input type="text">
-                                                </div>
-                                            </div>
-                                            <div class="col-12">
-                                                <div class="default-form-box">
-                                                    <label>State<span>*</span></label>
-                                                    <input type="text">
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-6">
-                                                <div class="default-form-box">
-                                                    <label>pincode<span>*</span></label>
-                                                    <input type="text">
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-6">
-                                                <div class="default-form-box">
-                                                    <label>phone  <span>*</span></label>
-                                                    <input type="text">
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-12 mt-3">
-                                    <div class="order-notes">
-                                        <label for="order_note">Order Notes</label>
-                                        <textarea id="order_note"
-                                            placeholder="Notes about your order, e.g. special notes for delivery."></textarea>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="order_button pt-3">
-                                <button class="btn btn-md btn-black-default-hover" type="submit">Proceed</button>
-                            </div>
-                        </form>
-                    </div>
-                    <div class="col-lg-6 col-md-6">
-                        
-                            <h3>Your order</h3>
-                            <div class="order_table table-responsive">
-                                <table>
-                                    <thead>
-                                        <tr>
-                                            <th>Product</th>
-                                            <th>Total</th>
-                                        </tr>
-                                    </thead>
-                                    <% if (cart && cart.items && cart.items.length > 0) { %>
-                                        <% cart.items.forEach((item, index) => { %>
-                                    <tbody>
-                                        <tr>
-                                            <td><%= item.productId.name %></td>
-                                            <td> <%= item.price * item.quantity %></td>
-                                        </tr>
-                                    </tbody>
-                                    <% }) %>
-                                    <% } %>
-                                    <tfoot>
-                                        <tr>
+                                                            <!-- <tr>
                                             <th>Cart Subtotal</th>
-                                            <td>RS:<%= cart && cart.Total ? cart.Total : '0.00' %></td>
+                                            <td></td>
                                         </tr>
-                                        <!-- <tr>
+                                        <tr>
                                             <th>Shipping</th>
                                             <td><strong>50.00</strong></td>
                                         </tr> -->
-                                        <tr class="order_total">
-                                            <th>Order Total</th>
-                                            <td><strong>220.00</strong></td>
-                                        </tr>
-                                    </tfoot>
-                                    
-                                </table>
-                            </div>
-                            <div class="payment_method">
-                                <div class="panel-default">
-                                    <label class="checkbox-default" for="currencyCod" data-bs-toggle="collapse"
-                                        data-bs-target="#methodCod">
-                                        <input type="checkbox" id="currencyCod">
-                                        <span>Cash on Delivery</span>
-                                    </label>
+                                                            <tr class="order_total">
+                                                                <th>Order Total</th>
+                                                                <td><strong>RS:<%= cart && cart.Total ? cart.Total
+                                                                            : '0.00' %></strong></td>
+                                                            </tr>
+                                                        </tfoot>
 
-                                    <div id="methodCod" class="collapse" data-parent="#methodCod">
-                                        <div class="card-body1">
-                                            <p>Please send a check to Store Name, Store Street, Store Town, Store State
-                                                / County, Store Postcode.</p>
+                                    </table>
+                                </div>
+                                <div class="payment_method">
+                                    <div class="panel-default">
+                                        <!-- <label class="checkbox-default" for="currencyCod" data-bs-toggle="collapse"
+                                        data-bs-target="#methodCod"> -->
+                                        <!-- <input type="checkbox" id="currencyCod"> -->
+                                        <!-- <span>Cash on Delivery</span> -->
+                                        <button class="btn btn-success text-light"
+                                            onclick="placeOrder('<%= cart %>')">Cash on Delivery</button>
+                                        <!-- </label> -->
+
+                                        <div id="methodCod" class="collapse" data-parent="#methodCod">
+                                            <div class="card-body1">
+                                                <p>Please send a check to Store Name, Store Street, Store Town, Store
+                                                    State
+                                                    / County, Store Postcode.</p>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                                <!-- <div class="panel-default">
+                                    <!-- <div class="panel-default">
                                     <label class="checkbox-default" for="currencyPaypal" data-bs-toggle="collapse"
                                         data-bs-target="#methodPaypal">
                                         <input type="checkbox" id="currencyPaypal">
@@ -327,20 +266,95 @@
                                         </div>
                                     </div>
                                 </div> -->
-                                <div class="order_button pt-3">
-                                    <button class="btn btn-md btn-black-default-hover" type="submit">Proceed</button>
+                                    <!-- <div class="order_button pt-3">
+                                    <button class="btn btn-md btn-black-default-hover" type="submit">Proceed</button>   //neeed to apply on next week
+                                </div> -->
                                 </div>
+
                             </div>
-                       
-                    </div>
+                        </div>
+                    </div> <!-- Start User Details Checkout Form -->
                 </div>
-            </div> <!-- Start User Details Checkout Form -->
-        </div>
-    </div><!-- ...:::: End Checkout Section:::... -->
+            </div><!-- ...:::: End Checkout Section:::... -->
 
-    <%- include('../partials/footer') %>
-    
-</body>
+            <%- include('../partials/footer') %>
 
 
-</html>
+    </body>
+    <script>
+
+        const form = document.getElementById("formData");
+
+        form.addEventListener('submit', function (event) {
+            event.preventDefault();
+            const formData = new FormData(form);
+            const data = {
+                name: formData.get('name'),
+                country: formData.get('country'),
+                address: formData.get('address'),
+                street: formData.get('street'),
+                city: formData.get('city'),
+                state: formData.get('state'),
+                pincode: formData.get('pincode'),
+                phone: formData.get('phone')
+            };
+
+            fetch('/addAddress', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.result === 'success') {
+                        Swal.fire("Address added successfully");
+                        // Optionally refresh the page or update the address list dynamically
+                    }
+                })
+                .catch(error => {
+                    console.error('There was a problem with the fetch operation:', error);
+                });
+        });
+
+        function placeOrder(cart) {
+            // Your placeOrder logic here
+            console.log(cart);
+        }
+
+        function selectAddress(index) {
+            // Your selectAddress logic here
+            console.log("Address selected:", index);
+        }
+
+        function delAddress(id) {
+            fetch(`/deleteAddress?id=${id}`)
+            .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.result === 'success') {
+                        Swal.fire("Address deleted successfully");
+                        // Optionally refresh the page or update the address list dynamically
+                    }
+                })
+                .catch(error => {
+                    console.error('There was a problem with the fetch operation:', error);
+                });
+            // Your delAddress logic here
+            console.log("Address deleted:", id);
+        }
+
+    </script>
+
+
+    </html>

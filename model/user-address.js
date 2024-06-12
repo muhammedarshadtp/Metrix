@@ -4,7 +4,7 @@ const userCollection = require('./user-schema')
 
 
  const addressschema= new mongoose.Schema({
-    user:{
+    userId:{
         type:mongoose.Schema.Types.ObjectId,
         ref:userCollection,
      
