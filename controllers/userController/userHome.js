@@ -10,9 +10,14 @@ const home = async (req, res) => {
         const id = req.session.userid
         const userDetail = await userCollection.find({ _id: id })
     
-            let cart=await cartCollection.findOne({}).populate("items.productId");
-            console.log(cart.items.length,'length');
-            cartCount = cart.items.length
+            let cart=await cartCollection.findOne({userId:id}).populate("items.productId");
+            // console.log(cart.items.length,'length');
+            // let cartCount 
+            // if(cart){
+
+            //     cartCount = cart.items.length || 0
+            // }
+            const cartCount = cart !==  null ? cart.items.length : 0
             const product = await productsCollection.find({ status: true }).populate("catagory")
             const products = product.filter(product => product.catagory.status === true)
             

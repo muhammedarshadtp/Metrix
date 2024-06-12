@@ -41,8 +41,10 @@ const otpverificationpost = async (req, res) => {
                 const userdata = req.session.userdata;
                 console.log(userdata,'userdata kitty');
                 const value = await userCollection.create(userdata);
+
+                req.session.userId = value._id
                 req.session.isAuth = true;
-                console.log(value);
+                console.log(value,'valueeeeeeeee');
                 res.redirect('/');
             } else {
                 console.log('OTP expired');

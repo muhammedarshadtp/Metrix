@@ -58,19 +58,19 @@ const cart = async (req, res) => {
             res.redirect('/cartpage')
         }else{
             let cart;
-            console.log(cart,'cart is shwoing')
+            console.log(cart,'cart is shwoing======================')
             console.log(cart);
             if (userId) {
                 cart = await cartCollection.findOne({ userId: userId }).populate("items.productId")
                 console.log(cart,'cart')
               }
               if (!cart) {
-                cart = await cartCollection.findOne({ sessionId: req.session.id }).populate("items.productId")
+                cart = await cartCollection.findOne({ userId: userId }).populate("items.productId")
               }
               if (!cart) {
                 // If no cart exists for the user, create a new one
                     cart = new cartCollection({
-                    sessionId: req.session.id,
+                    userId: req.session.id,
                     items: [],
                     Total: 0,
                 });
@@ -107,7 +107,7 @@ const cart = async (req, res) => {
               cart.Total = cart.items.reduce((acc, item) => acc + item.Total, 0);
 
               await cart.save();
-              console.log(cart,'cart is showing ');
+              console.log(cart,'cart is showing +++++++++++++++++++++++++');
               res.json({result:"success"})
             
         }
