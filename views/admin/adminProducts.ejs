@@ -74,11 +74,12 @@
                                     <span>Price</span>
                                 </div>
                                 <div class="col-lg-2 col-sm-2 col-4 col-status">
+                                    <span>Stock</span>
+                                </div>
+                                <div class="col-lg-2 col-sm-2 col-4 col-status">
                                     <span>Status</span>
                                 </div>
-                                <!-- <div class="col-lg-1 col-sm-2 col-4 col-date">
-                                <span>Date</span>
-                            </div> -->
+                                
                                 <div class="col-lg-2 col-sm-2 col-4 col-action text-end">
                                     <span>Action</span>
                                 </div>
@@ -110,6 +111,9 @@
                                     </div>
                                     <div class="col-lg-2 col-sm-2 col-4 col-price"> <span>
                                             <%= products[i].price %>
+                                        </span> </div>
+                                        <div class="col-lg-2 col-sm-2 col-4 col-price"> <span>
+                                            <%= products[i].stock %>
                                         </span> </div>
                                         <div class="col-lg-2 col-sm-2 col-4 col-status">
                                             <span class="badge rounded-pill <%= products[i].status ? 'alert-success' : 'alert-danger' %>">

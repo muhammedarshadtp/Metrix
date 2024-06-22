@@ -1,9 +1,6 @@
 const { ObjectId } = require("mongodb");
 const cartCollection = require("../../model/cart-schema");
-const userCollection = require("../../model/user-schema");
 const addressCollection = require("../../model/user-address");
-const { bnameValid, adphoneValid, pincodeValid, } = require("../../utils/validation/addressValidation");
-const catagoryCollection = require("../../model/catagory-schema");
 
 
 

@@ -1,0 +1,110 @@
+<%- include('../partials/head') %>
+
+<body>
+    <%- include('../partials/header') %>
+
+    <div class="breadcrumb-section breadcrumb-bg-color--golden">
+        <div class="breadcrumb-wrapper">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12">
+                        <h3 class="breadcrumb-title">Add New Address</h3>
+                        <div class="breadcrumb-nav breadcrumb-nav-color--black breadcrumb-nav-hover-color--golden">
+                            <nav aria-label="breadcrumb">
+                                <ul>
+                                    <li><a href="/">Home</a></li>
+                                    <li><a href="/products">Shop</a></li>
+                                    <li class="active" aria-current="page">Add New Address</li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container my-5">
+        <div class="row">
+            <div class="col-md-6">
+                <h4 class="mb-4">Add New Address</h4>
+                <form action="/userAddAddressPost" method="post">
+                    <div class="row">
+                        <% if (nameError.length > 0) { %>
+                            <div class="error-message alert text-danger text-start"><%= nameError %></div>
+                        <% } %>
+                        <div class="col-lg-6 mb-3">
+                            <label class="form-label" for="name">Name <span>*</span></label>
+                            <input type="text" class="form-control" id="name" name="name" placeholder="Name" required>
+                        </div>
+                        <% if (countryError.length > 0) { %>
+                            <div class="error-message alert text-danger text-start"><%= countryError %></div>
+                        <% } %>
+                        <div class="col-12 mb-3">
+                            <label class="form-label" for="country_name">Country <span>*</span></label>
+                            <select class="form-select" id="country_name" name="country" required>
+                                <option value="India">India</option>
+                                <!-- Add other countries as needed -->
+                            </select>
+                        </div>
+                        <% if (addressError.length > 0) { %>
+                            <div class="error-message alert text-danger text-start"><%= addressError %></div>
+                        <% } %>
+                        <div class="col-12 mb-3">
+                            <label class="form-label" for="address">Street address <span>*</span></label>
+                            <input type="text" class="form-control" id="address" name="address" placeholder="House number and street name" required>
+                        </div>
+                        <% if (streetError.length > 0) { %>
+                            <div class="error-message alert text-danger text-start"><%= streetError %></div>
+                        <% } %>
+                        <div class="col-12 mb-3">
+                            <label class="form-label" for="street">Street <span>(optional)</span></label>
+                            <input type="text" class="form-control" id="street" name="street" placeholder="Apartment, suite, unit etc.">
+                        </div>
+                        <% if (cityError.length > 0) { %>
+                            <div class="error-message alert text-danger text-start"><%= cityError %></div>
+                        <% } %>
+                        <div class="col-12 mb-3">
+                            <label class="form-label" for="city">City <span>*</span></label>
+                            <input type="text" class="form-control" id="city" name="city" required>
+                        </div>
+                        <% if (stateError.length > 0) { %>
+                            <div class="error-message alert text-danger text-start"><%= stateError %></div>
+                        <% } %>
+                        <div class="col-12 mb-3">
+                            <label class="form-label" for="state">State <span>*</span></label>
+                            <input type="text" class="form-control" id="state" name="state" required>
+                        </div>
+                        <% if (pincodeError.length > 0) { %>
+                            <div class="error-message alert text-danger text-start"><%= pincodeError %></div>
+                        <% } %>
+                        <div class="col-lg-6 mb-3">
+                            <label class="form-label" for="pincode">Pincode <span>*</span></label>
+                            <input type="text" class="form-control" id="pincode" name="pincode" required>
+                        </div>
+                        <% if (phoneError.length > 0) { %>
+                            <div class="error-message alert text-danger text-start"><%= phoneError %></div>
+                        <% } %>
+                        <div class="col-lg-6 mb-3">
+                            <label class="form-label" for="phone">Phone <span>*</span></label>
+                            <input type="text" class="form-control" id="phone" name="phone" required>
+                        </div>
+                    </div>
+                    <button class="btn btn-primary w-100" type="submit">Add Address</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <%- include('../partials/footer') %>
+</body>
+<script>
+    setTimeout(function() {
+      let errorMessages = document.querySelectorAll(".error-message");
+      errorMessages.forEach(function(message) {
+        message.innerHTML = '';
+      });
+    }, 4000);
+  </script>
+
+</html>

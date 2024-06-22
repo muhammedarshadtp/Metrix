@@ -1,207 +1,54 @@
-<form
-  action="/admin/productseditPost"
-  method="post"
-  enctype="multipart/form-data"
->
-  <%# if (productsdata) { %>
-  <div class="card-body">
-    <div class="mb-4">
-      <label for="product_name" class="form-label">Product Name</label>
-      <input
-        type="text"
-        placeholder="Type here"
-        name="name"
-        class="form-control"
-        value="<%= productsdata.name %>"
-        id="product_name"
-        required
-      />
-    </div>
-
-    <div class="mb-4">
-      <label for="product_category" class="form-label">Category </label>
-
-      <select name="catagory" id="product_category" required>
-        <option value="<%= productsdata.catagory.name %>">
-          <%= productsdata.catagory.name %>
-        </option>
-
-        <% for( let i = 0; i < catagorydata.length; i++ ) { %> <% if
-        (productsdata.catagory.name!= catagorydata[i].name) { %>
-        <option value="<%= catagorydata[i].name %>">
-          <%= catagorydata[i].name %>
-        </option>
-
-        <% } %> <% } %>
-      </select>
-    </div>
-
-    <div class="mb-4">
-      <label for="product_stock" class="form-label">Product Stock</label>
-      <input
-        type="number"
-        oninput="validity.valid||(value='')"
-        min="1"
-        max="100"
-        placeholder="Type here"
-        name="stock"
-        class="form-control"
-        value="<%= productsdata.stock %>"
-        id="product_stock"
-        required
-      />
-    </div>
-    <div class="mb-4">
-      <label class="form-label">Full description</label>
-      <textarea
-        placeholder="Type here"
-        class="form-control"
-        name="description"
-        id="product_description"
-        rows="4"
-        required
-      >
-                  <%= productsdata.description %></textarea
-      >
-    </div>
-    <div class="row">
-      <div class="col-lg-4">
-        <div class="mb-8">
-          <label class="form-label">Regular price</label>
-          <div class="row gx-4">
-            <input
-              placeholder=""
-              type="number"
-              min="1000"
-              max="200000"
-              oninput="validity.valid||(value='')"
-              name="price"
-              value="<%= productsdata.price %>"
-              id="product_price"
-              class="form-control"
-              required
-            />
+<div class="col-md-6">
+  <h4 class="mb-4">Add New Address</h4>
+  <form id="formData">
+      <div class="row">
+          <div class="col-12">
+              <div class="form-check mb-3">
+                  <input class="form-check-input" type="checkbox" id="newShipping" data-bs-toggle="collapse" data-bs-target="#anotherShipping">
+                  <label class="form-check-label" for="newShipping">Add new address</label>
+              </div>
+              <div id="anotherShipping" class="collapse mt-3" data-parent="#anotherShipping">
+                  <div class="row">
+                      <div class="col-lg-6 mb-3">
+                          <label class="form-label" for="name">Name <span>*</span></label>
+                          <input type="text" class="form-control" id="name" name="name" placeholder="Name" required>
+                      </div>
+                      <div class="col-12 mb-3">
+                          <label class="form-label" for="country_name">Country <span>*</span></label>
+                          <select class="form-select" id="country_name" name="country" required>
+                              <option value="America">America</option>
+                              <option value="India">India</option>
+                              <!-- Add other countries as needed -->
+                          </select>
+                      </div>
+                      <div class="col-12 mb-3">
+                          <label class="form-label" for="address">Street address <span>*</span></label>
+                          <input type="text" class="form-control" id="address" name="address" placeholder="House number and street name" required>
+                      </div>
+                      <div class="col-12 mb-3">
+                          <label class="form-label" for="street">Street <span>(optional)</span></label>
+                          <input type="text" class="form-control" id="street" name="street" placeholder="Apartment, suite, unit etc.">
+                      </div>
+                      <div class="col-12 mb-3">
+                          <label class="form-label" for="city">City <span>*</span></label>
+                          <input type="text" class="form-control" id="city" name="city" required>
+                      </div>
+                      <div class="col-12 mb-3">
+                          <label class="form-label" for="state">State <span>*</span></label>
+                          <input type="text" class="form-control" id="state" name="state" required>
+                      </div>
+                      <div class="col-lg-6 mb-3">
+                          <label class="form-label" for="pincode">Pincode <span>*</span></label>
+                          <input type="text" class="form-control" id="pincode" name="pincode" required>
+                      </div>
+                      <div class="col-lg-6 mb-3">
+                          <label class="form-label" for="phone">Phone <span>*</span></label>
+                          <input type="text" class="form-control" id="phone" name="phone" required>
+                      </div>
+                  </div>
+              </div>
           </div>
-        </div>
       </div>
-    </div>
-  </div>
-
-  <div class="card mb-4">
-    <div class="card-header">
-      <h4>Product Image</h4>
-    </div>
-
-    <div class="card-body">
-      <% for( let j = 0; j < productsdata.images.length; j++ ) { %>
-
-      <div class="input-upload">
-        <div id="image-preview" class="mt-3">
-          <img
-            src="/productsImages/<%=productsdata.images[j] %>"
-            style="max-width: 100%; max-height: 200px"
-            alt="Product Image"
-          />
-          <div class="d-flex pt-3">
-            <a
-              class="btn btn-outline-danger m-auto btn-sm"
-              href="/admin/productImageDelete/<%= productsdata._id%>/<%= productsdata.images[j]  %>"
-              onclick="return confirm('do you want to delete the image')"
-              >Delete</a
-            >
-          </div>
-        </div>
-        <input
-          type="text"
-          name="old_images"
-          value="<%=productsdata.images[j] %>"
-          hidden
-          id=""
-        />
-
-        <% } %>
-        <input
-          type="file"
-          name="image"
-          class="form-control"
-          id="imageInput"
-          onchange="previewImage(event)"
-          multiple
-        />
-        <!-- <button id="upload-btn" type="button">Submit Cropped Images</button> -->
-        <div id="imagePreview"></div>
-      </div>
-    </div>
-    <!-- <div>
-              <button
-                style="cursor: pointer"
-                type="submit"
-                class="btn btn-md rounded font-sm hover-up"
-              >
-                Confirm
-              </button>
-            </div> -->
-  </div>
-  <button type="submit">Click me</button>
-  <%# } %>
-</form>
-
-
-
-
-
-
-
-
-
-
-
-<script>
-	// Function to preview uploaded images
-	function previewImage(event) {
-	  const imagePreview = document.getElementById("imagePreview");
-	  imagePreview.innerHTML = ""; // Clear previous preview
-  
-	  const files = event.target.files;
-	  for (let i = 0; i < files.length; i++) {
-		const file = files[i];
-		const reader = new FileReader();
-  
-		reader.onload = function (e) {
-		  // Create image element for preview
-		  const img = document.createElement("img");
-		  img.src = e.target.result;
-		  img.classList.add("img-thumbnail");
-		  img.style.maxWidth = "200px";
-		  img.style.maxHeight = "200px";
-  
-		  // Create button for image removal
-		  const removeBtn = document.createElement("button");
-		  removeBtn.textContent = "Remove";
-		  removeBtn.classList.add("btn", "btn-danger", "btn-sm", "mt-1");
-		  removeBtn.onclick = function () {
-			// Remove the corresponding image and button from the preview
-			removeImage(img, removeBtn);
-			// Clear the file input value to allow selecting the same file again
-			// document.getElementById('imageInput').value = '';
-		  };
-  
-		  // Append image and remove button to the preview container
-		  imagePreview.appendChild(img);
-		  imagePreview.appendChild(removeBtn);
-		};
-  
-		// Read the image file as a data URL
-		reader.readAsDataURL(file);
-		console.log(reader);
-	  }
-	}
-  
-	// Function to remove image and button
-	function removeImage(img, btn) {
-	  console.log(img, "================");
-	  console.log(btn, "---------------------------");
-	  img.remove();
-	  btn.remove();
-	}
-  </script>
+      <button class="btn btn-primary w-100" type="submit">Add Address</button>
+  </form>
+</div>

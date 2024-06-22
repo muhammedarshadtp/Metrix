@@ -53,13 +53,12 @@ const cart = async (req, res) => {
         const quantity=1;
         console.log(product.images)
         let images = product.images[0]
-        console.log(images,'=========================')
         if(stock==0){
-            res.redirect('/cartpage')
+          return res.json({result:'out of stock'})
         }else{
             let cart;
             console.log(cart,'cart is shwoing======================')
-            console.log(cart);
+          
             if (userId) {
                 cart = await cartCollection.findOne({ userId: userId }).populate("items.productId")
                 console.log(cart,'cart')
@@ -83,7 +82,7 @@ const cart = async (req, res) => {
                if (productExist !== -1 ) {
                  const product =  cart.items.find(item=>item.productId._id.equals(pid))
 
-                if(cart.items[productExist].quantity < 10 && cart.items[productExist].quantity < product.productId.stock){
+                if(cart.items[productExist].quantity < 5 && cart.items[productExist].quantity < product.productId.stock){
 
                   cart.items[productExist].quantity += 1;
                   cart.items[productExist].total = cart.items[productExist].quantity * price;
@@ -127,6 +126,9 @@ const updatecart = async (req, res) => {
       console.log("Received Request:", req.body);
       const { productId } = req.params;
       const { action, cartId } = req.body;
+      console.log(action,'action is showing ================');
+      console.log(typeof action,'action is showing ================');
+
       const cart = await cartCollection.findOne({ _id: cartId });
       console.log("cartId", cartId);
       console.log("cart", cart);
@@ -152,7 +154,7 @@ const updatecart = async (req, res) => {
       const price = cart.items[itemIndex].price;
   
       let updatedQuantity;
-  
+      
       if (action == "1") {
         console.log("1",currentQuantity);
         updatedQuantity = currentQuantity + 1;
@@ -164,15 +166,18 @@ const updatecart = async (req, res) => {
       }
       if (
         updatedQuantity < 1 ||
-        (updatedQuantity > stockLimit && action == "1")
-      ) {
-        return res
+        (stockLimit <= updatedQuantity && action == "1")
+        ) {
+          return res
           .status(400)
           .json({ success: false, error: "Quantity exceeds stock limits" });
-      }
-  
-      cart.items[itemIndex].quantity = updatedQuantity;
-  
+        }
+        console.log(updatedQuantity,'updated quantity =============================');
+        console.log(typeof updatedQuantity,'updated quantity =============================');
+
+        
+        cart.items[itemIndex].quantity = updatedQuantity;
+        
       const newProductTotal = (price * updatedQuantity).toFixed(2)
       cart.items[itemIndex].Total = newProductTotal
       const total = cart.items.reduce((acc, item) => acc + item.Total, 0);

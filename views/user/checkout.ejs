@@ -22,7 +22,7 @@
                                             <li class="active" aria-current="page">Checkout</li>
                                         </ul>
                                     </nav>
-                                </div>
+                                </div> 
                             </div>
                         </div>
                     </div>
@@ -72,8 +72,10 @@
                                 <div class="card" style="width: 400px;margin-right: 5%;">
                                     <div class="card-body">
                                         <div class="radio-container">
-                                            <input type="radio" style="align-items:start ;"
-                                                onclick="selectAddress('<%= i %>')" name="name">
+                                            <input type="radio" style="align-items:start;"
+                                                onclick="selectAddress('<%= address[i]._id %>')" name="addressSelection"
+                                                data-id="<%= address[i]._id %>">
+
                                             <label style="font-weight: 800;font-size: larger;">Select</label>
                                         </div>
                                         <h5 class="card-title">Address of <%#= address[i].address %>
@@ -92,8 +94,9 @@
                                         <p class="card-text">Mobile: <%= address[i].phone %>
                                         </p>
                                         <div class="mb-4">
-                                            <a class="btn btn-warning" href="/checkOutEditeAddress/<%= i %>"> Edit </a>
-                                            <a class="btn btn-success" onclick="delAddress('<%= address[i]._id %>')">Delete</a>
+                                            <a class="btn btn-warning" href="/editAddress/?addressId=<%= address[i]._id %>&path=checkout"> Edit </a>
+                                            <a class="btn btn-success"
+                                                onclick="delAddress('<%= address[i]._id %>')">Delete</a>
                                         </div>
                                     </div>
 
@@ -242,7 +245,8 @@
                                         <!-- <input type="checkbox" id="currencyCod"> -->
                                         <!-- <span>Cash on Delivery</span> -->
                                         <button class="btn btn-success text-light"
-                                            onclick="placeOrder('<%= cart %>')">Cash on Delivery</button>
+                                            onclick="placeOrder('<%= cart._id %>','Cash on Delivery')">Cash on
+                                            Delivery</button>
                                         <!-- </label> -->
 
                                         <div id="methodCod" class="collapse" data-parent="#methodCod">
@@ -282,6 +286,39 @@
 
     </body>
     <script>
+        function selectAddress(addressId) {
+            selectedAddressId = addressId;
+            console.log("Address selected:", selectedAddressId);
+        }
+        const addressData = '<%- JSON.stringify(address) %>'
+        const address = JSON.parse(addressData)
+        console.log(address, 'addddd');
+        function placeOrder(cartId, paymentMethod) {
+            console.log(cartId, 'cart data is showing', paymentMethod, 'payment method');
+            if (address.length > 0) {
+                console.log('order placing success');
+                fetch(`/addOrder?cartId=${cartId}&paymentMethod=${paymentMethod}&addressId=${selectedAddressId}`)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        if (data.result === 'success') {
+                            Swal.fire("Order placed successfully").then(() => {
+                                location.href='/orderPlaced'
+                            })
+                            // Optionally refresh the page or update the address list dynamically
+                        }
+                    })
+                    .catch(error => {
+                        console.error('There was a problem with the fetch operation:', error);
+                    });
+            } else {
+                Swal.fire('address not found')
+            }
+        }
 
         const form = document.getElementById("formData");
 
@@ -314,7 +351,9 @@
                 })
                 .then(data => {
                     if (data.result === 'success') {
-                        Swal.fire("Address added successfully");
+                        Swal.fire("Address added successfully").then(() => {
+                            location.reload()
+                        })
                         // Optionally refresh the page or update the address list dynamically
                     }
                 })
@@ -323,19 +362,13 @@
                 });
         });
 
-        function placeOrder(cart) {
-            // Your placeOrder logic here
-            console.log(cart);
-        }
 
-        function selectAddress(index) {
-            // Your selectAddress logic here
-            console.log("Address selected:", index);
-        }
+
+
 
         function delAddress(id) {
             fetch(`/deleteAddress?id=${id}`)
-            .then(response => {
+                .then(response => {
                     if (!response.ok) {
                         throw new Error('Network response was not ok');
                     }
@@ -343,7 +376,9 @@
                 })
                 .then(data => {
                     if (data.result === 'success') {
-                        Swal.fire("Address deleted successfully");
+                        Swal.fire("Address deleted successfully").then(() => {
+                            location.reload()
+                        })
                         // Optionally refresh the page or update the address list dynamically
                     }
                 })

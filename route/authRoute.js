@@ -39,14 +39,14 @@ router.get('/auth/google/callback',
             return res.redirect('/login')
           }else{
             req.session.isAuth=true
-            req.session.userid=alreadyLoginUserData._id
+            req.session.userId=alreadyLoginUserData._id
             res.redirect('/');
           }
            
         }else{
             const createdUser = await userCollection.create(userData);
             req.session.isAuth=true   
-            req.session.userid=alreadyLoginUserData._id         
+            req.session.userId=alreadyLoginUserData._id         
             res.redirect('/');
         }
         

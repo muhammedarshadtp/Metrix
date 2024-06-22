@@ -1,7 +1,13 @@
 <%- include('../partials/head') %>
+<style>
+    img{
+        height:150px;
+        width: 150px;
+    }
+</style>
 
 <body>
-    <%#- include('../partials/header') %>
+    <%- include('../partials/header') %>
 
     <!-- Offcanvas Overlay -->
     <div class="offcanvas-overlay"></div>
@@ -43,24 +49,40 @@
                             <div class="order-details">
                                 <h3>Order Details</h3>
                                 <ul>
-                                    <li><strong>Order Number:</strong> <%#= order.id %></li>
-                                    <li><strong>Date:</strong> <%#= order.date %></li>
-                                    <li><strong>Total:</strong> ₹<%#= order.total %></li>
-                                    <li><strong>Payment Method:</strong> Cash on Delivery</li>
+                                    <li><strong>Order Number:</strong> <%= order.orderId %></li>
+                                    <li><strong>Date:</strong> <%= new Date(order.orderDate).toLocaleString('en-GB') %></li>
+                                    <li><strong>Total:</strong> ₹ <%= order.totalPrice %></li>
+                                    <li><strong>Payment Method: </strong><%= order.paymentMethod %></li>
+                                    
                                 </ul>
                             </div>
+                            <% order.products.forEach(item => { %>
+                             
+                          
+                            <div class="order-details"> <br> <br>
+                                <h3>Products Details</h3>
+                                <ul>
+                                    <li><strong>Item Name:</strong> <%= item.name %></li>
+                                    <li><img class="img img-thumbnail" src="/productsImages/<%= item.images %>" alt=""></li>
+                                    <li><strong>price:</strong> <%= item.price %>x<%= item.quantity%>=<%= item.price*item.quantity %></li>
+                                   
+                                    
+                                    <li><strong class="text-dark fw-bold">STATUS:<%= item.status.toUpperCase() %></strong> </li>
+                                </ul>
+                            </div>
+                            <% }) %>
                             <div class="customer-details">
+                            
                                 <h3>Customer Details</h3>
                                 <ul>
-                                    <li><strong>Name:</strong> <%#= order.customer.name %></li>
-                                    <li><strong>Email:</strong> <%#= order.customer.email %></li>
-                                    <li><strong>Phone:</strong> <%#= order.customer.phone %></li>
-                                    <li><strong>Address:</strong> <%#= order.customer.address %></li>
+                                    <li><strong>Name:</strong> <%= order.address.name %></li>
+                                    <li><strong>Phone:</strong> <%= order.address.phone %></li>
+                                    <li><strong>Address:</strong> <%= order.address.address %>,<%= order.address.city %></li>
                                 </ul>
                             </div>
                             <div class="order-actions">
                                 <a href="/products" class="btn btn-primary">Continue Shopping</a>
-                                <a href="/orders" class="btn btn-secondary">View My Orders</a>
+                                <a href="/ordersHistory" class="btn btn-secondary">View My Orders</a>
                             </div>
                         </div>
                     </div>

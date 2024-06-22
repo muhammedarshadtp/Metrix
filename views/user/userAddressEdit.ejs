@@ -1,0 +1,162 @@
+<%- include('../partials/head') %>
+
+    <body>
+        <%- include('../partials/header') %>
+
+            <div class="breadcrumb-section breadcrumb-bg-color--golden">
+                <div class="breadcrumb-wrapper">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-12">
+                                <h3 class="breadcrumb-title"> Edit Address</h3>
+                                <div
+                                    class="breadcrumb-nav breadcrumb-nav-color--black breadcrumb-nav-hover-color--golden">
+                                    <nav aria-label="breadcrumb">
+                                        <ul>
+                                            <li><a href="/">Home</a></li>
+                                            <li><a href="/products">Shop</a></li>
+                                            <li class="active" aria-current="page"> Edit Address</li>
+                                        </ul>
+                                    </nav>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="container my-5">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h4 class="mb-4"> Edit Address</h4>
+                        <form id="formData">
+                            <div class="row">
+                                <% if (nameError) { %>
+                                    <div class="error-message alert text-danger text-start"><%= nameError %></div>
+                                <% } %>
+                                <div class="col-lg-6 mb-3">
+                                    <label class="form-label" for="name">Name <span>*</span></label>
+                                    <input type="text" class="form-control" id="name" value="<%= address.name %>" name="name" placeholder="Name"
+                                        >
+                                </div>
+                                <% if (countryError) { %>
+                                    <div class="error-message alert text-danger text-start"><%= countryError %></div>
+                                <% } %>
+                                <div class="col-12 mb-3">
+                                    <label class="form-label" for="country_name">Country <span>*</span></label>
+                                    <select class="form-select" id="country_name" value="<%= address.country %>" name="country" >
+                                        <option value="America">America</option>
+                                        <option value="India">India</option>
+                                        <!-- Add other countries as needed -->
+                                    </select>
+                                </div>
+                                <% if (addressError) { %>
+                                    <div class="error-message alert text-danger text-start"><%= addressError %></div>
+                                <% } %>
+                                <div class="col-12 mb-3">
+                                    <label class="form-label" for="address">Street address <span>*</span></label>
+                                    <input type="text" class="form-control" id="address" value="<%= address.address %>" name="address"
+                                        placeholder="House number and street name" >
+                                </div>
+                                <% if (streetError) { %>
+                                    <div class="error-message alert text-danger text-start"><%= streetError %></div>
+                                <% } %>
+                                <div class="col-12 mb-3">
+                                    <label class="form-label" for="street">Street <span>(optional)</span></label>
+                                    <input type="text" class="form-control" id="street" value="<%= address.street %>" name="street"
+                                        placeholder="Apartment, suite, unit etc.">
+                                </div>
+                                <% if (cityError) { %>
+                                    <div class="error-message alert text-danger text-start"><%= cityError %></div>
+                                <% } %>
+                                <div class="col-12 mb-3">
+                                    <label class="form-label" for="city">City <span>*</span></label>
+                                    <input type="text" class="form-control" id="city" value="<%= address.city %>" name="city" >
+                                </div>
+                                <% if (stateError) { %>
+                                    <div class="error-message alert text-danger text-start"><%= stateError %></div>
+                                <% } %>
+                                <div class="col-12 mb-3">
+                                    <label class="form-label" for="state">State <span>*</span></label>
+                                    <input type="text" class="form-control" id="state" value="<%= address.state %>" name="state" >
+                                </div>
+                                <% if (pincodeError) { %>
+                                    <div class="error-message alert text-danger text-start"><%= pincodeError %></div>
+                                <% } %>
+                                <div class="col-lg-6 mb-3">
+                                    <label class="form-label" for="pincode">Pincode <span>*</span></label>
+                                    <input type="text" class="form-control" id="pincode" value="<%= address.pincode %>" name="pincode" >
+                                </div>
+                                <% if (phoneError) { %>
+                                    <div class="error-message alert text-danger text-start"><%= phoneError %></div>
+                                <% } %>
+                                <div class="col-lg-6 mb-3">
+                                    <label class="form-label" for="phone">Phone <span>*</span></label>
+                                    <input type="text" class="form-control" id="phone" value="<%= address.phone %>" name="phone" >
+                                </div>
+                            </div>
+                            <button class="btn btn-primary w-100" type="submit">Edit Address</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <%- include('../partials/footer') %>
+
+    </body>
+    <script>
+        let pathStr = '<%- JSON.stringify(path) %>'
+        const path = JSON.parse(pathStr)
+        console.log(path,'path is showing');
+        const form = document.getElementById("formData");
+
+        form.addEventListener('submit', function (event) {
+            event.preventDefault();
+            const formData = new FormData(form);
+            const data = {
+                name: formData.get('name'),
+                country: formData.get('country'),
+                address: formData.get('address'),
+                street: formData.get('street'),
+                city: formData.get('city'),
+                state: formData.get('state'),
+                pincode: formData.get('pincode'),
+                phone: formData.get('phone')
+            };
+
+            fetch(`/editAddress?path=${path}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.result === 'success') {
+                        const path = data.path
+                        Swal.fire("Edit address successfully").then(() => {
+                            location.href = `/${path}`
+                        })
+                        // Optionally refresh the page or update the address list dynamically
+                    }
+                })
+                .catch(error => {
+                    console.error('There was a problem with the fetch operation:', error);
+                });
+        });
+        setTimeout(function() {
+          let errorMessages = document.querySelectorAll(".error-message");
+          errorMessages.forEach(function(message) {
+            message.innerHTML = '';
+          });
+        }, 4000);
+    </script>
+    
+
+    </html>

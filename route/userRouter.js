@@ -15,7 +15,7 @@ const otp=require('../controllers/userController/userOtp')
 const {user_auth,status} = require("../middleware/userAuth");
 
 const {whishlistcart}= require('../utils/validationNavbar');
-const { user_orderHistory,order_placed } = require("../controllers/userController/order");
+const { user_orderHistory,order_placed, user_addOrder,cancelOrder } = require("../controllers/userController/order");
 const  account  = require("../controllers/userController/accounts");
 
 router.use(whishlistcart)
@@ -45,11 +45,25 @@ router.get('/resetPassword',forRe.resetPassword)
 
 router.post('/resetPasswordPost',forRe.resetPasswordPost)
 
-router.get('/account',account.account)
+router.get('/account',user_auth,account.account)
 
-router.post('/addAddress',account.addAddress)
+router.get('/profile',user_auth,account.profile)
 
-router.get('/deleteAddress',account.deleteAddress)
+router.post('/updateUser',user_auth,account.updateUser)
+
+router.get('/userAddress',user_auth,account.userAddress)
+
+router.post('/addAddress',user_auth,account.addAddress)
+
+router.get('/editAddress',user_auth,account.editAddress)
+
+router.post('/editAddress',user_auth,account.editAddressPost)
+
+router.get('/userAddAddress',user_auth,account.userAddAddress)
+
+router.post('/userAddAddressPost',user_auth,account.userAddAddressPost)
+
+router.get('/deleteAddress',user_auth,account.deleteAddress)
 
 router.get('/products',userProducts.products)
 
@@ -65,10 +79,13 @@ router.post('/update-cart-quantity/:productId/',user_auth,userCart.updatecart)
 
 router.get('/checkout',user_auth,checkout.checkout)
 
+router.get('/orderPlaced',user_auth,order_placed)
 
-router.get('/order_placed',order_placed)
+router.get('/ordersHistory',user_auth,user_orderHistory)
 
-router.get('/order-history',user_orderHistory)
+router.get('/addOrder',user_auth,user_addOrder)
+
+router.get('/cancelOrder',user_auth,cancelOrder)
 
 router.get('/logout',logout.logout)
 

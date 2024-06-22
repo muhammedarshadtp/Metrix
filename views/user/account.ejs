@@ -1,185 +1,109 @@
-<!DOCTYPE html>
-<html lang="en">
-  
-<%#- include('../partials/head') %>
-
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-hhJAYVyrVlbRqysQsau+3E35KWx0pWaf27oV34roF03qYpNoAUVh43RJweuW4zYuwCm/6RrXyjeY8GCt6mpLOA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<%- include('../partials/head') %>
 
 <body>
-    <div class="header--sidebar"></div>
+  <%- include('../partials/header') %>
+    <!-- Offcanvas Overlay -->
+    <div class="offcanvas-overlay"></div>
 
-
-
-     <!--  Header-->
-
-<%#- include('../partials/navbar') %>
-
-
-
-
-
- 
-  <style>
-    /* Custom CSS */
-    .profile-container {
-      max-width: 600px;
-      margin: auto;
-      padding: 20px;
-    }
-    .btn-full-block {
-      display: block;
-      width: 100%;
-    }
-    .card-body {
-  position: relative;
-  transition: box-shadow 0.3s, transform 0.3s;
-}
-
-.card-body:hover {
-  box-shadow: 0 0 30px rgba(0, 0, 0, 0.6);
-  transform: translateY(-5px);
-}
-.user-info {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.info-item {
-  margin-bottom: 10px;
-}
-
-.info-item strong {
-  font-weight: bold;
-  margin-right: 10px;
-}
-
-.info-item span {
-  color: #555;
-}
-
-</style>
-
-
-<div class="ps-hero bg--cover" data-background="/user/images/hero/bread-1.jpg">
-  <div class="ps-container">
-    <h3>Account Page</h3>
-    <div class="ps-breadcrumb">
-      <ol class="breadcrumb">
-        <li><a href="/">Home</a></li>
-        <li class="active">Account Page</li>
-      </ol>
-    </div>
-  </div>
-</div> 
-
-
-  
-<div class="container profile-container">
-  <div class="row">
-    <div class="col-md-12 border border-3 text-center mb-4 p-4">
-      <h2 class="mb-4">Account Settings</h2>
-      <div class="user-info">
-        <div class="info-item">
-          <strong></strong>
-          <span><%#= isUser.name %></span>
-        </div>
-        <div class="info-item">
-          <strong></strong>
-          <span><%#= isUser.email %></span>
-        </div>
+    <!-- Start Breadcrumb Section -->
+    <div class="breadcrumb-section breadcrumb-bg-color--golden">
+      <div class="breadcrumb-wrapper">
+          <div class="container">
+              <div class="row">
+                  <div class="col-12">
+                      <h3 class="breadcrumb-title">Account</h3>
+                      <div
+                          class="breadcrumb-nav breadcrumb-nav-color--black breadcrumb-nav-hover-color--golden">
+                          <nav aria-label="breadcrumb">
+                              <ul>
+                                  <li><a href="/">Home</a></li>
+                                  <li><a href="/products">Shop</a></li>
+                                  <li class="active" aria-current="page">Account</li>
+                              </ul>
+                          </nav>
+                      </div>
+                  </div>
+              </div>
+          </div>
       </div>
-    </div>
+  </div> <!-- End Breadcrumb Section -->
 
-    <br>
-    <br>
-
-    <div class="col-md-12">
-      <h2 class="text-center"></h2>
-      <div class="row mt-4">
-        <div class="col-md-4">
-          <div class="card mb-3">
-            <div class="card-body">
-              <img src="" width="400px" height="150px" alt="order-img">
-              <a href="" class="btn btn-success btn-full-block">
-                  My Orders
-              </a>
+    <!-- Start Account Section -->
+    <div class="container my-5">
+        <div class="row gy-4">
+            <div class="col-md-4">
+                <div class="card text-center">
+                    <a href="/profile">
+                        <img src="/accountImages/profile.jpg" class="card-img-top mx-auto" alt="Profile" style="height: 100px; width: 100px;">
+                        <div class="card-body">
+                            <h5 class="card-title">Profile</h5>
+                        </div>
+                    </a>
+                </div>
             </div>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="card mb-3">             
-            <div class="card-body">
-              <img src=" " width="400px" height="150px" alt="resetpass-img">
-              <a href="" class="btn btn-success btn-full-block">
-                Profile
-              </a>
+            <div class="col-md-4">
+                <div class="card text-center">
+                    <a href="/userAddress">
+                        <img src="/accountImages/address.jpg" class="card-img-top mx-auto" alt="Address" style="height: 100px; width: 100px;">
+                        <div class="card-body">
+                            <h5 class="card-title">Address</h5>
+                        </div>
+                    </a>
+                </div>
             </div>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="card">
-            <div class="card-body">
-              <img src=" " width="400px" height="150px" alt="coupen img">
-              <a href="" class="btn btn-success btn-full-block">
-               Address  
-              </a>
+            <div class="col-md-4">
+                <div class="card text-center">
+                    <a href="/changepassword">
+                        <img src="/accountImages/password.jpg" class="card-img-top mx-auto" alt="Password" style="height: 100px; width: 100px;">
+                        <div class="card-body">
+                            <h5 class="card-title">Password</h5>
+                        </div>
+                    </a>
+                </div>
             </div>
-          </div>
-        </div>
-      </div>
-      <br>
-      <br>
-      <div class="row">
-        <div class="col-md-4">
-          <div class="card mb-3">
-            <div class="card-body">
-              <img src="" width="400px" height="150px" alt="wallet-img">
-              <a href="t" class="btn btn-success mt-3 btn-full-block">
-                Wallet
-              </a>
+            <div class="col-md-4">
+                <div class="card text-center">
+                    <a href="/ordersHistory">
+                        <img src="/accountImages/order.jpg" class="card-img-top mx-auto" alt="Order" style="height: 100px; width: 100px;">
+                        <div class="card-body">
+                            <h5 class="card-title">Order</h5>
+                        </div>
+                    </a>
+                </div>
             </div>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="card mb-3">
-            <div class="card-body"> 
-              <img src=" " width="400px" height="150px" alt="address-img">
-              <a href="" class="btn btn-success mt-3 btn-full-block">
-                ResetPassword
-              </a>
+            <div class="col-md-4">
+                <div class="card text-center">
+                    <a href="/wallet">
+                        <img src="/accountImages/wallet.jpg" class="card-img-top mx-auto" alt="Wallet" style="height: 100px; width: 100px;">
+                        <div class="card-body">
+                            <h5 class="card-title">Wallet</h5>
+                        </div>
+                    </a>
+                </div>
             </div>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="card">
-            <div class="card-body">
-              <img src="" width="400px" height="150px" alt="logout">
-              <a href="" class="btn btn-success mt-3 btn-full-block">
-                Coupons
-              </a>
+            <div class="col-md-4">
+                <div class="card text-center">
+                    <a href="/cartpage">
+                        <img src="/accountImages/cart.jpg" class="card-img-top mx-auto" alt="Cart" style="height: 100px; width: 100px;">
+                        <div class="card-body">
+                            <h5 class="card-title">Cart</h5>
+                        </div>
+                    </a>
+                </div>
             </div>
-          </div>
         </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
+    </div> <!-- End Account Section -->
 
+    <%- include('../partials/footer') %>
 
-
-
-<script>
-  document.addEventListener('DOMContentLoaded', function () {
-    new MagicZoom();
-});
-</script>
-
-
-
-<%#- include('../partials/footer')  %>
+    <script>
+        setTimeout(function() {
+            const errMsg = document.querySelectorAll('.error-message');
+            errMsg.forEach(function(message) {
+                message.innerHTML = '';
+            });
+        }, 4000);
+    </script>
 </body>
 
 </html>

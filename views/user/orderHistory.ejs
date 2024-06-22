@@ -1,0 +1,173 @@
+<%- include('../partials/head') %>
+    <%- include('../partials/header') %>
+
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=Device-width, initial-scale=1.0">
+            <title>Order History</title>
+            <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+                integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+                crossorigin="anonymous">
+            <style>
+                /* General styles */
+                body {
+                    font-family: Arial, sans-serif;
+                    background-color: #f9f9f9;
+                    margin: 0;
+                    padding: 0;
+                }
+
+                /* Header styles */
+                header {
+                    background-color: #333;
+                    color: white;
+                    padding: 20px 0;
+                    text-align: center;
+                }
+
+                /* Main container styles */
+                main {
+                    max-width: 900px;
+                    margin: 20px auto;
+                    padding: 10px;
+                }
+
+                /* Order card styles */
+                .order-card {
+                    background-color: white;
+                    border: 1px solid #ddd;
+                    border-radius: 10px;
+                    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                    margin-bottom: 20px;
+                    padding: 20px;
+                }
+
+                /* Order header styles */
+                .order-header {
+                    display: flex;
+                    justify-content: space-between;
+                    margin-bottom: 15px;
+                    border-bottom: 1px solid #eee;
+                    padding-bottom: 10px;
+                }
+
+                .order-header span {
+                    font-weight: bold;
+                }
+
+                .order-header .order-date {
+                    font-size: 0.9rem;
+                    color: #777;
+                }
+
+                /* Order details styles */
+                .order-details {
+                    margin-top: 15px;
+                }
+
+                .order-details p {
+                    margin: 5px 0;
+                }
+
+                /* Product image styles */
+                .order-details img {
+                    height: 100px;
+                    width: auto;
+                    margin-right: 10px;
+                }
+
+                /* Responsive styles */
+                @media (max-width: 600px) {
+                    .order-header {
+                        flex-direction: column;
+                        align-items: flex-start;
+                    }
+                }
+            </style>
+        </head>
+
+        <body>
+            <header>
+                <h1>Order History</h1>
+            </header>
+            <main>
+                <% for (let i=0; i < order.length; i++) { %>
+                    <div class="order-card">
+                        <div class="order-header">
+                            <span class="order-number">Order #<%= order[i].orderId %></span>
+                            <span class="order-date">
+                                <%= new Date(order[i].orderDate).toLocaleString('en-GB') %>
+                            </span>
+                        </div>
+                        <div class="order-details">
+                            <% for (let j=0; j < order[i].products.length; j++) { %>
+                                <div class="row align-items-center mb-3">
+                                    <div class="col-md-2">
+                                        <img class="img-thumbnail" style="height: 8rem;"
+                                            src="/productsImages/<%= order[i].products[j].images %>"
+                                            alt="Product Image">
+                                    </div>
+                                    <div class="col-md-10">
+                                        <p><strong>User Name:</strong>
+                                            <%= order[i].address.name %>
+                                        </p>
+                                        <p><strong>Product Name:</strong>
+                                            <%= order[i].products[j].name %>
+                                        </p>
+                                        <p><strong>Item:</strong> ₹ <%= order[i].products[j].price %>
+                                        </p>
+                                        <p><strong>Quantity:</strong>
+                                            <%= order[i].products[j].quantity %>
+                                        </p>
+                                        <p><strong>Total:</strong> ₹ <%= order[i].products[j].price %>
+                                        </p>
+                                        <p><strong>Delivery Address:</strong>
+                                            <%= order[i].address.address %>, <%= order[i].address.city %>
+                                        </p>
+                                        <p><strong>STATUS:</strong>
+                                            <%= order[i].products[j].status %>
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="d-flex justify-content-end">
+                                    <% if (order[i].products[j].status !== 'Order Cancelled') { %>
+                                        <button class="btn btn-danger" onclick="cancelOrder('<%= order[i].orderId %>','<%= order[i].products[j].productId %>')">Cancel Order</button>
+                                    <% } else { %>
+                                       
+                                    <% } %>
+                                </div>
+                                <% } %>
+                        </div>
+                      
+                    </div>
+                <% } %>
+            </main>
+            <%- include('../partials/footer') %>
+                <!-- Bootstrap Bundle with Popper -->
+                <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+                    integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+8vLvZG8+2e5UzH3cgTk6tIQJp7tS"
+                    crossorigin="anonymous"></script>
+        </body>
+        <script>
+            async function cancelOrder(orderId,productId){
+                fetch(`/cancelOrder?orderId=${orderId}&productId=${productId}`)
+                .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        if (data.result === 'success') {
+                            Swal.fire("Cancel Order successfully")
+                            .then(()=>{
+                                location.reload()
+                            })
+                            // Optionally refresh the page or update the address list dynamically
+                        }
+                    })
+            }
+
+        </script>
+
+        </html> 
