@@ -123,8 +123,10 @@ router.post('/Removewishlist',user_auth,Removewishlist)
 
 router.post('/ApplyCoupon',user_auth,ApplyCoupon)
 
-router.post('/removeCoupon',user_auth,removeCoupon)
+// router.post('/removeCoupon',user_auth,removeCoupon)
 
+
+// ---------------Wallet------------------//
 
 
 

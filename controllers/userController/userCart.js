@@ -87,7 +87,7 @@ const cart = async (req, res) => {
                 if(cart.items[productExist].quantity < 5 && cart.items[productExist].quantity < product.productId.stock){
 
                   cart.items[productExist].quantity += 1;
-                  cart.items[productExist].total = cart.items[productExist].quantity * price;
+                  cart.items[productExist].Total = cart.items[productExist].quantity * price;
                 }else{
                   return res.json({result:'limit exceeded'})
                 }
