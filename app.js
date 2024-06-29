@@ -27,6 +27,17 @@ app.use(flash());
 
 app.use(nocache())
 
+// app.use((req, res, next) => {
+//     // Apply cache control headers for all routes
+//     res.set('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+//     res.set('Pragma', 'no-cache');
+//     res.set('Expires', '0');
+//     res.set('Surrogate-Control', 'no-store');
+  
+//     // Continue to the next middleware or route handler
+//     next();
+//   });
+
 app.use(session({
     secret: 'your-secret-key',
     resave: false,

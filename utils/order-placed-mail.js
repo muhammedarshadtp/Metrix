@@ -20,7 +20,6 @@ const sendOrderMail = async (email, name, orderId, products, totalPrice) => {
       <td>${product.name}</td>
       <td>${product.quantity}</td>
       <td>${product.price}</td>
-      <td><img src="${product.images[0]}" alt="${product.name}" style="width:50px; height:auto;"></td>
     </tr>`)
     .join('');
 
@@ -40,14 +39,13 @@ const sendOrderMail = async (email, name, orderId, products, totalPrice) => {
               <th>Product Name</th>
               <th>Quantity</th>
               <th>Price</th>
-              <th>Image</th>
             </tr>
           </thead>
           <tbody>
             ${productListHTML}
           </tbody>
         </table>
-        <h3>Total Price: $${totalPrice}</h3>
+        <h3>Total Price: Rs${totalPrice}</h3>
         <p>We will notify you once your order is shipped.</p>
         <p>Thank you for shopping with us!</p>
       `, // html body

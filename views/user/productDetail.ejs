@@ -245,10 +245,7 @@
                                         </div>
                                         <!-- Start  Product Details Meta Area-->
                                         <div class="product-details-meta mb-20">
-                                            <a href="wishlist.html" class="icon-space-right"><i
-                                                    class="icon-heart"></i>Add
-                                                to
-                                                wishlist</a>
+                                            <button onclick="addToWishlist('<%= data._id %>')" class="btn btn-md btn-golden">Add to Wishlist</button>
                                             <!-- <a href="compare.html" class="icon-space-right"><i class="icon-refresh"></i>Compare</a> -->
                                         </div> <!-- End  Product Details Meta Area-->
                                     </div> <!-- End Product Variable Area -->
@@ -1093,6 +1090,39 @@
                            // do something with myJson
                        }
                    </script>
+                  <script>
+                    function addToWishlist(productId,name,id,image) {
+                        fetch('/addToWishlist', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({ productId })
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.result ==='success') {
+                                Swal.fire({
+                                        position: "center",
+                                        icon: "success",
+                                        title: "Add to wishlist Successfully",
+                                        showConfirmButton: false,
+                                        timer: 2500
+                                    })
+                            } else if(data.result === 'failure') {
+                                Swal.fire({
+                                        position: "center",
+                                        icon: "error",
+                                        title:"This product is already in your wishlist",
+                                        showConfirmButton: false,
+                                        timer: 2500
+                                    })
+                              
+                            }
+                        })
+                        .catch(error => console.error('Error:', error));
+                    }
+                </script>
     </body>
 
 

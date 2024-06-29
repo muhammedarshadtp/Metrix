@@ -23,8 +23,11 @@ const isValidCoupon = (coupon) => {
 
 const onlyNumbers =(str)=>{
     try {
-        const numbersOnlyRegex =/^[1-9][0-9]*(\.[0-9]+)?$/;
-        return str.length>0 && numbersOnlyRegex.test(str);
+        console.log(str,'str is shwoing');
+        console.log(typeof str,'str is shwoing');
+
+        const numbersOnlyRegex =/^[0-9][0-9]*(\.[0-9]+)?$/;
+        return numbersOnlyRegex.test(str);
         
     } catch (error) {
         console.log(error);

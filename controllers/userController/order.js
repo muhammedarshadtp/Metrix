@@ -8,11 +8,16 @@ const otpGeneratorUser = require("../../utils/otp_generator")
 
 
 const user_orderHistory = async (req, res) => {
-    const userId = req.session.userId
+    try {
+        const userId = req.session.userId
     const user = req.session.isAuth
-    const order = await orderCollection.find({ userId: userId }).populate("userId")
+    const order = await orderCollection.find({ userId: userId }).populate("userId").sort({ orderDate: -1 })
+    const cart = await cartCollection.find({userId:userId})
     console.log(order, 'order kitty');
-    res.render('orderHistory', { order, user })
+    res.render('orderHistory', { order, user, cart})
+    } catch (error) {
+        console.log(error,'orderHistory error');
+    }
 }
 
 const user_addOrder = async (req, res) => {
@@ -29,48 +34,68 @@ const user_addOrder = async (req, res) => {
         //     return res.status(404).json({ error: 'Address not found' });
         // }
         const cartData = await cartCollection.findById(cartId).populate('items.productId').populate('userId','username email')
-
+        cartData.items.map(async (item) => {
+            if(!(Number(item.quantity) <= Number(item.productId.stock))){
+                console.log('what is happening');
+                return res.json({result:'error'})
+            }else{
+                console.log('inside else');
+               await OrderPlace()
+            }
+        })
         const products = cartData.items.map(item => ({
-            productId: item.productId._id,
-            status: 'Order placed',
-            name: item.productId.name,
-            price: item.Total,
-            quantity: item.quantity,
-            images: item.images,
+                productId: item.productId._id,
+                status: 'Order placed',
+                name: item.productId.name,
+                price: item.Total,
+                quantity: item.quantity,
+                images: item.images,
+        
         }));
+        let totalPrice 
+        if(req.session.finalPrice){
+            totalPrice = req.session.finalPrice
+        }else{
+            totalPrice = cartData.Total
+
+        }
         console.log(cartData,'cart data is showing ==================');
 
         console.log(products, 'product data');
 
         console.log(paymentMethod, 'payment method is showing');
+        async function OrderPlace (){
 
-        const orderId = await otpGeneratorUser()
-
-        const orderPlace = await orderCollection.create({
-            userId: cartData.userId,
-            orderId: orderId,
-            products: products,
-            totalPrice: cartData.Total,
-            address: address,
-            paymentMethod: paymentMethod,
-            
-        });
-        req.session.ORDER_PLACED = orderPlace
-        console.log(orderPlace, 'Order placed');
-         for (let product of products) {
-            const productDoc = await productsCollection.findById(product.productId);
-            if (productDoc && productDoc.stock >= product.quantity) {
-                productDoc.stock -= product.quantity;
-                await productDoc.save();
+            const orderId = await otpGeneratorUser()
+    
+            const orderPlace = await orderCollection.create({
+                userId: cartData.userId,
+                orderId: orderId,
+                products: products,
+                totalPrice:totalPrice,
+                address: address,
+                paymentMethod: paymentMethod,
+                
+            });
+            req.session.ORDER_PLACED = orderPlace
+            console.log(orderPlace, 'Order placed');
+             for (let product of products) {
+                const productDoc = await productsCollection.findById(product.productId);
+                if (productDoc && productDoc.stock >= product.quantity) {
+                    productDoc.stock -= product.quantity;
+                    await productDoc.save();
+                }
             }
+    
+    
+            const cartDataDeleting = await cartCollection.findByIdAndDelete(cartData._id)
+            
+            console.log(cartDataDeleting, 'cart data deleting');
+            sendOrderMail(cartData.userId.email, cartData.userId.username, orderId, products, cartData.Total)
+            return res.json({ result: "success", order: orderPlace });
         }
 
 
-        const cartDataDeleting = await cartCollection.findByIdAndDelete(cartData._id)
-        
-        console.log(cartDataDeleting, 'cart data deleting');
-        sendOrderMail(cartData.userId.email, cartData.userId.username, orderId, products, cartData.Total)
-        return res.json({ result: "success", order: orderPlace });
 
     } catch (error) {
         console.error(error, 'error is showing');
@@ -82,7 +107,7 @@ const order_placed = async (req, res) => {
     const user = req.session.isAuth
     const order = req.session.ORDER_PLACED
 
-    res.render('orderPlaced', { order, user })
+    res.render('orderPlaced', { order, user,cart:'' })
 }
 
 

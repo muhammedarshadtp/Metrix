@@ -14,7 +14,6 @@ const userlist=async(req,res)=>{
             
         const TOTAL_COUNT_OF_USERS = await userCollection.countDocuments()
         const totalPages = Math.ceil(TOTAL_COUNT_OF_USERS / limit);
-        console.log(TOTAL_COUNT_OF_USERS,'total count is showing');
         page = Math.max(1, Math.min(page, totalPages));
     
         const skip = (page - 1) * limit;

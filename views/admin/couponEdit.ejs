@@ -1,0 +1,225 @@
+<%- include('./partials/head/head.ejs') %> <%-
+include('./partials/header/header.ejs') %>
+<main class="main-wrap">
+
+                <section class="content-main">
+                    <div class="content-header">
+                        <div>
+                            <h2 class="content-title card-title">Coupon </h2>
+                            <p> Edit a coupon</p>
+                        </div>
+                        <div>
+                            <input type="text" placeholder="Search Categories" class="form-control bg-white">
+                        </div>
+                    </div>
+                    <span id="error" class="text-danger fw-bold fs-6">
+                        <%= %>
+                    </span>
+                    <div class="">
+                        <div class="card-body">
+                            <div class="row">
+                                <div id="error" class="text-danger fw-bold fs-6"></div>
+                                <div class="col-md-4 mx-auto">
+                                    <% if (coupon) { %>
+                                        <form id="editCouponForm">
+                                            <div class="mb-4">
+                                                <label class="form-label">Coupon</label>
+                                                <input type="text" name="name" placeholder="Type here"
+                                                    class="form-control" value="<%= coupon.name %>" id="coupon-code"
+                                                    required>
+                                                <div id="coupon-error" class="error"></div>
+                                            </div>
+                                            <div class="mb-4">
+                                                <label class="form-label">Discount</label>
+                                                <input type="number" placeholder="Type here" name="discount"
+                                                    value="<%= coupon.discount %>" max="100" class="form-control"
+                                                    oninput="validity.valid||(value='');" id="discount">
+                                                <div id="discount-error" class="error"></div>
+                                            </div>
+                                            <div class="mb-4">
+                                                <label class="form-label">Minimum Cart Price</label>
+                                                <input placeholder="Type here" type="number" min="500"
+                                                    value="<%= coupon.minimum_cart_price %>" name="minimum_cart_price"
+                                                    class="form-control" id="min-cart-price">
+                                            </div>
+                                            <div class="mb-4">
+                                                <label class="form-label">Starting Date</label>
+                                                <input type="date" name="starting_date" class="form-control"
+                                                    id="starting_date" value="<%= coupon.starting_date %>" required>
+                                                <div id="starting_date-error" class="error"></div>
+                                            </div>
+                                            <div class="mb-4">
+                                                <label class="form-label">Expiry Date</label>
+                                                <input type="date" name="expiry" class="form-control" id="expiry_date"
+                                                    value="<%= coupon.ending_date %>" required>
+                                                <div id="expiry_date-error" class="error"></div>
+                                            </div>
+                                            <div class="mb-4">
+                                                <label class="form-label">Description</label>
+                                                <textarea placeholder="Type here" name="description"
+                                                    class="form-control" id="description"
+                                                    required><%= coupon.description %></textarea>
+                                            </div>
+                                            <div class="d-grid">
+                                                <button type="submit" class="btn btn-primary" id="submit-btn"
+                                                    disabled>Edit coupon</button>
+                                            </div>
+                                        </form>
+                                        <% } %>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+        </main>
+        <%- include('./partials/footer/footer.ejs') %>
+
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+            <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+            <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+            <script>
+                document.addEventListener('DOMContentLoaded', function () {
+                    const coupon = `<%- JSON.stringify(coupon._id) %>`;
+                    const couponId = JSON.parse(coupon);
+                    const form = document.getElementById('editCouponForm');
+
+                    form.addEventListener('submit', async function (event) {
+                        event.preventDefault();
+
+                        const formData = new FormData(form);
+
+                        for (let [key, value] of formData.entries()) {
+                            console.log(key, value,'===========================================');
+                        }
+
+                        try {
+                            console.log('entring data');
+                            const response = await axios.put(`/admin/couponEdit/?couponId=${couponId}`, formData, {
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                }
+                            });
+                            const data = await response.data
+                            console.log(data, 'data is showing');
+                            if (data.result === 'success') {
+                                Swal.fire({
+                                    position: "center",
+                                    icon: "success",
+                                    title: "coupon updated successfully",
+                                    showConfirmButton: false,
+                                    timer: 2500
+                                }).then(() => {
+                                    location.href = '/admin/coupon'
+                                })
+
+                            } else if (data.result === 'already exists') {
+                                Swal.fire({
+                                    position: "center",
+                                    icon: "warning",
+                                    title: "coupon already exists",
+                                    showConfirmButton: false,
+                                    timer: 2500
+                                }).then(() => {
+                                    location.href = '/admin/coupon'
+                                })
+
+                            }
+                        } catch (error) {
+                            console.error(error, 'error is showing');
+                        }
+                    });
+
+                    const startingDateInput = document.getElementById('starting_date');
+                    const expiryDateInput = document.getElementById('expiry_date');
+                    const startingDateError = document.getElementById('starting_date-error');
+                    const expiryDateError = document.getElementById('expiry_date-error');
+                    const submitBtn = document.getElementById('submit-btn');
+
+                    const validateDates = () => {
+                        const today = new Date().toISOString().split('T')[0];
+                        const startingDate = startingDateInput.value;
+                        const expiryDate = expiryDateInput.value;
+                        let valid = true;
+
+                        startingDateError.textContent = '';
+                        expiryDateError.textContent = '';
+
+                        if (startingDate < today) {
+                            startingDateError.textContent = 'Starting date cannot be before today.';
+                            valid = false;
+                        }
+
+                        if (expiryDate <= startingDate) {
+                            expiryDateError.textContent = 'Expiry date must be after the starting date.';
+                            valid = false;
+                        }
+
+                        submitBtn.disabled = !valid;
+                    };
+
+                    startingDateInput.addEventListener('input', validateDates);
+                    expiryDateInput.addEventListener('input', validateDates);
+
+                    const couponCodeInput = document.getElementById('coupon-code');
+                    const discountInput = document.getElementById('discount');
+                    const couponError = document.getElementById('coupon-error');
+                    const discountError = document.getElementById('discount-error');
+
+                    const validateForm = () => {
+                        let valid = true;
+
+                        couponError.textContent = '';
+                        discountError.textContent = '';
+
+                        if (!/^[A-Z0-9]{6}$/.test(couponCodeInput.value)) {
+                            couponError.textContent = 'Coupon code must be exactly 6 capital letters or numbers.';
+                            valid = false;
+                        }
+
+                        const discountValue = parseInt(discountInput.value, 10);
+                        if (isNaN(discountValue) || discountValue < 1 || discountValue > 5) {
+                            discountError.textContent = 'Discount must be a number between 1 and 5.';
+                            valid = false;
+                        }
+
+                        submitBtn.disabled = !valid;
+                    };
+
+                    couponCodeInput.addEventListener('input', validateForm);
+                    discountInput.addEventListener('input', validateForm);
+
+                    form.addEventListener('submit', function (event) {
+                        validateForm();
+                        if (submitBtn.disabled) {
+                            event.preventDefault();
+                        }
+                    });
+                });
+            </script>
+
+            <script>
+                $(function () {
+                    var dtToday = new Date();
+                    var month = dtToday.getMonth() + 1;
+                    var day = dtToday.getDate();
+                    var year = dtToday.getFullYear();
+                    if (month < 10) month = '0' + month.toString();
+                    if (day < 10) day = '0' + day.toString();
+                    var maxDate = year + '-' + month + '-' + day;
+                    $('#starting_date').attr('min', maxDate);
+                });
+
+                // const errMsg = document.getElementById('error');
+                // function reload() {
+                //     setTimeout(() => {
+                //         errMsg.innerHTML = '';
+                //     }, 4000);
+                // }
+                // reload();
+            </script>
+
+    </body>
+
+</html>

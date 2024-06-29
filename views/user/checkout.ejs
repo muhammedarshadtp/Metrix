@@ -1,4 +1,73 @@
 <%- include('../partials/head') %>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f6f9fc;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container-pay {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 5rem;
+            margin-bottom: 5rem;
+        }
+
+        .card-pay {
+            width: 100%;
+            max-width: 600px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .card-body-pay {
+            padding: 2rem;
+        }
+
+        .card-title-pay {
+            margin-bottom: 1.5rem;
+        }
+
+        .d-grid-pay {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .btn-pay {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            font-size: 1rem;
+            border-radius: 5px;
+        }
+
+        .btn-block-pay {
+            display: block;
+            width: 100%;
+        }
+
+        .btn-primary-pay {
+            background: linear-gradient(145deg, #007bff, #0069d9);
+            color: white;
+        }
+
+        .btn-secondary-pay {
+            background: #6c757d;
+            color: white;
+        }
+
+        .btn-dark-pay {
+            background: #343a40;
+            color: white;
+        }
+
+        .btn-pay:hover {
+            transform: translateY(-5px);
+        }
+    </style>
 
     <body>
         <%- include('../partials/header') %>
@@ -22,7 +91,7 @@
                                             <li class="active" aria-current="page">Checkout</li>
                                         </ul>
                                     </nav>
-                                </div> 
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -47,11 +116,12 @@
                                 <div id="checkout_coupon" class="collapse checkout_coupon"
                                     data-parent="#checkout_coupon">
                                     <div class="checkout_info">
-                                        <form action="#">
-                                            <input placeholder="Coupon code" type="text">
-                                            <button class="btn btn-md btn-black-default-hover" type="submit">Apply
-                                                coupon</button>
-                                        </form>
+
+                                        <input placeholder="Coupon code" id="coupon" type="text">
+                                        <button class="btn btn-md btn-black-default-hover" type="button"
+                                            onclick="applyCoupon()">Apply
+                                            coupon</button>
+
                                     </div>
                                 </div>
                             </div>
@@ -94,7 +164,9 @@
                                         <p class="card-text">Mobile: <%= address[i].phone %>
                                         </p>
                                         <div class="mb-4">
-                                            <a class="btn btn-warning" href="/editAddress/?addressId=<%= address[i]._id %>&path=checkout"> Edit </a>
+                                            <a class="btn btn-warning"
+                                                href="/editAddress/?addressId=<%= address[i]._id %>&path=checkout"> Edit
+                                            </a>
                                             <a class="btn btn-success"
                                                 onclick="delAddress('<%= address[i]._id %>')">Delete</a>
                                         </div>
@@ -193,7 +265,7 @@
 
                                 <h3>Your order</h3>
                                 <div class="order_table table-responsive">
-                                    <table>
+                                    <table class="table">
                                         <thead>
                                             <tr>
                                                 <th>Product</th>
@@ -220,104 +292,230 @@
                                                 <% }) %>
                                                     <% } %>
                                                         <tfoot>
-
-                                                            <!-- <tr>
-                                            <th>Cart Subtotal</th>
-                                            <td></td>
-                                        </tr>
-                                        <tr>
-                                            <th>Shipping</th>
-                                            <td><strong>50.00</strong></td>
-                                        </tr> -->
+                                                            <tr>
+                                                                <th colspan="2">Discount</th>
+                                                                <td colspan="2"><strong id="dicprice" class="p-5">0</strong>
+                                                                   <button class=""><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+                                                                    <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"/>
+                                                                    <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"/>
+                                                                  </svg></button>
+                                                                </td>
+                                                            </tr>
                                                             <tr class="order_total">
-                                                                <th>Order Total</th>
-                                                                <td><strong>RS:<%= cart && cart.Total ? cart.Total
-                                                                            : '0.00' %></strong></td>
+                                                                <th colspan="2">Order Total</th>
+                                                                <td colspan="2"><strong>RS: <span id="amount">
+                                                                            <%= cart && cart.Total ? cart.Total : '0.00'
+                                                                                %>
+                                                                        </span></strong></td>
+                                                                <td>
+
+                                                                </td>
                                                             </tr>
                                                         </tfoot>
-
-                                    </table>
+                                       </table>
                                 </div>
-                                <div class="payment_method">
-                                    <div class="panel-default">
-                                        <!-- <label class="checkbox-default" for="currencyCod" data-bs-toggle="collapse"
-                                        data-bs-target="#methodCod"> -->
-                                        <!-- <input type="checkbox" id="currencyCod"> -->
-                                        <!-- <span>Cash on Delivery</span> -->
-                                        <button class="btn btn-success text-light"
-                                            onclick="placeOrder('<%= cart._id %>','Cash on Delivery')">Cash on
-                                            Delivery</button>
-                                        <!-- </label> -->
 
-                                        <div id="methodCod" class="collapse" data-parent="#methodCod">
-                                            <div class="card-body1">
-                                                <p>Please send a check to Store Name, Store Street, Store Town, Store
-                                                    State
-                                                    / County, Store Postcode.</p>
+                                <div class="container-pay">
+                                    <div class="card-pay">
+                                        <div class="card-body-pay">
+                                            <h3 class="card-title-pay text-center">Select Payment Method</h3>
+                                            <div class="mt-4 d-grid-pay gap-6">
+                                                <button id="pay-button" class="btn-pay btn-primary btn-block-pay">Pay
+                                                    with Razorpay</button>
+                                                <button class="btn-pay btn-secondary btn-block-pay"
+                                                    onclick="placeOrder('Cash on Delivery')">Pay with Cash on
+                                                    Delivery</button>
+                                                <button onclick="paymentUsingWallet()"
+                                                    class="btn-pay btn-dark btn-block-pay">Pay with Wallet</button>
                                             </div>
                                         </div>
                                     </div>
-                                    <!-- <div class="panel-default">
-                                    <label class="checkbox-default" for="currencyPaypal" data-bs-toggle="collapse"
-                                        data-bs-target="#methodPaypal">
-                                        <input type="checkbox" id="currencyPaypal">
-                                        <span>PayPal</span>
-                                    </label>
-                                    <div id="methodPaypal" class="collapse " data-parent="#methodPaypal">
-                                        <div class="card-body1">
-                                            <p>Pay via PayPal; you can pay with your credit card if you don’t have a
-                                                PayPal account.</p>
-                                        </div>
-                                    </div>
-                                </div> -->
-                                    <!-- <div class="order_button pt-3">
+                                </div>
+                                <input type="text" name="" id="cartId" value="<%= cart._id %>" hidden>
+
+                                <!-- <div class="order_button pt-3">
                                     <button class="btn btn-md btn-black-default-hover" type="submit">Proceed</button>   //neeed to apply on next week
                                 </div> -->
-                                </div>
-
                             </div>
                         </div>
-                    </div> <!-- Start User Details Checkout Form -->
-                </div>
+                    </div>
+                </div> <!-- Start User Details Checkout Form -->
+            </div>
             </div><!-- ...:::: End Checkout Section:::... -->
 
             <%- include('../partials/footer') %>
 
 
     </body>
+
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
     <script>
+
+        function removeCoupon() {
+
+            const couponCode = document.getElementById('coupon').value
+            const subtotal = document.getElementById('amount').innerText
+
+
+            fetch('/removeCoupon', {
+                method: "POST",
+                headers: {
+                    'Content-Type': "application/json"
+                },
+                body: JSON.stringify({ couponCode, subtotal })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        Swal.fire({
+                            text: "coupon applied",
+                            icon: 'success',
+                            showCancelButton: false,
+                            showCloseButton: false,
+                            showConfirmButton: false,
+                            showLoaderOnConfirm: false,
+                            timer: 3000
+                        });
+
+                        console.log("ivideumethi")
+                        document.getElementById('dicprice').innerText = "-" + data.dicprice
+                        document.getElementById('amount').innerText = data.price
+                        // document.getElementById('carttotal').value = data.price
+
+
+                    } else {
+                        Swal.fire({
+                            text: data.message,
+                            icon: 'error',
+                            showCancelButton: false,
+                            showCloseButton: false,
+                            showConfirmButton: false,
+                            showLoaderOnConfirm: false,
+                            timer: 3000
+                        });
+                    }
+                })
+                .catch(error => {
+                    console.error('Error applying coupon:', error);
+                    // alert('An error occurred while applying the coupon. Please try again.');
+                });
+
+
+
+
+
+        }
+    </script>
+
+
+    <script>
+
+        const addressData = '<%- JSON.stringify(address) %>';
+        const address = JSON.parse(addressData);
+        console.log(address, 'addddd');
+
+        let selectedAddressId;
+
         function selectAddress(addressId) {
             selectedAddressId = addressId;
             console.log("Address selected:", selectedAddressId);
         }
-        const addressData = '<%- JSON.stringify(address) %>'
-        const address = JSON.parse(addressData)
-        console.log(address, 'addddd');
-        function placeOrder(cartId, paymentMethod) {
-            console.log(cartId, 'cart data is showing', paymentMethod, 'payment method');
-            if (address.length > 0) {
-                console.log('order placing success');
-                fetch(`/addOrder?cartId=${cartId}&paymentMethod=${paymentMethod}&addressId=${selectedAddressId}`)
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error('Network response was not ok');
-                        }
-                        return response.json();
-                    })
-                    .then(data => {
-                        if (data.result === 'success') {
-                            Swal.fire("Order placed successfully").then(() => {
-                                location.href='/orderPlaced'
-                            })
-                            // Optionally refresh the page or update the address list dynamically
-                        }
-                    })
-                    .catch(error => {
-                        console.error('There was a problem with the fetch operation:', error);
-                    });
-            } else {
-                Swal.fire('address not found')
+
+        const cartId = document.getElementById('cartId').value;
+        const amount = document.getElementById('amount').innerText;
+
+        document.getElementById('pay-button').onclick = async function (e) {
+            e.preventDefault();
+            if (!selectedAddressId) {
+                Swal.fire('Address not found');
+                return;
             }
+
+            try {
+                const response = await fetch(`/razorpay?amount=${amount}`);
+                if (!response.ok) {
+                    throw new Error('Failed to create order');
+                }
+
+                const orders = await response.json();
+                const options = {
+                    key: 'rzp_test_vaUKH55kwbh0HR',
+                    amount: orders.amount,
+                    currency: orders.currency,
+                    orders_id: orders.id,
+                    name: 'Your Company Name',
+                    description: 'Test Payment',
+                    image: 'https://via.placeholder.com/150',
+                    handler: function (response) {
+                        Swal.fire({
+                            title: 'Payment Successful!',
+                            html: `<p>Payment ID: <strong>${response.razorpay_payment_id}</strong></p>
+                                 <p>Amount: <strong>${orders.amount / 100}</strong> ${orders.currency}</p>`,
+                            icon: 'success',
+                            timer: 3500,
+                        }).then(() => {
+                            razorpaySuccess(orders);
+                        });
+                    },
+                    prefill: {
+                        name: 'John Doe',
+                        email: 'john.doe@example.com',
+                        contact: '1234567890'
+                    },
+                    theme: {
+                        color: '#528FF0'
+                    }
+                };
+
+                const razorpayInstance = new Razorpay(options);
+                razorpayInstance.open();
+
+                function razorpaySuccess(orders) {
+                    fetch(`/addOrder?cartId=${cartId}&paymentMethod=Online Delivery&addressId=${selectedAddressId}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.result === 'success') {
+                                Swal.fire("Order placed successfully").then(() => {
+                                    location.href = '/orderPlaced';
+                                });
+                            } else if (data.result === 'error') {
+                                Swal.fire('Stock limit exceeded').then(() => {
+                                    location.reload();
+                                });
+                            }
+                        })
+                        .catch(error => {
+                            console.error('There was a problem with the fetch operation:', error);
+                        });
+                }
+            } catch (error) {
+                console.log(error, 'error is showing');
+            }
+        };
+
+        function placeOrder(paymentMethod) {
+            if (!selectedAddressId) {
+                Swal.fire('Address not found');
+                return;
+            }
+
+            fetch(`/addOrder?cartId=${cartId}&paymentMethod=${paymentMethod}&addressId=${selectedAddressId}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.result === 'success') {
+                        Swal.fire("Order placed successfully").then(() => {
+                            location.href = '/orderPlaced';
+                        });
+                    } else if (data.result === 'error') {
+                        Swal.fire('Stock limit exceeded').then(() => {
+                            location.reload();
+                        });
+                    }
+                })
+                .catch(error => {
+                    console.error('There was a problem with the fetch operation:', error);
+                });
         }
 
         const form = document.getElementById("formData");
@@ -343,18 +541,12 @@
                 },
                 body: JSON.stringify(data)
             })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return response.json();
-                })
+                .then(response => response.json())
                 .then(data => {
                     if (data.result === 'success') {
                         Swal.fire("Address added successfully").then(() => {
-                            location.reload()
-                        })
-                        // Optionally refresh the page or update the address list dynamically
+                            location.reload();
+                        });
                     }
                 })
                 .catch(error => {
@@ -362,34 +554,79 @@
                 });
         });
 
-
-
-
-
         function delAddress(id) {
             fetch(`/deleteAddress?id=${id}`)
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return response.json();
-                })
+                .then(response => response.json())
                 .then(data => {
                     if (data.result === 'success') {
                         Swal.fire("Address deleted successfully").then(() => {
-                            location.reload()
-                        })
-                        // Optionally refresh the page or update the address list dynamically
+                            location.reload();
+                        });
                     }
                 })
                 .catch(error => {
                     console.error('There was a problem with the fetch operation:', error);
                 });
-            // Your delAddress logic here
-            console.log("Address deleted:", id);
         }
 
     </script>
 
+    <script>
+        async function applyCoupon() {
+
+
+            const couponCode = document.getElementById('coupon').value
+            const subtotal = document.getElementById('amount').innerText
+
+
+            fetch('/applyCoupon', {
+                method: "POST",
+                headers: {
+                    'Content-Type': "application/json"
+                },
+                body: JSON.stringify({ couponCode, subtotal })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        Swal.fire({
+                            text: "coupon applied",
+                            icon: 'success',
+                            showCancelButton: false,
+                            showCloseButton: false,
+                            showConfirmButton: false,
+                            showLoaderOnConfirm: false,
+                            timer: 3000
+                        });
+
+                        console.log("ivideumethi")
+                        document.getElementById('dicprice').innerText = "-" + data.dicprice
+                        document.getElementById('amount').innerText = data.price
+                        // document.getElementById('carttotal').value = data.price
+
+
+                    } else {
+                        Swal.fire({
+                            text: data.message,
+                            icon: 'error',
+                            showCancelButton: false,
+                            showCloseButton: false,
+                            showConfirmButton: false,
+                            showLoaderOnConfirm: false,
+                            timer: 3000
+                        });
+                    }
+                })
+                .catch(error => {
+                    console.error('Error applying coupon:', error);
+                    // alert('An error occurred while applying the coupon. Please try again.');
+                });
+
+
+
+
+
+        }
+    </script>
 
     </html>

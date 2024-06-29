@@ -231,8 +231,8 @@
                                                                         class="quickview-btn" data-bs-toggle="modal"
                                                                         data-index="<%= i %>"><i
                                                                             class="icon-magnifier"></i></a>
-                                                                    <a href="wishlist.html"><i
-                                                                            class="icon-heart"></i></a>
+                                                                            <button onclick="addToWishlist('<%= products[i]._id %>')" class="btn btn-md btn-golden" style="border: none; background-color: transparent;"> <i class="icon-heart"></i></button>
+                                                                           
 
                                                                 </div>
                                                             </div>
@@ -362,8 +362,7 @@
                                                                         class="quickview-btn" data-bs-toggle="modal"
                                                                         data-index="<%= i %>"><i
                                                                             class="icon-magnifier"></i></a>
-                                                                    <a href="wishlist.html"><i
-                                                                            class="icon-heart"></i></a>
+                                                                            <button onclick="addToWishlist('<%= products[i]._id %>')" class="btn btn-md btn-golden" style="border: none; background-color: transparent;" > <i class="icon-heart"></i></button>
 
                                                                 </div>
                                                             </div>
@@ -534,7 +533,15 @@
                             timer: 2500
                         })
                         
-                    }
+                    }else if (data.result == 'out of stock') {
+                    Swal.fire({
+                      position: "center",
+                      icon: "warning",
+                      title: "out of stock",
+                      showConfirmButton: false,
+                      timer: 2500
+                    })
+                }
                      else {
                         alert('localhost has some issue')
                     }
@@ -554,6 +561,39 @@
 
             //extract JSON from the http response
             // do something with myJson
+        }
+    </script>
+    <script>
+        function addToWishlist(productId,name,id,image) {
+            fetch('/addToWishlist', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ productId })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.result ==='success') {
+                    Swal.fire({
+                            position: "center",
+                            icon: "success",
+                            title: "Add to wishlist Successfully",
+                            showConfirmButton: false,
+                            timer: 2500
+                        })
+                } else if(data.result === 'failure') {
+                    Swal.fire({
+                            position: "center",
+                            icon: "error",
+                            title:"This product is already in your wishlist",
+                            showConfirmButton: false,
+                            timer: 2500
+                        })
+                  
+                }
+            })
+            .catch(error => console.error('Error:', error));
         }
     </script>
 

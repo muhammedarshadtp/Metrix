@@ -14,8 +14,7 @@ const  productsedit  = require("../controllers/productsController/productsedit")
 const  catagoryedit  = require("../controllers/catagoryController/catagoryedit");
 const order = require('../controllers/orderContoller/order');
 const  orderDetails  = require("../controllers/orderContoller/orderDetails");
-
-
+const coupon = require("../controllers/couponController/coupon")
 
 
 
@@ -60,6 +59,18 @@ routerAdmin.get('/productImageDelete/:id/:images',admin_auth,productsedit.delete
 routerAdmin.get('/order',admin_auth,order.order)
 
 routerAdmin.get('/orderDetails/:id',orderDetails.orderDetail)
+
+routerAdmin.get('/coupon',admin_auth,coupon.coupon)
+
+routerAdmin.post('/coupon',admin_auth,coupon.couponPost)
+
+routerAdmin.put('/updateCoupon',admin_auth,coupon.updateCoupon)
+
+routerAdmin.get('/couponEdit',admin_auth,coupon.couponEdit)
+
+routerAdmin.put('/couponEdit',admin_auth,coupon.couponEditPut)
+
+
 
 
 

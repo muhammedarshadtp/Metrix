@@ -22,7 +22,10 @@ const userschema= mongoose.Schema({
     admin:{
         type:Boolean,
         default:false
-    }
+    },
+    usedCoupons:[{
+        type: String 
+    }],
 
 
 })

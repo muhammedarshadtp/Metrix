@@ -86,6 +86,35 @@ const profile = async(req,res)=>{
 
 }
 
+const changePassword = async (req,res)=>{
+    try {
+        const userId = req.session.userId;
+        const { currentPassword, newPassword, confirmPassword } = req.body;
+        console.log(req.body)
+
+          const user = await userCollection.findById(userId)
+         
+    user.password = newPassword;
+    await user.save();
+    res.redirect('/changepassword');
+
+    } catch (error) {
+        console.error(error);
+        res.redirect('/changepassword');
+    }
+}
+
+    const changepassword = async(req,res)=>{
+        try {
+            const user = req.session.isAuth
+            const cart = await cartCollection.find()
+            res.render('changepassword',{user,cart});
+        } catch (error) {
+            console.log(error);
+            res.render('error_page')
+        }
+    }
+
 const updateUser=async(req,res)=>{
     try {
         const userId=req.session.userId
@@ -113,7 +142,8 @@ const userAddress=async(req,res)=>{
         const userId=req.session.userId
         const userdata= await userCollection.findById(userId)
         const address = await addressCollection.find({userId:userId})
-        res.render('userAddress',{user,userdata,address})
+        const cart = await cartCollection.find()
+        res.render('userAddress',{user,userdata,address,cart})
     } catch (error) {
         
     }
@@ -297,6 +327,9 @@ module.exports={
     userAddAddress,
     userAddAddressPost,
     editAddress,
-    editAddressPost     
+    editAddressPost,
+    changePassword,
+    changepassword
+        
 
 }

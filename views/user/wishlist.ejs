@@ -1,84 +1,140 @@
 <%- include('../partials/head') %>
 
-<body>
- <%#- include('../partials/header') %>
+    <body>
+        <%#- include('../partials/header') %>
 
-    <!-- Offcanvas Overlay -->
-    <div class="offcanvas-overlay"></div>
+            <!-- Offcanvas Overlay -->
+            <div class="offcanvas-overlay"></div>
 
-    <!-- ...:::: Start Breadcrumb Section:::... -->
-    <div class="breadcrumb-section breadcrumb-bg-color--golden">
-        <div class="breadcrumb-wrapper">
-            <div class="container">
-                <div class="row">
-                    <div class="col-12">
-                        <h3 class="breadcrumb-title">Wishlist</h3>
-                        <div class="breadcrumb-nav breadcrumb-nav-color--black breadcrumb-nav-hover-color--golden">
-                            <nav aria-label="breadcrumb">
-                                <ul>
-                                    <li><a href="/">Home</a></li>
-                                    <li><a href="/products">Shop</a></li>
-                                    <li class="active" aria-current="page">Wishlist</li>
-                                </ul>
-                            </nav>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div> <!-- ...:::: End Breadcrumb Section:::... -->
-
-    <!-- ...:::: Start Wishlist Section:::... -->
-    <div class="wishlist-section">
-        <!-- Start Cart Table -->
-        <div class="wishlish-table-wrapper" data-aos="fade-up" data-aos-delay="0">
-            <div class="container">
-                <div class="row">
-                    <div class="col-12">
-                        <div class="table_desc">
-                            <div class="table_page table-responsive">
-                                <table>
-                                    <!-- Start Wishlist Table Head -->
-                                    <thead>
-                                        <tr>
-                                            <th class="product_thumb">Image</th>
-                                            <th class="product_name">Product</th>
-                                            <th class="product-price">Price</th>
-                                            <th class="product_stock">Stock Status</th>
-                                            <th class="product_remove">Delete</th>
-                                            <th class="product_addcart">Add To Cart</th>
-                                        </tr>
-                                    </thead> <!-- End Cart Table Head -->
-                                    <tbody>
-                                        <!-- Start Wishlist Single Item-->
-                                        <tr>
-                                            <td class="product_remove"><a href="#"><i class="fa fa-trash-o"></i></a>
-                                            </td>
-                                            <td class="product_thumb"><a href="product-details-default.html"><img
-                                                        src="assets/images/product/default/home-1/default-1.jpg"
-                                                        alt=""></a></td>
-                                            <td class="product_name"><a href="product-details-default.html">Handbag
-                                                    fringilla</a></td>
-                                            <td class="product-price">$65.00</td>
-                                            <td class="product_stock">In Stock</td>
-                                            <td class="product_addcart"><a href="#" class="btn btn-md btn-golden"
-                                                    data-bs-toggle="modal" data-bs-target="#modalAddcart">Add To
-                                                    Cart</a></td>
-                                        </tr> <!-- End Wishlist Single Item-->
-                                    </tbody>
-
-                                </table>
+            <!-- ...:::: Start Breadcrumb Section:::... -->
+            <div class="breadcrumb-section breadcrumb-bg-color--golden">
+                <div class="breadcrumb-wrapper">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-12">
+                                <h3 class="breadcrumb-title">Wishlist</h3>
+                                <div
+                                    class="breadcrumb-nav breadcrumb-nav-color--black breadcrumb-nav-hover-color--golden">
+                                    <nav aria-label="breadcrumb">
+                                        <ul>
+                                            <li><a href="/">Home</a></li>
+                                            <li><a href="/products">Shop</a></li>
+                                            <li class="active" aria-current="page">Wishlist</li>
+                                        </ul>
+                                    </nav>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </div> <!-- End Cart Table -->
-    </div> <!-- ...:::: End Wishlist Section:::... -->
+            </div> <!-- ...:::: End Breadcrumb Section:::... -->
 
-    <%- include('../partials/footer') %>
-    
-</body>
+            <!-- ...:::: Start Wishlist Section:::... -->
+            <div class="wishlist-section">
+                <!-- Start Cart Table -->
+                <div class="wishlish-table-wrapper" data-aos="fade-up" data-aos-delay="0">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="table_desc">
+                                    <div class="table_page table-responsive">
+                                        <table>
+                                            <!-- Start Wishlist Table Head -->
+                                            <thead>
+                                                <tr>
+                                                    <th class="product_thumb">Image</th>
+                                                    <th class="product_name">Product Name</th>
+                                                    <th class="product-price">Price</th>
+                                                    <!-- <th class="product_stock">Stock Status</th> -->
+                                                    <th class="product_addcart">Product Details</th>
+                                                    <th class="product_remove">Delete</th>
+                                                </tr>
+                                            </thead> <!-- End Cart Table Head -->
+                                            <tbody>
+                                                <!-- Start Wishlist Single Item-->
+                                                <% if (wishlist && wishlist.item.length> 0) { %>
+                                                    <% wishlist.item.forEach(item=> { %>
+                                                        <tr>
+
+                                                            <td class="product_thumb"><a
+                                                                    href="/productDetail/<%= item.productId._id %>"><img
+                                                                        src="/productsImages/<%= item.productId.images[0] %>"
+                                                                        alt=""></a></td>
+                                                            <td class="product_name"><a
+                                                                    href="product-details-default.html">
+                                                                    <%= item.productId.name %>
+                                                                </a></td>
+                                                            <td class="product-price">
+                                                                <%= item.productId.price %>
+                                                            </td>
+                                                            <!-- <td class="product_stock">In Stock</td> -->
+                                                            <td class="product_addcart">
+                                                                <a href="/productDetail/<%= item.productId._id %>"
+                                                                    class="btn btn-md btn-golden">view</a>
+                                                            <td class="product_remove">
+                                                                <form action="/Removewishlist" method="POST">
+                                                                    <input type="hidden" name="productId"
+                                                                        value="<%= item.productId._id %>">
+                                                                    <button type="submit"
+                                                                        class="btn btn-md btn-danger">Remove</button>
+                                                                </form>
+                                                            </td>
+                                                        </tr> <!-- End Wishlist Single Item-->
+                                                        <% }); %>
+                                                            <% } else { %>
+                                                                <tr>
+                                                                    <td colspan="6">Your wishlist is empty.</td>
+                                                                </tr>
+                                                                <% } %>
+                                            </tbody>
 
 
-</html>  
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div> <!-- End Cart Table -->
+            </div> <!-- ...:::: End Wishlist Section:::... -->
+
+            <%- include('../partials/footer') %>
+
+    </body>
+    <button id="wishlistButton" onclick="addToWishlist()">Wishlist</button>
+
+    <!-- Add to wishlist button in product listing or details page -->
+
+
+    <script>
+        function addToWishlist(productId) {
+            console.log(productId, 'productId vauinde');
+            fetch('/addToWishlist', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ productId })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        Swal.fire({
+                            position: "center",
+                            icon: "success",
+                            title: "Add to wishlist Successfully",
+                            showConfirmButton: false,
+                            timer: 2500
+                        })
+                    } else {
+                        alert('Error adding product to wishlist');
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+        }
+    </script>
+
+
+
+
+    </html>

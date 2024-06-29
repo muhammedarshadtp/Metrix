@@ -29,11 +29,16 @@ const productseditPost = async (req, res) => {
     try {
         console.log('==========================');
         const data = req.body;
+        console.log(data,'data is showing');
+        console.log(data.stock ,'stock data is showing');
+        console.log(typeof data.stock ,'stock data is showing');
+
+
         const podsId = req.query.podsId;
         const nameValid=alphanumValid(data.name)
-        const stockValid=onlyNumbers(data.stock)
-        const discValid=AlphaOnly(data.description)
         const priceValid=onlyNumbers(data.price)
+        const stockValid=onlyNumbers(Number(data.stock))
+        const discValid=AlphaOnly(data.description)
          if(!nameValid){
              req.flash('nameError','Product name must be at least 3 characters long')
              return res.redirect('/admin/productsedit')
@@ -62,7 +67,7 @@ const productseditPost = async (req, res) => {
         console.log(podsId,"sanam kitty");
         
         const product = await productsCollection.findById(podsId);
-        console.log(products,'products kitty');
+        console.log(product,'products kitty');
         const catagory = await catagoryCollection.findOne({ name: req.body.catagory });
         console.log(catagory,'catagory kitty');
         if (!product || !catagory) {
@@ -81,7 +86,7 @@ const productseditPost = async (req, res) => {
             name: req.body.name,
             catagory: catagory,
             description: req.body.description,
-            stock: req.body.stock,
+            stock: Number(req.body.stock),
             price: req.body.price,
             images: updatedImages
         };

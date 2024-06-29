@@ -6,9 +6,18 @@ const productsCollection = require("../../model/products-schema")
 const products = async (req, res) => {
     try {
         
+        const limit = 6; 
+        let page = Number(req.query.page) || 1; 
 
-        const products = await productsCollection.find()
-        res.render('adminProducts', { products })
+        const TOTAL_COUNT_OF_PRODUCT = await productsCollection.countDocuments()
+        const totalPages = Math.ceil(TOTAL_COUNT_OF_PRODUCT / limit)
+        page = Math.max(1,Math.min(page,totalPages))
+
+        const skip = (page - 1) * limit;
+
+
+        const products = await productsCollection.find().skip(skip).limit(limit)
+        res.render('adminProducts', { products,page,totalPages,count:TOTAL_COUNT_OF_PRODUCT })
     } catch (error) {
         console.log("products error");
     }
