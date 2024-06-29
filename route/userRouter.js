@@ -19,7 +19,7 @@ const { user_orderHistory,order_placed, user_addOrder,cancelOrder } = require(".
 const  account  = require("../controllers/userController/accounts");
 const { razorpay } = require("../controllers/userController/razorpay");
 const { wishlist,addToWishlist,Removewishlist } = require("../controllers/userController/wishlist");
-const { ApplyCoupon } = require("../controllers/userController/coupon");
+const { ApplyCoupon,removeCoupon } = require("../controllers/userController/coupon");
 
 // router.use(whishlistcart)
 
@@ -122,6 +122,8 @@ router.post('/Removewishlist',user_auth,Removewishlist)
 // ------------------coupon--------------------//
 
 router.post('/ApplyCoupon',user_auth,ApplyCoupon)
+
+router.post('/removeCoupon',user_auth,removeCoupon)
 
 
 

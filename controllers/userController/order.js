@@ -47,14 +47,14 @@ const user_addOrder = async (req, res) => {
                 productId: item.productId._id,
                 status: 'Order placed',
                 name: item.productId.name,
-                price: item.Total,
+                price: item.price,
                 quantity: item.quantity,
                 images: item.images,
         
         }));
         let totalPrice 
-        if(req.session.finalPrice){
-            totalPrice = req.session.finalPrice
+        if( req.session.finalprice){
+            totalPrice =  req.session.finalprice
         }else{
             totalPrice = cartData.Total
 
