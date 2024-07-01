@@ -31,6 +31,7 @@ const wallet = async (req,res)=>{
                     amount:finalPrice,
                 }
                 const wallet = await walletCollection.updateOne({userId:userId},{$inc:{wallet:-amount},$addToSet:{walletTransactions:walletTransactions}},{upsert:true})
+                console.log(wallet,'wallet');
                 res.json({result:'Within Limit'})
             }else{
                 res.json({result:'Limit Exceeded'})

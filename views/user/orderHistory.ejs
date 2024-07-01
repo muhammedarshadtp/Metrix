@@ -1,290 +1,285 @@
 <%- include('../partials/head') %>
-    <%- include('../partials/header') %>
+<%- include('../partials/header') %>
 
-        <head>
-            <meta charset="UTF-8">
-            <meta name="viewport" content="width=Device-width, initial-scale=1.0">
-            <title>Order History</title>
-            <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
-                integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
-                crossorigin="anonymous">
-            <style>
-                /* General styles */
-                body {
-                    font-family: Arial, sans-serif;
-                    background-color: #f9f9f9;
-                    margin: 0;
-                    padding: 0;
-                }
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order History</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+        crossorigin="anonymous">
+    <style>
+        /* General styles */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 0;
+        }
 
-                /* Header styles */
-                header {
-                    background-color: #333;
-                    color: white;
-                    padding: 20px 0;
-                    text-align: center;
-                }
+        /* Header styles */
+        header {
+            background-color: #333;
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+        }
 
-                /* Main container styles */
-                main {
-                    max-width: 900px;
-                    margin: 20px auto;
-                    padding: 10px;
-                }
+        /* Main container styles */
+        main {
+            max-width: 900px;
+            margin: 20px auto;
+            padding: 10px;
+        }
 
-                /* Order card styles */
-                .order-card {
-                    background-color: white;
-                    border: 1px solid #ddd;
-                    border-radius: 10px;
-                    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-                    margin-bottom: 20px;
-                    padding: 20px;
-                }
+        /* Order card styles */
+        .order-card {
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            padding: 20px;
+        }
 
-                /* Order header styles */
-                .order-header {
-                    display: flex;
-                    justify-content: space-between;
-                    margin-bottom: 15px;
-                    border-bottom: 1px solid #eee;
-                    padding-bottom: 10px;
-                }
+        /* Order header styles */
+        .order-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+        }
 
-                .order-header span {
-                    font-weight: bold;
-                }
+        .order-header span {
+            font-weight: bold;
+        }
 
-                .order-header .order-date {
-                    font-size: 0.9rem;
-                    color: #777;
-                }
+        .order-header .order-date {
+            font-size: 0.9rem;
+            color: #777;
+        }
 
-                /* Order details styles */
-                .order-details {
-                    margin-top: 15px;
-                }
+        /* Order details styles */
+        .order-details {
+            margin-top: 15px;
+        }
 
-                .order-details p {
-                    margin: 5px 0;
-                }
+        .order-details p {
+            margin: 5px 0;
+        }
 
-                /* Product image styles */
-                .order-details img {
-                    height: 100px;
-                    width: auto;
-                    margin-right: 10px;
-                }
+        /* Product image styles */
+        .order-details img {
+            height: 100px;
+            width: auto;
+            margin-right: 10px;
+        }
 
-                /* Responsive styles */
-                @media (max-width: 600px) {
-                    .order-header {
-                        flex-direction: column;
-                        align-items: flex-start;
-                    }
-                }
+        /* Responsive styles */
+        @media (max-width: 600px) {
+            .order-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
 
-                /* Modal styles */
-                .modal {
-                    display: none;
-                    position: fixed;
-                    z-index: 1;
-                    left: 0;
-                    top: 0;
-                    width: 100%;
-                    height: 100%;
-                    overflow: auto;
-                    background-color: rgb(0, 0, 0);
-                    background-color: rgba(0, 0, 0, 0.4);
-                }
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgb(0, 0, 0);
+            background-color: rgba(0, 0, 0, 0.4);
+        }
 
-                .modal-content {
-                    background-color: #fefefe;
-                    margin: 15% auto;
-                    padding: 20px;
-                    border: 1px solid #888;
-                    width: 80%;
-                    max-width: 500px;
-                    border-radius: 10px;
-                }
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 500px;
+            border-radius: 10px;
+        }
 
-                .close {
-                    color: #aaa;
-                    float: right;
-                    font-size: 28px;
-                    font-weight: bold;
-                }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
 
-                .close:hover,
-                .close:focus {
-                    color: black;
-                    text-decoration: none;
-                    cursor: pointer;
-                }
-            </style>
-        </head>
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
 
-        <body>
-            <header>
-                <h1>Order History</h1>
-            </header>
-            <main>
-                <% for (let i=0; i < order.length; i++) { %>
-                    <div class="order-card">
-                        <div class="order-header">
-                            <span class="order-number">Order #<%= order[i].orderId %></span>
-                            <span class="order-date">
-                                <%= new Date(order[i].orderDate).toLocaleString('en-GB') %>
-                            </span>
-                        </div>
-                        <div class="order-details">
-                            <% for (let j=0; j < order[i].products.length; j++) { %>
-                                <div class="row align-items-center mb-3">
-                                    <div class="col-md-2">
-                                        <img class="img-thumbnail" style="height: 8rem;"
-                                            src="/productsImages/<%= order[i].products[j].images %>"
-                                            alt="Product Image">
-                                    </div>
-                                    <div class="col-md-10">
-                                        <p><strong>User Name:</strong>
-                                            <%= order[i].address.name %>
-                                        </p>
-                                        <p><strong>Product Name:</strong>
-                                            <%= order[i].products[j].name %>
-                                        </p>
-                                        <p><strong>Item:</strong> ₹ <%= order[i].products[j].price %>
-                                        </p>
-                                        <p><strong>Quantity:</strong>
-                                            <%= order[i].products[j].quantity %>
-                                        </p>
-                                        <p><strong>Total:</strong> ₹ <%= order[i].products[j].price %>
-                                        </p>
-                                        <p><strong>Delivery Address:</strong>
-                                            <%= order[i].address.address %>, <%= order[i].address.city %>
-                                        </p>
-                                        <% if (order[i].products[j].status=='Order Cancelled' ) { %>
-
-
-                                            <p><strong>STATUS:</strong>
-                                                <span class="text-danger">
-                                                    <%= order[i].products[j].status %>
-                                                </span>
-                                            </p>
-                                            <% } else { %>
-                                                <p><strong>STATUS:</strong>
-                                                    <%= order[i].products[j].status %>
-                                                </p>
-                                                <% } %>
-                                    </div>
-                                </div>
-                                <div class="d-flex justify-content-end">
-                                    <% if(order[i].products[j].status=='Returned' && order[i].products[j].returnStatus === 'APPROVE' ) { %>
-                                        <h4 class="text-success">Product returned successfully</h4>
-                                        <% } else if(order[i].products[j].status=='Delivered' && order[i].products[j].returnStatus === 'REJECTED' ) { %>
-                                            <h4 class="text-danger">Product rejected</h4>
-
-                                    <% } else if(order[i].products[j].status=='Delivered' ) { %>
-                                        <button class="btn btn-danger"
-                                            onclick="showReturnModal('<%= order[i].orderId %>','<%= order[i].products[j].productId %>')">Return
-                                            Order</button>
-                                        <%} else if (
-                                            order[i].products[j].status=='Order placed' ||
-                                            order[i].products[j].status=='Shipping' ) { %>
-                                            <button class="btn btn-danger"
-                                                onclick="cancelOrder('<%= order[i].orderId %>','<%= order[i].products[j].productId %>')">Cancel
-                                                Order</button>
-                                            <% } %>
-                                </div>
-                                <% } %>
-                        </div>
-
+<body>
+    <header>
+        <h1>Order History</h1>
+    </header>
+    <main>
+        <% if (order.length === 0) { %>
+            <p>No orders found.</p>
+        <% } else { %>
+            <% order.forEach(order => { %>
+                <div class="order-card">
+                    <div class="order-header">
+                        <span class="order-number">Order #<%= order.orderId %></span>
+                        <span class="order-date"><%= new Date(order.orderDate).toLocaleString('en-GB') %></span>
                     </div>
-                    <% } %>
-            </main>
-            <div id="returnModal" class="modal">
-                <div class="modal-content">
-                    <span class="close" onclick="closeModal()">&times;</span>
-                    <h2>Return Order</h2>
-                    <form id="returnForm">
-                        <input type="hidden" id="orderId">
-                        <input type="hidden" id="productId">
-                        <div class="form-group">
-                            <label for="reason">Reason for return:</label>
-                            <textarea id="reason" class="form-control" rows="4" required></textarea>
-                        </div>
-                        <button type="button" class="btn btn-primary" onclick="submitReturn()">Submit</button>
-                    </form>
+                    <div class="order-details">
+                        <p><strong>User Name:</strong> <%= order.address.name %></p>
+                        <% order.products.forEach(product => { %>
+                            <div class="row align-items-center mb-3">
+                                <div class="col-md-2">
+                                    <img class="img-thumbnail" style="height: 8rem;" src="/productsImages/<%= product.images %>"
+                                        alt="Product Image">
+                                </div>
+                                <div class="col-md-10">
+                                    <p><strong>Product Name:</strong> <%= product.name %></p>
+                                    <p><strong>Item:</strong> ₹ <%= product.price %></p>
+                                    <p><strong>Quantity:</strong> <%= product.quantity %></p>
+                                    <p><strong>Total:</strong> ₹ <%= product.price %></p>
+                                    <% if (product.status === 'Order Cancelled') { %>
+                                        <p><strong>Status:</strong> <span class="text-danger"><%= product.status %></span></p>
+                                        <% } else { %>
+                                            <p ><strong >Status:</strong> <%= product.status %></p>
+                                            <% } %>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex justify-content-end">
+                                        <% if (product.status === 'Returned' && product.returnStatus === 'APPROVE') { %>
+                                    <h4 class="text-success">Product returned successfully</h4>
+                                <% } else if (product.status === 'Delivered' && product.returnStatus === 'REJECTED') { %>
+                                    <h4 class="text-danger">Product rejected</h4>
+                                <% } else if (product.status === 'Delivered') { %>
+                                    <button class="btn btn-danger" onclick="showReturnModal('<%= order.orderId %>','<%= product.productId %>')">Return Order</button>
+                                    <% } else if (product.status === 'Order Placed' || product.status === 'Shipping') { %>
+                                        <button class="btn btn-danger" onclick="cancelOrder('<%= order.orderId %>','<%= product.productId %>')">Cancel Order</button>
+                                        <% } %>
+                                    </div>
+                                    <% }) %>
+                                    <p><strong>Delivery Address:</strong> <%= order.address.address %>, <%= order.address.city %></p>
+                                    <p><strong>Payment method:</strong> <%= order.paymentMethod %></p>
+                    </div>
                 </div>
-            </div>
-            <%- include('../partials/footer') %>
-                <!-- Bootstrap Bundle with Popper -->
-                <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-                    integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+8vLvZG8+2e5UzH3cgTk6tIQJp7tS"
-                    crossorigin="anonymous"></script>
-        </body>
-        <script>
-            async function cancelOrder(orderId, productId) {
-                fetch(`/cancelOrder?orderId=${orderId}&productId=${productId}`)
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error('Network response was not ok');
-                        }
-                        return response.json();
-                    })
-                    .then(data => {
-                        if (data.result === 'success') {
-                            Swal.fire("Cancel Order successfully")
-                                .then(() => {
-                                    location.reload()
-                                })
-                            // Optionally refresh the page or update the address list dynamically
-                        }
-                    })
-            }
+            <% }) %>
+        <% } %>
 
-        </script>
-        <script>
-            // JavaScript for handling the modal
-            function showReturnModal(orderId, productId) {
-                document.getElementById('orderId').value = orderId;
-                document.getElementById('productId').value = productId;
-                document.getElementById('returnModal').style.display = 'block';
-            }
+        <!-- Pagination -->
+        <nav aria-label="Page navigation">
+            <ul class="pagination justify-content-center">
+                <li class="page-item <%= currentPage === 1 ? 'disabled' : '' %>">
+                    <a class="page-link" href="/ordersHistory?page=<%= currentPage - 1 %>&limit=<%= limit %>" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+                <% for (let i = 1; i <= totalPages; i++) { %>
+                    <li class="page-item <%= currentPage === i ? 'active' : '' %>">
+                        <a class="page-link" href="/ordersHistory?page=<%= i %>&limit=<%= limit %>"><%= i %></a>
+                    </li>
+                <% } %>
+                <li class="page-item <%= currentPage === totalPages ? 'disabled' : '' %>">
+                    <a class="page-link" href="/ordersHistory?page=<%= currentPage + 1 %>&limit=<%= limit %>" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </main>
 
-            function closeModal() {
-                document.getElementById('returnModal').style.display = 'none';
-            }
+    <div id="returnModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2>Return Order</h2>
+            <form id="returnForm">
+                <input type="hidden" id="orderId">
+                <input type="hidden" id="productId">
+                <div class="form-group">
+                    <label for="reason">Reason for return:</label>
+                    <textarea id="reason" class="form-control" rows="4" required></textarea>
+                </div>
+                <button type="button" class="btn btn-primary" onclick="submitReturn()">Submit</button>
+            </form>
+        </div>
+    </div>
 
-            async function submitReturn() {
-                const orderId = document.getElementById('orderId').value;
-                const productId = document.getElementById('productId').value;
-                const reason = document.getElementById('reason').value;
-
-                if (reason) {
-                    try {
-                        const response = await fetch('/orderReturn', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json'
-                            },
-                            body: JSON.stringify({ orderId, productId, reason })
-                        });
-                        const data = await response.json();
-                        if (data.result === 'success') {
-                            alert('Return reason submitted successfully');
-                            closeModal();
-                            location.reload();
-                        } else {
-                            alert('Error submitting return reason');
-                        }
-                    } catch (error) {
-                        console.error('Error:', error);
-                        alert('Error submitting return reason');
-                    }
-                } else {
-                    alert('Please enter a reason for the return');
+    <%- include('../partials/footer') %>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+8vLvZG8+2e5UzH3cgTk6tIQJp7tS"
+        crossorigin="anonymous"></script>
+</body>
+<script>
+    async function cancelOrder(orderId, productId) {
+        fetch(`/cancelOrder?orderId=${orderId}&productId=${productId}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
                 }
-            }
-        </script>
+                return response.json();
+            })
+            .then(data => {
+                if (data.result === 'success') {
+                    Swal.fire("Cancel Order successfully")
+                        .then(() => {
+                            location.reload()
+                        })
+                }
+            })
+    }
+</script>
+<script>
+    function showReturnModal(orderId, productId) {
+        document.getElementById('orderId').value = orderId;
+        document.getElementById('productId').value = productId;
+        document.getElementById('returnModal').style.display = 'block';
+    }
 
-        </html>
+    function closeModal() {
+        document.getElementById('returnModal').style.display = 'none';
+    }
+
+    async function submitReturn() {
+        const orderId = document.getElementById('orderId').value;
+        const productId = document.getElementById('productId').value;
+        const reason = document.getElementById('reason').value;
+
+        if (reason) {
+            try {
+                const response = await fetch('/orderReturn', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ orderId, productId, reason })
+                });
+                const data = await response.json();
+                if (data.result === 'success') {
+                    alert('Return reason submitted successfully');
+                    closeModal();
+                    location.reload();
+                } else {
+                    alert('Error submitting return reason');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error submitting return reason');
+            }
+        } else {
+            alert('Please enter a reason for the return');
+        }
+    }
+</script>
+
+</html>

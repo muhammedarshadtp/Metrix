@@ -159,6 +159,8 @@
                             <span class="transaction-type"><%= transaction.type %></span>
                             <span class="transaction-date"><%= new Date(transaction.date).toLocaleDateString() %></span>
                         </div>
+                        
+                        <div><strong>Reason:</strong><%= transaction.remarks %></div>
                         <div class="transaction-amount">Rs <%= transaction.amount %></div>
                     </div>
                 <% }) %>

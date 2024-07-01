@@ -12,10 +12,21 @@ const user_orderHistory = async (req, res) => {
     try {
         const userId = req.session.userId
     const user = req.session.isAuth
-    const order = await orderCollection.find({ userId: userId }).populate("userId").sort({ orderDate: -1 })
+
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 6;
+
+    const startIndex = (page - 1) * limit;
+
+    const totalOrders = await orderCollection.countDocuments({ userId: userId });
+
+    const order = await orderCollection.find({ userId: userId }).populate("userId").sort({ orderDate: -1 }).skip(startIndex).limit(limit)
     const cart = await cartCollection.find({userId:userId})
+
     console.log(order, 'order kitty');
-    res.render('orderHistory', { order, user, cart})
+    res.render('orderHistory', { order, user, cart,limit,
+        currentPage: page, 
+        totalPages: Math.ceil(totalOrders / limit)})
     } catch (error) {
         console.log(error,'orderHistory error');
     }
@@ -46,7 +57,7 @@ const user_addOrder = async (req, res) => {
         })
         const products = cartData.items.map(item => ({
                 productId: item.productId._id,
-                status: 'Order placed',
+                status: 'Order Placed',
                 name: item.productId.name,
                 price: item.price,
                 quantity: item.quantity,
@@ -92,8 +103,8 @@ const user_addOrder = async (req, res) => {
             const cartDataDeleting = await cartCollection.findByIdAndDelete(cartData._id)
             
             console.log(cartDataDeleting, 'cart data deleting');
-            sendOrderMail(cartData.userId.email, cartData.userId.username, orderId, products, cartData.Total)
-            return res.json({ result: "success", order: orderPlace });
+            await sendOrderMail(cartData.userId.email, cartData.userId.username, orderId, products, cartData.Total)
+         res.json({ result: "success", order: orderPlace });
         }
 
 

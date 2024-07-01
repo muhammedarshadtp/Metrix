@@ -17,7 +17,7 @@ const walletschema = new mongoose.Schema({
             remarks:{type:String},
             date:{type:Date},
             type:{type:String},
-            amount:{typr:Number},
+            amount:{type:Number},
         },
     ],
 })
