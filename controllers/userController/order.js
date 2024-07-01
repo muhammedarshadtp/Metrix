@@ -36,84 +36,76 @@ const user_addOrder = async (req, res) => {
     try {
         console.log(req.query);
         const { cartId, addressId, paymentMethod } = req.query;
-        // if (!cartId || !addressId || !paymentMethod) {
-        //     return res.status(400).json({ error: 'Missing required fields' });
-        // }
 
         const address = await addressCollection.findById(addressId);
-        console.log(address, 'address');
-        // if (!address) {
-        //     return res.status(404).json({ error: 'Address not found' });
-        // }
-        const cartData = await cartCollection.findById(cartId).populate('items.productId').populate('userId','username email')
-        cartData.items.map(async (item) => {
-            if(!(Number(item.quantity) <= Number(item.productId.stock))){
-                console.log('what is happening');
-                return res.json({result:'error'})
-            }else{
-                console.log('inside else');
-               await OrderPlace()
-            }
-        })
-        const products = cartData.items.map(item => ({
-                productId: item.productId._id,
-                status: 'Order Placed',
-                name: item.productId.name,
-                price: item.price,
-                quantity: item.quantity,
-                images: item.images,
-        
-        }));
-        let totalPrice 
-        if( req.session.finalprice){
-            totalPrice =  req.session.finalprice
-        }else{
-            totalPrice = cartData.Total
-
-        }
-        console.log(cartData,'cart data is showing ==================');
-
-        console.log(products, 'product data');
-
-        console.log(paymentMethod, 'payment method is showing');
-        async function OrderPlace (){
-
-            const orderId = await otpGeneratorUser()
-    
-            const orderPlace = await orderCollection.create({
-                userId: cartData.userId,
-                orderId: orderId,
-                products: products,
-                totalPrice:totalPrice,
-                address: address,
-                paymentMethod: paymentMethod,
-                
-            });
-            req.session.ORDER_PLACED = orderPlace
-            console.log(orderPlace, 'Order placed');
-             for (let product of products) {
-                const productDoc = await productsCollection.findById(product.productId);
-                if (productDoc && productDoc.stock >= product.quantity) {
-                    productDoc.stock -= product.quantity;
-                    await productDoc.save();
-                }
-            }
-    
-    
-            const cartDataDeleting = await cartCollection.findByIdAndDelete(cartData._id)
-            
-            console.log(cartDataDeleting, 'cart data deleting');
-            await sendOrderMail(cartData.userId.email, cartData.userId.username, orderId, products, cartData.Total)
-         res.json({ result: "success", order: orderPlace });
+        if (!address) {
+            return res.json({ error: 'Address not found' });
         }
 
+        const cartData = await cartCollection.findById(cartId)
+            .populate('items.productId')
+            .populate('userId', 'username email');
 
+        if (!cartData) {
+            return res.status(404).json({ error: 'Cart not found' });
+        }
+
+        // Check stock availability
+        for (const item of cartData.items) {
+            if (Number(item.quantity) > Number(item.productId.stock)) {
+                return res.json({ result: 'error', message: 'Insufficient stock' });
+            }
+        }
+
+        // If all items have sufficient stock, place the order
+        const orderPlace = await OrderPlace(cartData, address, paymentMethod, req.session.finalprice || cartData.Total);
+        req.session.ORDER_PLACED = orderPlace
+        res.json({ result: "success", order: orderPlace });
 
     } catch (error) {
         console.error(error, 'error is showing');
         return res.status(500).json({ error: 'Internal server error' });
     }
 }
+
+async function OrderPlace(cartData, address, paymentMethod, totalPrice) {
+    const products = cartData.items.map(item => ({
+        productId: item.productId._id,
+        status: 'Order Placed',
+        name: item.productId.name,
+        price: item.price,
+        quantity: item.quantity,
+        images: item.images,
+    }));
+
+    const orderId = await otpGeneratorUser();
+
+    const orderPlace = await orderCollection.create({
+        userId: cartData.userId,
+        orderId: orderId,
+        products: products,
+        totalPrice: totalPrice,
+        address: address,
+        paymentMethod: paymentMethod,
+    });
+
+    
+
+    for (const product of products) {
+        const productDoc = await productsCollection.findById(product.productId);
+        if (productDoc && productDoc.stock >= product.quantity) {
+            productDoc.stock -= product.quantity;
+            await productDoc.save();
+        }
+    }
+
+    await cartCollection.findByIdAndDelete(cartData._id);
+
+    await sendOrderMail(cartData.userId.email, cartData.userId.username, orderId, products, totalPrice);
+
+    return orderPlace;
+}
+
 
 const order_placed = async (req, res) => {
     const user = req.session.isAuth

@@ -1,3 +1,4 @@
+const cartCollection = require("../../model/cart-schema");
 const walletCollection = require("../../model/wallet-schema")
 
 
@@ -5,10 +6,18 @@ const walletCollection = require("../../model/wallet-schema")
 const wallet = async (req,res)=>{
     try {
         const userId = req.session.userId
+        
+
+        const user = req.session.isAuth
+        
+
+        const cart = await cartCollection.find({userId:userId})
+       
 
         const wallet = await walletCollection.findOne({userId:userId})
 
-        res.render('wallet',{wallet})
+
+        res.render('wallet',{wallet,user,cart})
 
     } catch (error) {
         

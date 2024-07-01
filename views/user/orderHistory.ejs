@@ -150,7 +150,7 @@
                                     <p><strong>Product Name:</strong> <%= product.name %></p>
                                     <p><strong>Item:</strong> ₹ <%= product.price %></p>
                                     <p><strong>Quantity:</strong> <%= product.quantity %></p>
-                                    <p><strong>Total:</strong> ₹ <%= product.price %></p>
+                                    <p><strong>Total:</strong> ₹ <%= product.price * product.quantity %></p>
                                     <% if (product.status === 'Order Cancelled') { %>
                                         <p><strong>Status:</strong> <span class="text-danger"><%= product.status %></span></p>
                                         <% } else { %>
@@ -172,6 +172,7 @@
                                     <% }) %>
                                     <p><strong>Delivery Address:</strong> <%= order.address.address %>, <%= order.address.city %></p>
                                     <p><strong>Payment method:</strong> <%= order.paymentMethod %></p>
+                                    <p><strong>Grand Total:</strong> ₹ <%= order.totalPrice %></p>
                     </div>
                 </div>
             <% }) %>
