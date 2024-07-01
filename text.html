@@ -1,54 +1,141 @@
-<div class="col-md-6">
-  <h4 class="mb-4">Add New Address</h4>
-  <form id="formData">
-      <div class="row">
-          <div class="col-12">
-              <div class="form-check mb-3">
-                  <input class="form-check-input" type="checkbox" id="newShipping" data-bs-toggle="collapse" data-bs-target="#anotherShipping">
-                  <label class="form-check-label" for="newShipping">Add new address</label>
-              </div>
-              <div id="anotherShipping" class="collapse mt-3" data-parent="#anotherShipping">
-                  <div class="row">
-                      <div class="col-lg-6 mb-3">
-                          <label class="form-label" for="name">Name <span>*</span></label>
-                          <input type="text" class="form-control" id="name" name="name" placeholder="Name" required>
-                      </div>
-                      <div class="col-12 mb-3">
-                          <label class="form-label" for="country_name">Country <span>*</span></label>
-                          <select class="form-select" id="country_name" name="country" required>
-                              <option value="America">America</option>
-                              <option value="India">India</option>
-                              <!-- Add other countries as needed -->
-                          </select>
-                      </div>
-                      <div class="col-12 mb-3">
-                          <label class="form-label" for="address">Street address <span>*</span></label>
-                          <input type="text" class="form-control" id="address" name="address" placeholder="House number and street name" required>
-                      </div>
-                      <div class="col-12 mb-3">
-                          <label class="form-label" for="street">Street <span>(optional)</span></label>
-                          <input type="text" class="form-control" id="street" name="street" placeholder="Apartment, suite, unit etc.">
-                      </div>
-                      <div class="col-12 mb-3">
-                          <label class="form-label" for="city">City <span>*</span></label>
-                          <input type="text" class="form-control" id="city" name="city" required>
-                      </div>
-                      <div class="col-12 mb-3">
-                          <label class="form-label" for="state">State <span>*</span></label>
-                          <input type="text" class="form-control" id="state" name="state" required>
-                      </div>
-                      <div class="col-lg-6 mb-3">
-                          <label class="form-label" for="pincode">Pincode <span>*</span></label>
-                          <input type="text" class="form-control" id="pincode" name="pincode" required>
-                      </div>
-                      <div class="col-lg-6 mb-3">
-                          <label class="form-label" for="phone">Phone <span>*</span></label>
-                          <input type="text" class="form-control" id="phone" name="phone" required>
-                      </div>
-                  </div>
-              </div>
-          </div>
+<%- include('./partials/head/head.ejs') %>
+
+<%- include('./partials/header/header.ejs') %>
+
+<main class="main-wrap">
+  <header class="main-header navbar">
+    <div class="col-search">
+      <!-- <form class="searchform">
+        <div class="input-group">
+          <input list="search_terms" type="text" class="form-control" placeholder="Search term">
+          <button class="btn btn-light bg" type="button"> <i class="material-icons md-search"></i></button>
+        </div>
+        <datalist id="search_terms">
+          <option value="Products">
+          <option value="New orders">
+          <option value="Apple iphone">
+          <option value="Ahmed Hassan">
+        </datalist>
+      </form> -->
+    </div>
+    <div class="col-nav">
+      <button class="btn btn-icon btn-mobile me-auto" data-trigger="#offcanvas_aside">
+        <i class="material-icons md-apps"></i>
+      </button>
+      <ul class="nav">
+        <!-- <li class="nav-item">
+          <a class="nav-link btn-icon" href="#">
+            <i class="material-icons md-notifications animation-shake"></i>
+            <span class="badge rounded-pill">3</span>
+          </a>
+        </li> -->
+        <li class="nav-item">
+          <a class="nav-link btn-icon darkmode" href="#">
+            <i class="material-icons md-nights_stay"></i>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#" class="requestfullscreen nav-link btn-icon">
+            <i class="material-icons md-cast"></i>
+          </a>
+        </li>
+        <li class="dropdown nav-item">
+          <a class="dropdown-item text-danger" href="/admin/Logout">
+            <i class="material-icons md-exit_to_app"></i> Logout
+          </a>
+        </li>
+      </ul>
+    </div>
+  </header>
+  <section class="content-main">
+    <div class="content-header">
+      <div>
+        <h2 class="content-title card-title">Order List</h2>
+        <p>Lorem ipsum dolor sit amet.</p>
       </div>
-      <button class="btn btn-primary w-100" type="submit">Add Address</button>
-  </form>
-</div>
+    </div>
+    <div class="card mb-4">
+      <header class="card-header">
+        <div class="row gx-3">
+          <div class="col-lg-4 col-md-6 me-auto">
+            <input type="text" placeholder="Search..." class="form-control">
+          </div>
+        </div>
+      </header>
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <th>#ID</th>
+                <th scope="col">Name</th>
+                <th scope="col">Products Name</th>
+                <th scope="col">Total</th>
+                <th scope="col">Status</th>
+                <th scope="col">Date</th>
+                <th scope="col">Details</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% for (let i = 0; i < orderlist.length; i++) { %>
+                <tr>
+                  <td><%= orderlist[i].orderId %></td>
+                  <td><b><%= orderlist[i].userId ? orderlist[i].userId.username : 'N/A' %></b></td>
+                  <td>
+                    <% if (orderlist[i].products && orderlist[i].products.length > 0) { %>
+                      <% orderlist[i].products.forEach(product => { %>
+                        <p><%= product.name %></p>
+                      <% }); %>
+                    <% } %>
+                  </td>
+                  <td><%= orderlist[i].totalPrice %></td>
+                  <td>
+                    <% orderlist[i].products.forEach(product => { %>
+                      <p>
+                        <span class="badge rounded-pill alert-warning"><%= product.status %></span>
+                      </p>
+                    <% }); %>
+                  </td>
+                  <td><%= orderlist[i].orderDate.toDateString() %></td>
+                  <td>
+                    <% if (orderlist[i].products.length > 2) { %>
+                      <button type="button" class="btn btn-danger btn-sm">
+                        <a href="/admin/orderDetailsMultiple/<%= orderlist[i].orderId %>">Details</a>
+                      </button>
+                    <% } else { %>
+                      <button type="button" class="btn btn-danger btn-sm">
+                        <a href="/admin/orderDetails/<%= orderlist[i].orderId %>">Details</a>
+                      </button>
+                    <% } %>
+                  </td>
+                </tr>
+              <% } %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="pagination-area mt-15 mb-50">
+      <nav aria-label="Page navigation example">
+        <ul class="pagination justify-content-start">
+          <% if (page > 1) { %>
+            <li class="page-item">
+              <a class="page-link" href="/admin/order/?page=<%= page - 1 %>">Prev</a>
+            </li>
+          <% } %>
+          <% for (let i = 1; i <= totalPages; i++) { %>
+            <li class="page-item <%= page === i ? 'active' : '' %>">
+              <a class="page-link" href="/admin/order/?page=<%= i %>"><%= i %></a>
+            </li>
+          <% } %>
+          <% if (page < totalPages) { %>
+            <li class="page-item">
+              <a class="page-link btn btn-primary" href="/admin/order/?page=<%= page + 1 %>">Next</a>
+            </li>
+          <% } %>
+        </ul>
+      </nav>
+    </div>
+  </section>
+  <%- include('./partials/footer/footer.ejs') %>
+</main>

@@ -83,6 +83,44 @@
                         align-items: flex-start;
                     }
                 }
+
+                /* Modal styles */
+                .modal {
+                    display: none;
+                    position: fixed;
+                    z-index: 1;
+                    left: 0;
+                    top: 0;
+                    width: 100%;
+                    height: 100%;
+                    overflow: auto;
+                    background-color: rgb(0, 0, 0);
+                    background-color: rgba(0, 0, 0, 0.4);
+                }
+
+                .modal-content {
+                    background-color: #fefefe;
+                    margin: 15% auto;
+                    padding: 20px;
+                    border: 1px solid #888;
+                    width: 80%;
+                    max-width: 500px;
+                    border-radius: 10px;
+                }
+
+                .close {
+                    color: #aaa;
+                    float: right;
+                    font-size: 28px;
+                    font-weight: bold;
+                }
+
+                .close:hover,
+                .close:focus {
+                    color: black;
+                    text-decoration: none;
+                    cursor: pointer;
+                }
             </style>
         </head>
 
@@ -124,24 +162,60 @@
                                         <p><strong>Delivery Address:</strong>
                                             <%= order[i].address.address %>, <%= order[i].address.city %>
                                         </p>
-                                        <p><strong>STATUS:</strong>
-                                            <%= order[i].products[j].status %>
-                                        </p>
+                                        <% if (order[i].products[j].status=='Order Cancelled' ) { %>
+
+
+                                            <p><strong>STATUS:</strong>
+                                                <span class="text-danger">
+                                                    <%= order[i].products[j].status %>
+                                                </span>
+                                            </p>
+                                            <% } else { %>
+                                                <p><strong>STATUS:</strong>
+                                                    <%= order[i].products[j].status %>
+                                                </p>
+                                                <% } %>
                                     </div>
                                 </div>
                                 <div class="d-flex justify-content-end">
-                                    <% if (order[i].products[j].status !== 'Order Cancelled') { %>
-                                        <button class="btn btn-danger" onclick="cancelOrder('<%= order[i].orderId %>','<%= order[i].products[j].productId %>')">Cancel Order</button>
-                                    <% } else { %>
-                                       
-                                    <% } %>
+                                    <% if(order[i].products[j].status=='Returned' && order[i].products[j].returnStatus === 'APPROVE' ) { %>
+                                        <h4 class="text-success">Product returned successfully</h4>
+                                        <% } else if(order[i].products[j].status=='Delivered' && order[i].products[j].returnStatus === 'REJECTED' ) { %>
+                                            <h4 class="text-danger">Product rejected</h4>
+
+                                    <% } else if(order[i].products[j].status=='Delivered' ) { %>
+                                        <button class="btn btn-danger"
+                                            onclick="showReturnModal('<%= order[i].orderId %>','<%= order[i].products[j].productId %>')">Return
+                                            Order</button>
+                                        <%} else if (
+                                            order[i].products[j].status=='Order placed' ||
+                                            order[i].products[j].status=='Shipping' ) { %>
+                                            <button class="btn btn-danger"
+                                                onclick="cancelOrder('<%= order[i].orderId %>','<%= order[i].products[j].productId %>')">Cancel
+                                                Order</button>
+                                            <% } %>
                                 </div>
                                 <% } %>
                         </div>
-                      
+
                     </div>
-                <% } %>
+                    <% } %>
             </main>
+            <div id="returnModal" class="modal">
+                <div class="modal-content">
+                    <span class="close" onclick="closeModal()">&times;</span>
+                    <h2>Return Order</h2>
+                    <form id="returnForm">
+                        <input type="hidden" id="orderId">
+                        <input type="hidden" id="productId">
+                        <div class="form-group">
+                            <label for="reason">Reason for return:</label>
+                            <textarea id="reason" class="form-control" rows="4" required></textarea>
+                        </div>
+                        <button type="button" class="btn btn-primary" onclick="submitReturn()">Submit</button>
+                    </form>
+                </div>
+            </div>
             <%- include('../partials/footer') %>
                 <!-- Bootstrap Bundle with Popper -->
                 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
@@ -149,9 +223,9 @@
                     crossorigin="anonymous"></script>
         </body>
         <script>
-            async function cancelOrder(orderId,productId){
+            async function cancelOrder(orderId, productId) {
                 fetch(`/cancelOrder?orderId=${orderId}&productId=${productId}`)
-                .then(response => {
+                    .then(response => {
                         if (!response.ok) {
                             throw new Error('Network response was not ok');
                         }
@@ -160,14 +234,57 @@
                     .then(data => {
                         if (data.result === 'success') {
                             Swal.fire("Cancel Order successfully")
-                            .then(()=>{
-                                location.reload()
-                            })
+                                .then(() => {
+                                    location.reload()
+                                })
                             // Optionally refresh the page or update the address list dynamically
                         }
                     })
             }
 
         </script>
+        <script>
+            // JavaScript for handling the modal
+            function showReturnModal(orderId, productId) {
+                document.getElementById('orderId').value = orderId;
+                document.getElementById('productId').value = productId;
+                document.getElementById('returnModal').style.display = 'block';
+            }
 
-        </html> 
+            function closeModal() {
+                document.getElementById('returnModal').style.display = 'none';
+            }
+
+            async function submitReturn() {
+                const orderId = document.getElementById('orderId').value;
+                const productId = document.getElementById('productId').value;
+                const reason = document.getElementById('reason').value;
+
+                if (reason) {
+                    try {
+                        const response = await fetch('/orderReturn', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({ orderId, productId, reason })
+                        });
+                        const data = await response.json();
+                        if (data.result === 'success') {
+                            alert('Return reason submitted successfully');
+                            closeModal();
+                            location.reload();
+                        } else {
+                            alert('Error submitting return reason');
+                        }
+                    } catch (error) {
+                        console.error('Error:', error);
+                        alert('Error submitting return reason');
+                    }
+                } else {
+                    alert('Please enter a reason for the return');
+                }
+            }
+        </script>
+
+        </html>

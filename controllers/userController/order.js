@@ -3,6 +3,7 @@ const orderCollection = require("../../model/order-schema")
 const productsCollection = require("../../model/products-schema")
 const addressCollection = require("../../model/user-address")
 const userCollection = require("../../model/user-schema")
+const walletCollection = require("../../model/wallet-schema")
 const sendOrderMail = require("../../utils/order-placed-mail")
 const otpGeneratorUser = require("../../utils/otp_generator")
 
@@ -113,6 +114,8 @@ const order_placed = async (req, res) => {
 
 const cancelOrder = async (req, res) => {
     try {
+
+        const userId = req.session.userId
         console.log("entering cancel");
         const { orderId,productId} = req.query
 
@@ -122,6 +125,7 @@ const cancelOrder = async (req, res) => {
         const productItem = order.products.find(item => item.productId.toString() === productId);
        
         const quantity = productItem.quantity;
+        const currentStatus =productItem.status
 
 
         const cancelledOrderData = await orderCollection.updateOne(
@@ -142,7 +146,24 @@ const cancelOrder = async (req, res) => {
                 await product.save();
             }
         }
+      
+        if(order.paymentMethod !=='Cash on Delivery' && currentStatus !== 'Order Cancelled'){
+            const amount = productItem.price * quantity;
+            const  walletTransactions = {
+                remarks:'User cancel a order',
+                date:new Date(),
+                type:'Credit',
+                amount:amount,
+            }
+              console.log('Processing wallet transaction=====================');
+
+            const wallet = await walletCollection.updateOne({userId:userId},{$inc:{wallet:+amount},$addToSet:{walletTransactions:walletTransactions}},{upsert:true})
+            console.log(wallet,'sdhbvfsdhb=================================');
+        }
+        
         res.json({result:"success"})
+
+
 
 
 
@@ -153,9 +174,30 @@ const cancelOrder = async (req, res) => {
     }
 }
 
+const orderReturn = async (req,res)=>{
+    try {
+        const {orderId,productId,reason}= req.body
+
+        const order = await orderCollection.findOne({orderId:orderId,'products.productId':productId})
+
+        if(order){
+            const product = order.products.find(p => p.productId === productId)
+            product.status = 'Return Requested';
+            product.returnReason = reason;
+             await order.save()
+             res.json({ result: 'success' }); 
+        }
+
+        res.json({result})
+    } catch (error) {
+        console.log(error,'return order errror');
+    }
+}
+
 module.exports = {
     user_orderHistory,
     order_placed,
     user_addOrder,
-    cancelOrder
+    cancelOrder,
+    orderReturn
 }

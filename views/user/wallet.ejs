@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wallet</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container-wallet {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .wallet-summary {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background-color: #e9ecef;
+            border-radius: 8px;
+        }
+
+        .wallet-balance {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .transaction-history {
+            margin-top: 20px;
+        }
+
+        .transaction-history h2 {
+            font-size: 20px;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .transaction {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .transaction:last-child {
+            border-bottom: none;
+        }
+
+        .transaction-details {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .transaction-type {
+            font-weight: bold;
+        }
+
+        .transaction-amount {
+            font-size: 18px;
+            color: #333;
+        }
+
+        .transaction-date {
+            font-size: 14px;
+            color: #777;
+        }
+
+        .breadcrumb-section {
+            padding: 20px 0;
+            background-color: #f7f7f7;
+            text-align: center;
+        }
+
+        .breadcrumb-text {
+            display: inline-block;
+            text-align: left;
+        }
+
+        .breadcrumb-text p {
+            margin: 0;
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .pagination a {
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            color: #212529;
+            padding: 6px 12px;
+            text-decoration: none;
+            transition: background-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+        }
+
+        .pagination a:hover {
+            background-color: #e9ecef;
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25);
+        }
+
+        .pagination a.active {
+            background-color: #007bff;
+            color: white;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    
+    <!-- breadcrumb-section -->
+    <div class="breadcrumb-section breadcrumb-bg">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 offset-lg-2 text-center">
+                    <div class="breadcrumb-text">
+                        <p>Manage your funds</p>
+                        <h1>Wallet</h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- end breadcrumb section -->
+
+    <% if (wallet) { %>
+    <div class="container-wallet">
+        <h1>Wallet</h1>
+        <div class="wallet-summary">
+            <div class="wallet-balance">Balance: Rs <%= wallet.wallet %></div>
+        </div>
+        <div class="transaction-history">
+            <h2>Transaction History</h2>
+            <% if (wallet.walletTransactions.length > 0) { %>
+                <% wallet.walletTransactions.forEach(transaction => { %>
+                    <div class="transaction">
+                        <div class="transaction-details">
+                            <span class="transaction-type"><%= transaction.type %></span>
+                            <span class="transaction-date"><%= new Date(transaction.date).toLocaleDateString() %></span>
+                        </div>
+                        <div class="transaction-amount">Rs <%= transaction.amount %></div>
+                    </div>
+                <% }) %>
+            <% } else { %>
+                <h1 class="text-center fw-bolder">No transactions found</h1>
+            <% } %>
+        </div>
+        <div class="pagination">
+            <!-- Pagination logic (if needed) -->
+        </div>
+    </div>
+    <% } else { %>
+        <h1 class="text-center fw-bolder">No wallet found</h1>
+    <% } %>
+
+    
+</body>
+</html>

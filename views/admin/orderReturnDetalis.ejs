@@ -1,0 +1,245 @@
+<%- include('./partials/head/head.ejs') %>
+    <style>
+        .dropdown-and-button {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        td[colspan="5"] {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 40%;
+            /* Ensure the cell takes up full height */
+        }
+    </style>
+</head>
+
+<%- include('./partials/header/header.ejs') %>
+<body>
+    
+       
+
+        <main class="main-wrap">
+                <section class="content-main">
+                    <% if (orderDetails) { %>
+                        <div class="content-header">
+                            <div>
+                                <h2 class="content-title card-title">Order Detail</h2>
+                                <p>Details for Order ID: <%= orderDetails.orderId %>
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <header class="card-header">
+                                <div class="row align-items-center">
+                                    <div class="col-lg-6 col-md-6 mb-lg-0 mb-15">
+                                        <span>
+                                            <i class="material-icons md-calendar_today"></i> <b>
+                                                <%= orderDetails.orderDate %>
+                                            </b>
+                                        </span>
+                                        <br>
+                                        <small class="text-muted">Order ID: <%= orderDetails.orderId %></small>
+                                    </div>
+                                    <div class="col-lg-6 col-md-6 ms-auto text-md-end">
+                                        <a class="btn btn-secondary print ms-2" href="#">
+                                            <i class="icon material-icons md-print"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </header>
+                            <div class="card-body">
+                                <div class="row mb-50 mt-20 order-info-wrap">
+                                    <div class="col-md-4">
+                                        <article class="icontext align-items-start">
+                                            <span class="icon icon-sm rounded-circle bg-primary-light">
+                                                <i class="text-primary material-icons md-person"></i>
+                                            </span>
+                                            <div class="text">
+                                                <h6 class="mb-1">Customer</h6>
+                                                <p class="mb-1">
+                                                    <%= orderDetails.username %><br>
+                                                        <%= orderDetails.email %><br>
+                                                            <%= orderDetails.phoneNumber %>
+                                                </p>
+                                                <a href="#">View profile</a>
+                                            </div>
+                                        </article>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <article class="icontext align-items-start">
+                                            <span class="icon icon-sm rounded-circle bg-primary-light">
+                                                <i class="text-primary material-icons md-local_shipping"></i>
+                                            </span>
+                                            <div class="text">
+                                                <h6 class="mb-1">Order Info</h6>
+                                                <p class="mb-1">
+                                                    Shipping: Fargo express<br>
+                                                    Pay method: <%= orderDetails.paymentMethod %><br>
+                                                        Status: new
+                                                </p>
+                                                <a href="#">Download info</a>
+                                            </div>
+                                        </article>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <article class="icontext align-items-start">
+                                            <span class="icon icon-sm rounded-circle bg-primary-light">
+                                                <i class="text-primary material-icons md-place"></i>
+                                            </span>
+                                            <div class="text">
+                                                <h6 class="mb-1">Deliver to</h6>
+                                                <p class="mb-1">
+                                                    City: <%= orderDetails.address %><br>
+                                                        Block A, House 123, Floor 2<br>
+                                                        Po Box 10000
+                                                </p>
+                                                <a href="#">View profile</a>
+                                            </div>
+                                        </article>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <div class="table-responsive">
+                                            <table class="table">
+                                                <thead>
+                                                    <tr>
+                                                        <th width="20%">Product</th>
+                                                        <th width="20%">Unit Price</th>
+                                                        <th width="20%">Reason</th>
+                                                        <th width="20%">Quantity</th>
+                                                        <th width="20%">Total Amount</th>
+                                                        <th width="20%" class="">Order Status</th>
+                                                    </tr>
+                                                </thead>
+                                                
+                                                <% orderDetails.products.forEach((item,index)=> { %>
+                                                    <% if (item.status === 'Return Requested' || item.returnStatus === 'APPROVE' || item.returnStatus === 'REJECTED') { %>
+                                                     
+                                                    
+                                                    <tbody>
+                                                        <tr>
+                                                            <td>
+                                                                <a class="itemside" href="#">
+                                                                    <div class="left">
+                                                                        <img src="/productsImages/<%=item.images %>" width="60"
+                                                                            height="60" class="img-xl" alt="Item">
+                                                                    </div>
+                                                                    <div class="info">
+                                                                        <%= item.name %>
+                                                                    </div>
+                                                                </a>
+                                                            </td>
+                                                            <td>Rs <%= item.price %>
+                                                            </td>
+                                                            <td>
+                                                                <%= item.returnReason %> 
+                                                            </td>
+                                                            <td>
+                                                                <span id="quantity_<%= index %>">
+                                                                    <%= item.quantity %>
+                                                                </span>
+                                                            </td>
+                                                            <td>Rs <%= item.price * item.quantity %>
+                                                            </td>
+                                                            <td>
+                                                                <% if (item.status==='Return Requested' ) { %>
+                                                                    <button class="btn btn-success"
+                                                                        onclick="handleReturnOrder('APPROVE', '<%= item.productId %>','<%= item.quantity %>')">Approve</button>
+                                                                    <button class="btn btn-danger "
+                                                                        onclick="handleReturnOrder('REJECTED', '<%= item.productId %>','<%= item.quantity %>')">Reject</button>
+                                                                    <% }else if(item.status === 'Returned') {%>
+                                                                        <h4 class="text-success">Product returned successfully</h4>
+                                                                        <% }else if(item.status === 'Order Cancelled') {%>
+                                                                            <h5 class="text-danger">User Cancelled Product</h5>
+                                                                            <% }else if(item.returnStatus === 'REJECTED') {%>
+                                                                                <h5 class="text-danger">Product Rejected</h5>
+                                                                        <% }  %> 
+
+
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                    <% } %>
+                                                    <% }) %>
+                                            </table>
+                                            <div class="text-end mt-4">
+                                                <h4>Grand Total: Rs <%= orderDetails.products.reduce((total, item)=>
+                                                        total + (item.price * item.quantity), 0) %></h4>
+                                            </div>
+                                            
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <% } else { %>
+                            <div class="no-data">No data found. Some error occurred, kindly check the order.</div>
+                            <% } %>
+                </section>
+        </main>
+    </body>
+        <%- include('./partials/footer/footer.ejs') %>
+
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+        <script>
+            console.log('what is happening');
+            const orderData = '<%- JSON.stringify(orderDetails) %>';
+            console.log(orderData, 'order is showing');
+            async function handleReturnOrder(action, productId, quantity) {
+                try {
+                    const order = JSON.parse(orderData)
+                    console.log(order, 'order is showing');
+                    const response = await fetch(`/admin/orderReturnConformation`, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            orderId: order.orderId,
+                            productId: productId,
+                            userId: order.userId,
+                            action: action,
+                            quantity: quantity
+                        })
+                    });
+                    if (response.ok) {
+                        const data = await response.json();
+                        if (data.result === 'APPROVE') {
+                            Swal.fire({
+                                position: "center",
+                                icon: "success",
+                                title: `Return request ${action.toLowerCase()}ed successfully`,
+                                showConfirmButton: false,
+                                timer: 1500
+                            }).then(() => location.reload());
+                        } else if (data.result === 'REJECTED') {
+                            Swal.fire({
+                                position: "center",
+                                icon: "warning",
+                                title: `Return request ${action.toLowerCase()}ed successfully`,
+                                showConfirmButton: false,
+                                timer: 1500
+                            }).then(() => location.reload());
+
+                            console.log('Return action unsuccessful');
+                        }
+                    } else {
+                        console.log('Network failure occurred while processing return');
+                    }
+                } catch (error) {
+                    console.log(error, 'Error occurred while processing return action');
+                }
+            }
+
+        </script>
+           
+
+
+</html>

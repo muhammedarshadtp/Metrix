@@ -14,23 +14,31 @@ const  productsedit  = require("../controllers/productsController/productsedit")
 const  catagoryedit  = require("../controllers/catagoryController/catagoryedit");
 const order = require('../controllers/orderContoller/order');
 const  orderDetails  = require("../controllers/orderContoller/orderDetails");
-const coupon = require("../controllers/couponController/coupon")
+const coupon = require("../controllers/couponController/coupon");
+const { orderReturn,orderReturnDetails,orderReturnConformation } = require("../controllers/orderContoller/orderReturn");
 
 
-
+// -----------------AdminLogin-----------------//
 
 routerAdmin.get('/login', adminController.admin_loginGet)
 
 routerAdmin.post('/login', adminController.admin_loginPost)
 
+// ---------------dashboard-------------------//
+
 routerAdmin.get('/dashboard', admin_auth, dashboard.dashboard_get)
+
+
+
+
+
+// ------------------userlist------------------------//
 
 routerAdmin.get('/users_list',admin_auth, userlist.userlist)
 
-routerAdmin.get('/logout', adminController.admin_logoutGet)
-
 routerAdmin.get('/userstatus/:id', admin_auth, userlist.userstatus)
 
+// ----------------------catagory------------------//
 
 routerAdmin.get('/catagory', admin_auth, catagory.catagory)
 
@@ -41,6 +49,8 @@ routerAdmin.post('/addcatagory',admin_auth, addcatagory.addcatagory)
 routerAdmin.get('/catagoryedit/:id',admin_auth,catagoryedit.catagoryedit)
 
 routerAdmin.post('/updatecatagory',admin_auth,catagoryedit.updatecatagory)
+
+// -----------------------Products---------------//
 
 routerAdmin.get('/products', admin_auth, products.products)
 
@@ -56,9 +66,24 @@ routerAdmin.post('/productseditPost',admin_auth,upload.array('image',5), product
 
 routerAdmin.get('/productImageDelete/:id/:images',admin_auth,productsedit.deleteImages)
 
+// ------------------Order---------------------//
+
 routerAdmin.get('/order',admin_auth,order.order)
 
-routerAdmin.get('/orderDetails/:id',orderDetails.orderDetail)
+routerAdmin.get('/orderDetails/:id',admin_auth,orderDetails.orderDetail)
+
+routerAdmin.post('/updateOrderStatus',admin_auth,orderDetails.updateOrderStatus)
+
+// ---------------------ReturnOrder-----------------------------//
+
+routerAdmin.get('/orderReturn',admin_auth,orderReturn)
+
+routerAdmin.get('/orderReturnDetails',admin_auth,orderReturnDetails)
+
+routerAdmin.put('/orderReturnConformation',admin_auth,orderReturnConformation)
+
+// ---------------coupon----------------//
+
 
 routerAdmin.get('/coupon',admin_auth,coupon.coupon)
 
@@ -70,6 +95,9 @@ routerAdmin.get('/couponEdit',admin_auth,coupon.couponEdit)
 
 routerAdmin.put('/couponEdit',admin_auth,coupon.couponEditPut)
 
+// ----------------logout-------------//
+
+routerAdmin.get('/logout', adminController.admin_logoutGet)
 
 
 

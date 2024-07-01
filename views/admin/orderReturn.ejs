@@ -1,0 +1,103 @@
+
+<%- include('./partials/head/head.ejs') %>
+
+<%- include('./partials/header/header.ejs') %>
+
+
+        <main class="main-wrap">
+
+            
+
+                <section class="content-main">
+                    <div class="content-header">
+                        <div>
+                            <h2 class="content-title card-title">Return Order List </h2>
+                            <p>Lorem ipsum dolor sit amet.</p>
+                        </div>
+                        <div>
+                            <input type="text" placeholder="Search order ID" class="form-control bg-white">
+                        </div>
+                      
+                    </div>
+                    <div class="card mb-4">
+                        <header class="card-header">
+                            <div class="row gx-3">
+                                
+                    
+                            </div>
+                        </header> <!-- card-header end// -->
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr class="fw-bold fs-6">
+                                            <th>#ID</th>
+                                            <th scope="col">Name</th>
+                                            <th scope="col">Total</th>
+                                            <th scope="col">Method Of Payment</th>
+                                            <th scope="col">Date</th>
+                                            <th scope="col" class="text-end"> Action </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <% if (orders.length>0) { %>
+
+                                            <% for( let i=0; i < orders.length; i++ ) { %>
+
+
+                                                <tr class="fw-bold fs-6">
+                                                    <td><%= orders[i].orderId %> </td>
+                                                    <td><b>
+                                                            <%= orders[i].address.name %>
+                                                        </b></td>
+                                            
+                                                    <td>Rs <%= orders[i].totalPrice %>
+                                                    </td>
+                                                    <td>
+                                                        <%= orders[i].paymentMethod %>
+                                                    </td>
+                                                    <td>
+                                                        <%= new Date(orders[i].orderDate).toLocaleString('en-IN') %>
+                                                    </td>
+                                                    <td class="text-end">
+                                                        <a href="/admin/orderReturnDetails?orderId=<%= orders[i]._id %>" class="btn btn-md rounded font-sm">Detail</a>
+                                                         <!-- dropdown //end -->
+                                                    </td>
+                                                </tr>
+                                                <% } %>
+                                                    <%} else{ %>
+                                                        <h4 >No returned order placed yet</h4>
+                                                        <% } %>
+                                    </tbody>
+                                </table>
+                            </div> <!-- table-responsive //end -->
+                        </div> <!-- card-body end// -->
+                    </div> <!-- card end// -->
+                    <div class="pagination-area mt-15 mb-50">
+                        <nav aria-label="Page navigation example">
+                            <ul class="pagination justify-content-start">
+                                <% if (page > 1) { %>
+                                    <li class="page-item">
+                                        <a class="page-link" href="/admin/return-order-details/?page=<%= page - 1 %>">Prev</a>
+                                    </li>
+                                <% } %>
+                                <% for (let i = 1; i <= totalPages; i++) { %>
+                                    <li class="page-item <%= page === i ? 'active' : '' %>">
+                                        <a class="page-link" href="/admin/return-order-details/?page=<%= i %>"><%= i %></a>
+                                    </li>
+                                <% } %>
+                                <% if (page < totalPages) { %>
+                                    <li class="page-item">
+                                        <a class="page-link btn btn-primary" href="/admin/return-order-details/?page=<%= page + 1 %>">Next</a>
+                                    </li>
+                                <% } %>
+                            </ul>
+                        </nav>
+                    </div>
+                </section> <!-- content-main end// -->
+                
+
+    </body>
+
+    <%- include('./partials/footer/footer.ejs') %>
+</html>

@@ -15,11 +15,12 @@ const otp=require('../controllers/userController/userOtp')
 const {user_auth,status} = require("../middleware/userAuth");
 
 // const {whishlistcart}= require('../utils/validationNavbar');
-const { user_orderHistory,order_placed, user_addOrder,cancelOrder } = require("../controllers/userController/order");
+const { user_orderHistory,order_placed, user_addOrder,cancelOrder,orderReturn } = require("../controllers/userController/order");
 const  account  = require("../controllers/userController/accounts");
 const { razorpay } = require("../controllers/userController/razorpay");
 const { wishlist,addToWishlist,Removewishlist } = require("../controllers/userController/wishlist");
 const { ApplyCoupon,removeCoupon } = require("../controllers/userController/coupon");
+const { wallet,walletPost } = require("../controllers/userController/wallet");
 
 // router.use(whishlistcart)
 
@@ -99,7 +100,7 @@ router.get('/deletecart/:id',user_auth, userCart.deletecart)
 
 router.post('/update-cart-quantity/:productId/',user_auth,userCart.updatecart)
 
-// -------------Checkout-----------------//
+// -------------Order-----------------//
 
 router.get('/checkout',user_auth,checkout.checkout)
 
@@ -110,6 +111,9 @@ router.get('/ordersHistory',user_auth,user_orderHistory)
 router.get('/addOrder',user_auth,user_addOrder)
 
 router.get('/cancelOrder',user_auth,cancelOrder)
+
+router.post('/orderReturn',user_auth,orderReturn)
+
 
 // ------------Wishlist----------------//
 
@@ -128,7 +132,9 @@ router.post('/ApplyCoupon',user_auth,ApplyCoupon)
 
 // ---------------Wallet------------------//
 
+router.get('/wallet',user_auth,wallet)
 
+router.post('/wallet',user_auth,walletPost)
 
 
 

@@ -1,4 +1,19 @@
  <!-- Start Header Area -->
+ <style>
+    .wishlist-link, .cart-link {
+    color: brown;
+    width: 70px;
+    text-align: center;
+}
+
+.wishlist-icon, .cart-icon {
+    font-size: 25px; /* Adjust the size as needed */
+    width: 32px; /* Adjust the size as needed */
+    height: 32px; /* Adjust the size as needed */
+    color: brown;
+}
+
+ </style>
  <header class="header-section d-none d-xl-block">
     <div class="header-wrapper">
         <div class="header-bottom header-bottom-color--black section-fluid sticky-header sticky-color--black">
@@ -8,35 +23,20 @@
                         <!-- Start Header Logo -->
                         <div class="header-logo">
                             <div class="logo">
-                                <a href="/"><img src="/assets/images/logo/logo_white.png" alt=""></a>
+                                <a href="/"><img src="/assets/images/logo/logo_white.png" alt="Logo"></a>
                             </div>
                         </div>
                         <!-- End Header Logo -->
-
+    
                         <!-- Start Header Main Menu -->
                         <div class="main-menu menu-color--white menu-hover-color--pink">
                             <nav>
                                 <ul>
                                     <li class="has-dropdown">
                                         <a class="active main-menu-link" href="/">Home</a>
-                                        <!-- Sub Menu -->
                                     </li>
                                     <li class="has-dropdown has-megaitem">
                                         <a href="/products">Shop</a>
-                                        <!-- Mega Menu -->
-                                            <!-- <div class="mega-menu">
-                                                <ul class="mega-menu-inner">
-                                                
-                                                
-                                                    
-                                                </ul>
-                                                <div class="menu-banner">
-                                                    <a href="#" class="menu-banner-link">
-                                                        <img class="menu-banner-img"
-                                                            src="/assets/images/banner/menu-banner.jpg" alt="">
-                                                    </a>
-                                                </div>
-                                            </div> -->
                                     </li>
                                     <li>
                                         <a href="/account">Account</a>
@@ -47,43 +47,30 @@
                                 </ul>
                             </nav>
                         </div>
-                        <!-- End Header Main Menu Start -->
-
+                        <!-- End Header Main Menu -->
+    
                         <!-- Start Header Action Link -->
-                        <ul class="header-action-link action-color--white action-hover-color--pink">
+                        <ul style="display: flex;gap: 2rem; ">
                             <li>
-                                <a href="#offcanvas-wishlish" class="offcanvas-toggle">
-                                    <i class="icon-heart"></i>
+                                <% if (!user) { %>
+                                    <a href="/login" style="color: white;width: 100px; ">Login</a>
+                                <% } else { %>
+                                    <a href="/logout" style="color: white;">Logout</a>
+                                <% } %>
+                            </li>
+                            <li>
+                                <a href="#offcanvas-wishlish" class="offcanvas-toggle wishlist-link">
+                                    <i class="icon-heart wishlist-icon"></i>
                                     <span class="item-count"></span>
                                 </a>
                             </li>
                             <li>
-                                <a href="#offcanvas-add-cart" class="offcanvas-toggle">
-                                    <i class="icon-bag"></i>
+                                <a href="#offcanvas-add-cart" class="offcanvas-toggle cart-link">
+                                    <i class="icon-bag cart-icon"></i>
                                     <span class="item-count"><%#= cartCount %></span>
                                 </a>
                             </li>
-                            <li>
-                                <a href="#search">
-                                    <i class="icon-magnifier"></i>
-                                </a>
-                            </li>
-                            <li>
-                                <% if (!user) { %>
-                                    <a href="/login">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="30" fill="currentColor" class="bi bi-person-x" viewBox="0 0 16 16">
-                                            <path d="M11 5a3 3 0 1 1-6 0 3 3 0 0 1 6 0M8 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4m.256 7a4.5 4.5 0 0 1-.229-1.004H3c.001-.246.154-.986.832-1.664C4.484 10.68 5.711 10 8 10q.39 0 .74.025c.226-.341.496-.65.804-.918Q8.844 9.002 8 9c-5 0-6 3-6 4s1 1 1 1z"/>
-                                            <path d="M12.5 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7m-.646-4.854.646.647.646-.647a.5.5 0 0 1 .708.708l-.647.646.647.646a.5.5 0 0 1-.708.708l-.646-.647-.646.647a.5.5 0 0 1-.708-.708l.647-.646-.647-.646a.5.5 0 0 1 .708-.708"/>
-                                          </svg>
-                                    </a>
-                               
-                                    <% } else { %>
-                                        <a href="/logout">
-                                            <i class="icon-user"></i>
-                                        </a>
-                               
-                                <% } %>
-                            </li>
+                            
                         </ul>
                         <!-- End Header Action Link -->
                     </div>
@@ -91,6 +78,7 @@
             </div>
         </div>
     </div>
+    
 </header>
 <!-- Start Header Area -->
    <!-- Start Mobile Header -->

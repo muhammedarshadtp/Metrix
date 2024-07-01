@@ -21,7 +21,15 @@ const orderschema = new mongoose.Schema({
           },
           status: {
             type: String,
-            required: true,
+            enum: ['Order Placed','Order Cancelled', 'Shipped', 'Delivered','Return Requested','Returned'],
+            default: 'Order Placed',
+          },
+          returnStatus:{
+            type: String,
+            enum: ['APPROVE', 'REJECTED']
+          },
+          returnReason:{
+            type: String,
           },
           name: {
             type: String,
