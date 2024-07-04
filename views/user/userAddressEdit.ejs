@@ -123,8 +123,10 @@
                 pincode: formData.get('pincode'),
                 phone: formData.get('phone')
             };
+            const addressIdStr = '<%- JSON.stringify(addressId) %>'
+            const addressId = JSON.parse(addressIdStr)
 
-            fetch(`/editAddress?path=${path}`, {
+            fetch(`/editAddress?addressId=${addressId}&path=${path}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

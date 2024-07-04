@@ -12,6 +12,10 @@ const catagoryschema= mongoose.Schema({
     status:{
         type:Boolean,
         default:true,
+    },
+    catagoryOffer:{
+        type:Number,
+        
     }
 
 

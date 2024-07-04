@@ -26,8 +26,13 @@ routerAdmin.post('/login', adminController.admin_loginPost)
 
 // ---------------dashboard-------------------//
 
+
+
 routerAdmin.get('/dashboard', admin_auth, dashboard.dashboard_get)
 
+routerAdmin.post('/downloadsales', admin_auth, dashboard.downloadsales)
+
+routerAdmin.get('/getSalesData',admin_auth,dashboard.getSalesData)
 
 
 

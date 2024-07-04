@@ -52,6 +52,32 @@
                
             </div>
         </div>
+        <div class="col-xl-12 stretch-card grid-margin">
+            <div class="card">
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-sm-7">
+                    <h5>Business Survey</h5>
+                    <p class="text-muted"> Show overview jan 2018 - Dec 2019 <a class="text-muted font-weight-medium pl-2" href="#"><u>See Details</u></a>
+                    </p>
+                  </div>
+                  <div class="col-sm-5 text-md-right">
+                    <form action="/admin/downloadsales" method="post">
+                    <input type="date" id="startDate" name="startDate" placeholder="Start Date">
+                    <input type="date" id="endDate" name="endDate" placeholder="End Date">
+                    <%if(expressFlash.derror){%>
+                      <div class="alter text-danger text-start"><%= expressFlash.derror%></div>
+                  <%}%>
+                    <button type="submit" style="background-color: green; color: white;" class="btn btn-icon-text mb-3 mt-2 mb-sm-0 btn-inverse-primary font-weight-normal" onclick="">
+                      <i class=""></i>Download Report </button>
+                    </form>
+                    
+                  </div>
+                </div>
+                <br>
+                
+                
+                
         <div class="row">
             <div class="col-lg-3">
                 <div class="card card-body mb-4">
@@ -60,7 +86,7 @@
                                 class="text-primary material-icons md-monetization_on"></i></span>
                         <div class="text">
                             <h6 class="mb-1 card-title">Revenue</h6>
-                            <span>13,456.5</span>
+                            <span><%=totalOrderAmount  %></span>
                             <span class="text-sm">
                                 Shipping fees are not included
                             </span>
@@ -74,7 +100,7 @@
                         <span class="icon icon-sm rounded-circle bg-success-light"><i
                                 class="text-success material-icons md-local_shipping"></i></span>
                         <div class="text">
-                            <h6 class="mb-1 card-title">Orders</h6> <span>53.668</span>
+                            <h6 class="mb-1 card-title">Orders</h6> <span><%= orderCount %></span>
                             <span class="text-sm">
                                 Excluding orders in transit
                             </span>
@@ -88,9 +114,9 @@
                         <span class="icon icon-sm rounded-circle bg-warning-light"><i
                                 class="text-warning material-icons md-qr_code"></i></span>
                         <div class="text">
-                            <h6 class="mb-1 card-title">Products</h6> <span>9.856</span>
+                            <h6 class="mb-1 card-title">Products</h6> <span><%= productCount %></span>
                             <span class="text-sm">
-                                In 19 Categories
+                                In <%= categoryCount %> Categories
                             </span>
                         </div>
                     </article>
@@ -102,25 +128,35 @@
                         <span class="icon icon-sm rounded-circle bg-info-light"><i
                                 class="text-info material-icons md-shopping_basket"></i></span>
                         <div class="text">
-                            <h6 class="mb-1 card-title">Monthly Earning</h6> <span>96,982</span>
+                            <h6 class="mb-1 card-title">Total Users</h6> <span><%= usersCount  %></span>
                             <span class="text-sm">
-                                Based in your local time.
+                                Our total users
                             </span>
                         </div>
                     </article>
                 </div>
             </div>
         </div>
-        <!-- <div class="row">
+        <div class="row">
             <div class="col-xl-8 col-lg-12">
+                <div>
+                    <label class="me-3" for="filter">Filter:</label>
+                    <select id="filter" class="p-1" style="color: #8a8d93; background-color: transparent;">
+                      <option value="daily" selected>Daily</option>
+                      <option value="monthly">Monthly</option>
+                      <option value="yearly">Yearly</option>
+                    </select>
+                  </div>
+          <br>
                 <div class="card mb-4">
                     <article class="card-body">
                         <h5 class="card-title">Sale statistics</h5>
-                        <canvas id="myChart" height="120px"></canvas> -->
+                        <canvas id="salesChart" height="140px"></canvas>
                     </article>
-                <!-- </div>
+                </div>
                 <div class="row">
-                    <div class="col-lg-5">
+
+                    <!-- <div class="col-lg-5">
                         <div class="card mb-4">
                             <article class="card-body">
                                 <h5 class="card-title">New Members</h5>
@@ -164,8 +200,8 @@
                                 </div>
                             </article>
                         </div>
-                    </div>
-                    <div class="col-lg-7">
+                    </div> -->
+                    <!-- <div class="col-lg-7">
                         <div class="card mb-4">
                             <article class="card-body">
                                 <h5 class="card-title">Recent activities</h5>
@@ -259,10 +295,10 @@
                                 </ul>
                             </article>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
             </div>
-            <div class="col-xl-4 col-lg-12">
+            <!-- <div class="col-xl-4 col-lg-12">
                 <div class="card mb-4">
                     <article class="card-body">
                         <h5 class="card-title">Revenue Base on Area</h5>
@@ -294,9 +330,9 @@
                         </div>
                     </article>
                 </div>
-            </div>
-        </div> -->
-        <div class="card mb-4">
+            </div> -->
+        </div>
+        <!-- <div class="card mb-4">
             <header class="card-header">
                 <h4 class="card-title">Latest orders</h4>
                 <div class="row align-items-center">
@@ -311,7 +347,7 @@
                     <div class="col-md-2 col-6">
                         <input type="date" value="02.05.2021" class="form-control">
                     </div>
-                    <!-- <div class="col-md-2 col-6">
+                    <div class="col-md-2 col-6">
                         <div class="custom_select">
                             <select class="form-select select-nice">
                                 <option selected>Status</option>
@@ -321,7 +357,7 @@
                                 <option>Refund</option>
                             </select>
                         </div>
-                    </div> -->
+                    </div>
                 </div>
             </header>
             <div class="card-body">
@@ -500,11 +536,11 @@
                                 </tr>
                             </tbody>
                         </table>
-                    </div>
-                </div> <!-- table-responsive end// -->
+                    </div> 
+                </div> 
             </div>
-        </div>
-        <div class="pagination-area mt-30 mb-50">
+        </div> -->
+        <!-- <div class="pagination-area mt-30 mb-50">
             <nav aria-label="Page navigation example">
                 <ul class="pagination justify-content-start">
                     <li class="page-item active"><a class="page-link" href="#">01</a></li>
@@ -516,8 +552,71 @@
                                 class="material-icons md-chevron_right"></i></a></li>
                 </ul>
             </nav>
-        </div>
+        </div> -->
     </section> <!-- content-main end// -->
 
     <%- include('./partials/footer/footer.ejs') %>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+    
+          function fetchSalesData(filter) {
+            console.log("Fetching sales data for filter:", filter);
+            fetch(`/admin/getSalesData?filter=${filter}`)
+              .then(response => {
+                if (!response.ok) {
+                  throw new Error('Network response was not ok');
+                }
+                return response.json();
+              })
+              .then(data => {
+                console.log("Received sales data:", data);
+                updateChart(data);
+              })
+              .catch(error => {
+                console.error('Error fetching sales data:', error);
+              });
+          }
+    
+          function updateChart(data) {
+            const labels = data.saleDate;
+            const salesData = data.count;
+    
+            const ctx = document.getElementById('salesChart').getContext('2d');
+    
+            if (window.salesChart instanceof Chart) {
+              window.salesChart.destroy();
+            }
+    
+            window.salesChart = new Chart(ctx, {
+              type: 'bar',
+              data: {
+                labels: labels,
+                datasets: [{
+                  label: 'Orders',
+                  data: salesData,
+                  backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                  borderColor: 'rgba(54, 162, 235, 1)',
+                  borderWidth: 1
+                }]
+              },
+              options: {
+                scales: {
+                  y: {
+                    beginAtZero: true
+                  }
+                }
+              }
+            });
+          }
+    
+          document.getElementById('filter').addEventListener('change', function () {
+            const filter = this.value;
+            console.log("Filter value changed to:", filter);
+            fetchSalesData(filter);
+          });
+    
+          fetchSalesData('daily');
+       });
+ </script>
    

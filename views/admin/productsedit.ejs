@@ -82,6 +82,26 @@ include('./partials/header/header.ejs') %>
               <div  class="error-message alter text-danger text-start"><%=discError%></div>
   
           <%}%>
+          
+            <div class="col-lg-4">
+              <div class="mb-8">
+                <label class="form-label">product offer</label>
+                <div class="row gx-4">
+                  <input
+                    placeholder=""
+                    type="number"
+                    
+                    oninput="validity.valid||(value='')"
+                    name="productOffer"
+                    value="<%= productsdata.productOffer %>"
+                    id="product_offer"
+                    class="form-control"
+                    
+                  />
+                </div>
+              </div>
+            </div>
+          
             <div class="row">
               <div class="col-lg-4">
                 <div class="mb-8">

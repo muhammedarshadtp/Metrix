@@ -26,7 +26,7 @@ const addproductspost = async (req, res) => {
         const catagory= await catagoryCollection.findOne({_id:req.body.catagory})
        const data = req.body;
     
-
+        console.log(data,'data kitty');
        const nameValid=AlphaOnly(data.name)
        console.log(nameValid);
        const discValid=AlphaOnly(data.description)
@@ -65,13 +65,21 @@ const addproductspost = async (req, res) => {
             count++
         }
         console.log(imageMultiple,'imageMultiple is shiwubg');
+
+        const {productOffer,price} = req.body
+        let productOfferPrice
+        if(productOffer){
+            productOfferPrice = Number(price) - ( Number(price) * Number(productOffer) /100)
+        }
+        console.log(productOfferPrice,'product offer price showing ');
         const productsdatas = {
             name: req.body.name,
             catagory:catagory,
             description: req.body.description,
             stock: req.body.stock,
-            price: req.body.price,
+            price: productOfferPrice,
             images: imageMultiple,
+            originalPrice:req.body.price
         }
 
 

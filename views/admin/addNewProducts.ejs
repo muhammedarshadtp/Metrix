@@ -82,7 +82,7 @@
                                     
                                     <div class="mb-4">
                                       <label for="product_stock" class="form-label">Product Stock</label>
-                                        <input type="number" oninput="validity.valid||(value='')" min="0" max="20" placeholder="Type here" name="stock" class="form-control" id="product_stock">
+                                        <input type="number" oninput="validity.valid||(value='')" min="0" max="100" placeholder="Type here" name="stock" class="form-control" id="product_stock">
                                     </div>
                                     <% if(stockError){%>
                                         <div  class="error-message alter text-danger text-start"><%=stockError%></div>
@@ -97,6 +97,16 @@
                                         <div  class="error-message alter text-danger text-start"><%=discError%></div>
                             
                                     <%}%>
+                                    
+                                        <div class="col-lg-4">
+                                            <div class="mb-4">
+                                                <label class="form-label">Product offer</label>
+                                                <div class="row gx-2">
+                                                    <input placeholder="" type="number" min="1" max="10" name="productOffer" id="product_offer" class="form-control" >
+                                                </div>
+                                            </div>
+                                        </div>
+
                                     <div class="row">
                                         <div class="col-lg-4">
                                             <div class="mb-4">

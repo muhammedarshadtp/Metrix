@@ -41,6 +41,7 @@ const user_addOrder = async (req, res) => {
         if (!address) {
             return res.json({ error: 'Address not found' });
         }
+        console.log('1====');
 
         const cartData = await cartCollection.findById(cartId)
             .populate('items.productId')
@@ -49,6 +50,7 @@ const user_addOrder = async (req, res) => {
         if (!cartData) {
             return res.status(404).json({ error: 'Cart not found' });
         }
+        console.log('2==========');
 
         // Check stock availability
         for (const item of cartData.items) {
@@ -56,6 +58,7 @@ const user_addOrder = async (req, res) => {
                 return res.json({ result: 'error', message: 'Insufficient stock' });
             }
         }
+        console.log('3=========');
 
         // If all items have sufficient stock, place the order
         const orderPlace = await OrderPlace(cartData, address, paymentMethod, req.session.finalprice || cartData.Total);
@@ -77,6 +80,7 @@ async function OrderPlace(cartData, address, paymentMethod, totalPrice) {
         quantity: item.quantity,
         images: item.images,
     }));
+    console.log('4========');
 
     const orderId = await otpGeneratorUser();
 
@@ -88,21 +92,22 @@ async function OrderPlace(cartData, address, paymentMethod, totalPrice) {
         address: address,
         paymentMethod: paymentMethod,
     });
-
+console.log('5=========');
     
 
     for (const product of products) {
         const productDoc = await productsCollection.findById(product.productId);
         if (productDoc && productDoc.stock >= product.quantity) {
-            productDoc.stock -= product.quantity;
-            await productDoc.save();
+            // productDoc.stock -= product.quantity;
+            // await productDoc.save();
+            await productsCollection.updateOne({_id:product.productId},{$inc:{stock:product.quantity}})
         }
     }
-
+console.log('6=========');
     await cartCollection.findByIdAndDelete(cartData._id);
 
     await sendOrderMail(cartData.userId.email, cartData.userId.username, orderId, products, totalPrice);
-
+console.log('7========');
     return orderPlace;
 }
 

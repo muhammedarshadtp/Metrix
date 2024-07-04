@@ -10,7 +10,7 @@ const addcatagory=async(req,res)=>{
     
     try {
         const catagorydata=req.body
-
+ 
         
       const validatedName=  validateName(catagorydata.name)
       const validatedDesc = validateName(catagorydata.description)
@@ -37,6 +37,7 @@ const addcatagory=async(req,res)=>{
            
 
         }else{
+            
             const catagory= await catagoryCollection.create([catagorydata])
             return res.redirect('/admin/catagory')
         }
@@ -45,7 +46,7 @@ const addcatagory=async(req,res)=>{
    
     } catch (error) {
         console.log(error);
-        return res.render('error_page')
+       
     }
 
 }

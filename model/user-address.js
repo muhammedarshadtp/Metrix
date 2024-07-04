@@ -29,7 +29,8 @@ const userCollection = require('./user-schema')
     },
     pincode:{
         type:Number,
-    },phone:{
+    },
+    phone:{
         type:String,
     },
  })

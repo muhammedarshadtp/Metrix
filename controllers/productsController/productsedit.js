@@ -82,13 +82,21 @@ const productseditPost = async (req, res) => {
             updatedImages = updatedImages.concat(newImages);
         }
 
+         const {productOffer,price} = req.body
+        let productOfferPrice
+        if(productOffer){
+            productOfferPrice = Number(price) - ( Number(price) * Number(productOffer) /100)
+        }
+        console.log(productOfferPrice,'product offer price showing ');
+
         const updatedProductData = {
             name: req.body.name,
             catagory: catagory,
             description: req.body.description,
             stock: Number(req.body.stock),
-            price: req.body.price,
-            images: updatedImages
+            price: productOfferPrice,
+            images: updatedImages,
+             originalPrice:req.body.price,
         };
 
         const result = await productsCollection.updateOne(

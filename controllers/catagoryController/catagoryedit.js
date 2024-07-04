@@ -1,4 +1,5 @@
-const catagoryCollection = require("../../model/catagory-schema")
+const catagoryCollection = require("../../model/catagory-schema");
+const productsCollection = require("../../model/products-schema");
 const {AlphaOnly,alphanumValid} =require('../../utils/validation/adminValidation')
 
 const mongoose = require('mongoose');
@@ -47,9 +48,28 @@ const updatecatagory = async (req, res) => {
             return res.redirect(`/admin/catagoryedit/${id}`)
           }
         else if(existingcatagoryname&&existingcatagoryname._id.toString()=== id){
+
+          console.log('inside else case');
+          const catagorydata= await catagoryCollection.findOne({name:data.name})
+          console.log(catagorydata);
+          const products = await productsCollection.find({ catagory: catagorydata._id });
+          console.log(products,'products is showing ==================');
+          for (const product of products) {
+            console.log(product,'product is showing');
+            const originalPrice = Number(product.originalPrice);
+            const catagoryOffer = Number(catagorydata.catagoryOffer);
+
+            const amount = originalPrice - (originalPrice * catagoryOffer / 100) 
+            console.log(amount, "amount is showing ");
+            const result = await productsCollection.findByIdAndUpdate(product._id, {
+              price: amount,
+            })
+            console.log(result, "result is showing put hand in mine");
+  
+          }
             await catagoryCollection.updateOne(
                 { _id: id },
-                { name: data.name, description: data.description }
+                { name: data.name, description: data.description,catagoryOffer:data.catagoryOffer }
               )
             return res.redirect("/admin/catagory");
         }
@@ -58,10 +78,11 @@ const updatecatagory = async (req, res) => {
             return res.redirect(`/admin/catagoryedit/${id}`)
         } 
           else{
+          
             console.log("update aaind");
             await catagoryCollection.updateOne(
                 { _id: id },
-                { name: data.name, description: data.description }
+                { name: data.name, description: data.description,catagoryOffer:data.catagoryOffer }
               );
               return res.redirect("/admin/catagory");
 

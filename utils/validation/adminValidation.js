@@ -48,15 +48,13 @@ const zerotonine = (str) => {
 
 const AlphaOnly = (input) => {
     try {
-        if (input.trim() === '') {
-            return false; // Return false for empty strings
-        }
+        
         const regex = /^[a-zA-Z]*$/;
         return regex.test(input);
         
     } catch (error) {
         console.log(error);
-        res.render("error_page") 
+    
     }
 }
 

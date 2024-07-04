@@ -31,6 +31,7 @@ const admin_manageProducts = async (req, res) => {
         console.log(`${productId},${status}`);
         console.log(typeof status);
         const product = await productsCollection.findById(productId)
+        
         if (status === 'true') {
             console.log('inside status tre');
            await productsCollection.findByIdAndUpdate(productId, { status: false })
