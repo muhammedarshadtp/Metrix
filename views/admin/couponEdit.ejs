@@ -45,13 +45,13 @@ include('./partials/header/header.ejs') %>
                                             <div class="mb-4">
                                                 <label class="form-label">Starting Date</label>
                                                 <input type="date" name="starting_date" class="form-control"
-                                                    id="starting_date" value="<%= coupon.starting_date %>" required>
+                                                    id="starting_date" value="<%= coupon.starting_date ? coupon.starting_date.toISOString().split('T')[0] : '' %>" required>
                                                 <div id="starting_date-error" class="error"></div>
                                             </div>
                                             <div class="mb-4">
                                                 <label class="form-label">Expiry Date</label>
                                                 <input type="date" name="expiry" class="form-control" id="expiry_date"
-                                                    value="<%= coupon.ending_date %>" required>
+                                                    value="<%= coupon.ending_date ? coupon.ending_date.toISOString().split('T')[0] : '' %>" required>
                                                 <div id="expiry_date-error" class="error"></div>
                                             </div>
                                             <div class="mb-4">

@@ -64,8 +64,13 @@ const orderschema = new mongoose.Schema({
     orderDate: {
         type: Date,
         default: new Date(),
+    },
+    discountAmount:{
+      type:Number,
+      
     }
-});
+
+},{timestamps:true});
 
 const orderCollection = new mongoose.model('orders', orderschema);
 module.exports = orderCollection;

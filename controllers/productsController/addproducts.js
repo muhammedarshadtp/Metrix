@@ -54,8 +54,9 @@ const addproductspost = async (req, res) => {
             return res.redirect('/admin/adminaddproducts');
         
         }
+
         else{
-        
+        console.log(req.file,'==================');
 
         let imageMultiple = []
         let count = 0
@@ -67,7 +68,7 @@ const addproductspost = async (req, res) => {
         console.log(imageMultiple,'imageMultiple is shiwubg');
 
         const {productOffer,price} = req.body
-        let productOfferPrice
+        let productOfferPrice = price
         if(productOffer){
             productOfferPrice = Number(price) - ( Number(price) * Number(productOffer) /100)
         }

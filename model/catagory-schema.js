@@ -15,6 +15,7 @@ const catagoryschema= mongoose.Schema({
     },
     catagoryOffer:{
         type:Number,
+        default: 0,
         
     }
 

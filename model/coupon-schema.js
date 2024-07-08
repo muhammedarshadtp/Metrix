@@ -22,9 +22,6 @@ const couponschema = new mongoose.Schema({
         type:Number,
         required:true
       },
-      maximum_cart_redeem:{
-        type:Number,
-      },
       description:{
         type:String,
       },

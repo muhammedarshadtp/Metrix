@@ -173,6 +173,10 @@
                                     <p><strong>Delivery Address:</strong> <%= order.address.address %>, <%= order.address.city %></p>
                                     <p><strong>Payment method:</strong> <%= order.paymentMethod %></p>
                                     <p><strong>Grand Total:</strong> ₹ <%= order.totalPrice %></p>
+                                    <% if (order.discountAmount) { %>
+                                     
+                                        <p><strong>Discount Amount:</strong> ₹ <%= order.discountAmount %></p>
+                                    <% } %>
                     </div>
                 </div>
             <% }) %>
@@ -223,23 +227,47 @@
 </body>
 <script>
     async function cancelOrder(orderId, productId) {
-        fetch(`/cancelOrder?orderId=${orderId}&productId=${productId}`)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })
-            .then(data => {
-                if (data.result === 'success') {
-                    Swal.fire("Cancel Order successfully")
-                        .then(() => {
-                            location.reload()
-                        })
-                }
-            })
+        const confirmation = await Swal.fire({
+            title: "Are you sure you want to cancel the order?",
+            text: "",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, confirm it!"
+        });
+
+        if (confirmation.isConfirmed) {
+            fetch(`/cancelOrder?orderId=${orderId}&productId=${productId}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.result === 'success') {
+                        Swal.fire({
+                            title: "Order Cancelled",
+                            text: "Your order has been successfully cancelled.",
+                            icon: "success"
+                        }).then(() => {
+                            location.reload();
+                        });
+                    }
+                })
+                .catch(error => {
+                    console.error('Error cancelling order:', error);
+                    Swal.fire({
+                        title: "Error",
+                        text: "There was an issue cancelling your order. Please try again.",
+                        icon: "error"
+                    });
+                });
+        }
     }
 </script>
+
 <script>
     function showReturnModal(orderId, productId) {
         document.getElementById('orderId').value = orderId;

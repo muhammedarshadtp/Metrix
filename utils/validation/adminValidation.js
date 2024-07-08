@@ -48,9 +48,14 @@ const zerotonine = (str) => {
 
 const AlphaOnly = (input) => {
     try {
-        
+        if(input.length === 0){
+            return
+        }
         const regex = /^[a-zA-Z]*$/;
-        return regex.test(input);
+        console.log('dumbel dore work avunundo');
+        const result = regex.test(input);
+    
+        return result
         
     } catch (error) {
         console.log(error);

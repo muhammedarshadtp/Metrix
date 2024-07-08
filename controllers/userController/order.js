@@ -12,7 +12,7 @@ const user_orderHistory = async (req, res) => {
     try {
         const userId = req.session.userId
     const user = req.session.isAuth
-
+        
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 6;
 
@@ -20,7 +20,7 @@ const user_orderHistory = async (req, res) => {
 
     const totalOrders = await orderCollection.countDocuments({ userId: userId });
 
-    const order = await orderCollection.find({ userId: userId }).populate("userId").sort({ orderDate: -1 }).skip(startIndex).limit(limit)
+    const order = await orderCollection.find({ userId: userId }).populate("userId").sort({ createdAt: -1  }).skip(startIndex).limit(limit)
     const cart = await cartCollection.find({userId:userId})
 
     console.log(order, 'order kitty');
@@ -34,6 +34,7 @@ const user_orderHistory = async (req, res) => {
 
 const user_addOrder = async (req, res) => {
     try {
+
         console.log(req.query);
         const { cartId, addressId, paymentMethod } = req.query;
 
@@ -58,10 +59,13 @@ const user_addOrder = async (req, res) => {
                 return res.json({ result: 'error', message: 'Insufficient stock' });
             }
         }
-        console.log('3=========');
+        console.log(req.session.dicprice,'3=========');
+         const discPrice =   req.session.dicprice==undefined?0:Number(req.session.dicprice)
+         
 
         // If all items have sufficient stock, place the order
-        const orderPlace = await OrderPlace(cartData, address, paymentMethod, req.session.finalprice || cartData.Total);
+        const orderPlace = await OrderPlace(cartData, address, paymentMethod, req.session.finalprice || cartData.Total,discPrice);
+
         req.session.ORDER_PLACED = orderPlace
         res.json({ result: "success", order: orderPlace });
 
@@ -71,7 +75,7 @@ const user_addOrder = async (req, res) => {
     }
 }
 
-async function OrderPlace(cartData, address, paymentMethod, totalPrice) {
+async function OrderPlace(cartData, address, paymentMethod, totalPrice,discPrice) {
     const products = cartData.items.map(item => ({
         productId: item.productId._id,
         status: 'Order Placed',
@@ -91,6 +95,7 @@ async function OrderPlace(cartData, address, paymentMethod, totalPrice) {
         totalPrice: totalPrice,
         address: address,
         paymentMethod: paymentMethod,
+        discountAmount : discPrice,
     });
 console.log('5=========');
     
@@ -154,8 +159,10 @@ const cancelOrder = async (req, res) => {
                 await product.save();
             }
         }
-      
+        console.log(order.paymentMethod,'payment method');
+        console.log('above if case of wallet');
         if(order.paymentMethod !=='Cash on Delivery' && currentStatus !== 'Order Cancelled'){
+            console.log('inside if case wallet ');
             const amount = productItem.price * quantity;
             const  walletTransactions = {
                 remarks:'User cancel a order',

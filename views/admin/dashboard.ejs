@@ -556,6 +556,32 @@
     </section> <!-- content-main end// -->
 
     <%- include('./partials/footer/footer.ejs') %>
+    <script>
+$(function() {
+    var today = new Date();
+    var todayFormatted = formatDate(today);
+
+    $('#startDate').attr('max', todayFormatted);
+    $('#endDate').attr('max', todayFormatted);
+
+    $('#startDate').on('change', function() {
+        var startDate = $(this).val();
+        $('#endDate').attr('min', startDate);
+    });
+
+    function formatDate(date) {
+        var d = new Date(date),
+            month = '' + (d.getMonth() + 1),
+            day = '' + d.getDate(),
+            year = d.getFullYear();
+
+        if (month.length < 2) month = '0' + month;
+        if (day.length < 2) day = '0' + day;
+
+        return [year, month, day].join('-');
+    }
+});
+    </script>
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {

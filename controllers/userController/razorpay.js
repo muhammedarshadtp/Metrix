@@ -9,7 +9,15 @@ const razorpay = async (req, res) => {
             key_id: process.env.RAZORPAY_KEY,
             key_secret: process.env.RAZORPAY_SECRET
         })
-        const amountstr = req.query.amount
+
+        let amountstr
+        if(req.session.finalprice){
+            amountstr = req.session.finalprice
+            console.log(amountstr,'sdjkghsdfukg');
+        }else{
+
+            amountstr = req.query.amount
+        }
         const amount = Number(amountstr) * 100
         console.log(amount);
         console.log(typeof amount);

@@ -54,25 +54,32 @@ const productseditPost = async (req, res) => {
          else if(!priceValid){
              req.flash('priceError','Price must be a positive number')
              return res.redirect('/admin/productsedit')
-         }
-         else{
-            if(!req.body.old_images){
-                if (!req.files || req.files.length === 0) {
-                    req.flash('error_MSG', 'Please upload at least one image');
+         } 
+        
+         else if(!req.body.old_images){
+            if (!req.files || req.files.length === 0) {
+                req.flash('error_MSG', 'Please upload at least one image');
+                return res.redirect('/admin/productsedit');
+            
+            }
+        } 
+        const allowedTypes = ['image/webp', 'image/jpg', 'image/jpeg', 'image/png'];
+
+        if (req.files && req.files.length > 0) {
+            for (const file of req.files) {
+                if (!allowedTypes.includes(file.mimetype)) {
+                    req.flash('error_MSG', 'Incorrect file type. Only JPG, PNG, and WEBP files are allowed.');
                     return res.redirect('/admin/productsedit');
-                
                 }
             }
-        const podsId= req.query.podsId
-        console.log(podsId,"sanam kitty");
+        }
+            
         
         const product = await productsCollection.findById(podsId);
         console.log(product,'products kitty');
         const catagory = await catagoryCollection.findOne({ name: req.body.catagory });
         console.log(catagory,'catagory kitty');
-        if (!product || !catagory) {
-            return res.status(404).send('Product or Category not found');
-        }
+        
 
         let updatedImages = req.body.old_images || product.images;
 
@@ -83,10 +90,13 @@ const productseditPost = async (req, res) => {
         }
 
          const {productOffer,price} = req.body
-        let productOfferPrice
-        if(productOffer){
-            productOfferPrice = Number(price) - ( Number(price) * Number(productOffer) /100)
-        }
+       
+         const realprice = price !=product.originalPrice? price:product.originalPrice
+
+            productOfferPrice = Number(realprice) - ( Number(realprice) * Number(productOffer) /100)
+        
+           
+        
         console.log(productOfferPrice,'product offer price showing ');
 
         const updatedProductData = {
@@ -96,7 +106,8 @@ const productseditPost = async (req, res) => {
             stock: Number(req.body.stock),
             price: productOfferPrice,
             images: updatedImages,
-             originalPrice:req.body.price,
+             originalPrice:realprice,
+             productOffer: req.body.productOffer
         };
 
         const result = await productsCollection.updateOne(
@@ -107,7 +118,7 @@ const productseditPost = async (req, res) => {
         console.log(result);
 
         res.redirect('/admin/products');
-         }
+         
     } catch (error) {
         console.error(error);
         res.status(500).send('Internal Server Error');

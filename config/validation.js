@@ -3,7 +3,7 @@ const validateName = (name) => {
     if (name.trim() === '') {
       return false; // Return false for empty strings
   }
-    const nameRegex = /^[a-zA-Z\s]{6,}$/;
+    const nameRegex = /^[a-zA-Z\s]{4,}$/;
     // name=name.trim()
     return nameRegex.test(name);
   };

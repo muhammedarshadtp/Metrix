@@ -26,11 +26,73 @@ const account = async (req,res) => {
     
 }
 
+const userAddress=async(req,res)=>{
+    try {
+        const user = req.session.isAuth
+        const userId=req.session.userId
+        const userdata= await userCollection.findById(userId)
+        const address = await addressCollection.find({userId:userId})
+        const cart = await cartCollection.find()
+        res.render('userAddress',{user,userdata,address,cart,
+            nameError: req.flash('nameError'),
+            countryError: req.flash('countryError'),
+            addressError: req.flash('addressError'),
+            streetError: req.flash('streetError'),
+            cityError: req.flash('cityError'),
+            stateError: req.flash('stateError'),
+            pincodeError: req.flash('pincodeError'),
+            phoneError: req.flash('phoneError'),
+        })
+    } catch (error) {
+        console.log(error);
+    }
+}
+
 const addAddress = async (req, res) => {
     try {
         const userId = req.session.userId
         const {name,country,address,street,city,state,pincode,phone}=req.body
         console.log(req.body,'++++++++++++++++++++++');
+        const nameValid = AlphaOnly(name);
+         const countryValid = AlphaOnly(country);
+         const addressValid = alphanumValid(address);
+         const streetValid = alphanumValid(street);
+         const cityValid = AlphaOnly(city);
+         const stateValid = AlphaOnly(state);
+         const pincodeValid = zerotonine(pincode);
+         const phoneValid = zerotonine(phone);
+         if (!nameValid) {
+            const nameError = 'Name must contain only alphabetic characters.'
+            return  res.json({error:`${nameError}`});
+        }
+         if (!countryValid) {
+            const countryError = 'Country must contain only alphabetic characters.'
+            return  res.json({error:`${countryError}`});
+        }
+         if (!addressValid) {
+            const addressError = 'Address must contain only alphanumeric characters.'
+            return  res.json({error:`${addressError}`});
+        }
+         if (!streetValid) {
+            const streetError = 'Street must contain only alphanumeric characters.'
+            return  res.json({error:`${streetError}`});
+        }
+         if (!cityValid) {
+            const cityError = 'City must contain only alphabetic characters.'
+            return  res.json({error:`${cityError}`});
+        }
+        if (!stateValid) {
+            const stateError = 'State must contain only alphabetic characters.'
+            return  res.json({error:`${stateError}`});
+        }
+        if (!pincodeValid) {
+            const pincodeError = 'Pincode must contain only numeric characters.'
+            return  res.json({error:`${pincodeError}`});
+        }
+        if (!phoneValid) {
+            const phoneError = 'Phone must contain only numeric characters.'
+            return  res.json({error:`${phoneError}`});
+        }
         const addressData = {
             name:name,
             userId:userId,
@@ -47,14 +109,14 @@ const addAddress = async (req, res) => {
         const addAddress= await addressCollection.create(addressData)
         console.log(addAddress,"addAddress varuninde");
 
-        res.json({result:"success"})
+         return res.json({result:"success"})
 
         
 
 
     } catch (error) {
         console.log(error, 'checkout post  error');
-        return res.render('error_page')
+       
     }
 
 }
@@ -164,26 +226,16 @@ const updateUser=async(req,res)=>{
     }
 }
 
-const userAddress=async(req,res)=>{
-    try {
-        const user = req.session.isAuth
-        const userId=req.session.userId
-        const userdata= await userCollection.findById(userId)
-        const address = await addressCollection.find({userId:userId})
-        const cart = await cartCollection.find()
-        res.render('userAddress',{user,userdata,address,cart})
-    } catch (error) {
-        
-    }
-}
+
 
 const userAddAddress=async(req,res)=>{
     try {
         const user = req.session.isAuth
         const userId=req.session.userId
         const userdata= await userCollection.findById(userId)
+        const cart = await cartCollection.find()
         const address = await addressCollection.findOne({userId:userId})
-        res.render('userAddAddress',{user,address,
+        res.render('userAddAddress',{user,address,cart,
             nameError: req.flash('nameError'),
             countryError: req.flash('countryError'),
             addressError: req.flash('addressError'),
@@ -213,37 +265,37 @@ const userAddAddressPost=async(req,res)=>{
          const stateValid = AlphaOnly(state);
          const pincodeValid = zerotonine(pincode);
          const phoneValid = zerotonine(phone);
-        if (!nameValid) {
-            req.flash('nameError', 'Name must contain only alphabetic characters.');
-            return res.redirect('/editAddress');
+         if (!nameValid) {
+            const nameError = 'Name must contain only alphabetic characters.'
+            return  res.json({error:`${nameError}`});
         }
          if (!countryValid) {
-            req.flash('countryError', 'Country must contain only alphabetic characters.');
-            return res.redirect('/editAddress');
+            const countryError = 'Country must contain only alphabetic characters.'
+            return  res.json({error:`${countryError}`});
         }
          if (!addressValid) {
-            req.flash('addressError', 'Address must contain only alphanumeric characters.');
-            return res.redirect('/editAddress');
+            const addressError = 'Address must contain only alphanumeric characters.'
+            return  res.json({error:`${addressError}`});
         }
          if (!streetValid) {
-            req.flash('streetError', 'Street must contain only alphanumeric characters.');
-            return res.redirect('/editAddress');
+            const streetError = 'Street must contain only alphanumeric characters.'
+            return  res.json({error:`${streetError}`});
         }
          if (!cityValid) {
-            req.flash('cityError', 'City must contain only alphabetic characters.');
-            return res.redirect('/editAddress');
+            const cityError = 'City must contain only alphabetic characters.'
+            return  res.json({error:`${cityError}`});
         }
         if (!stateValid) {
-            req.flash('stateError', 'State must contain only alphabetic characters.');
-            return res.redirect('/editAddress');
+            const stateError = 'State must contain only alphabetic characters.'
+            return  res.json({error:`${stateError}`});
         }
         if (!pincodeValid) {
-            req.flash('pincodeError', 'Pincode must contain only numeric characters.');
-            return res.redirect('/editAddress');
+            const pincodeError = 'Pincode must contain only numeric characters.'
+            return  res.json({error:`${pincodeError}`});
         }
         if (!phoneValid) {
-            req.flash('phoneError', 'Phone must contain only numeric characters.');
-            return res.redirect('/editAddress');
+            const phoneError = 'Phone must contain only numeric characters.'
+            return  res.json({error:`${phoneError}`});
         }
         const addressData = {
             name:name,
@@ -260,7 +312,7 @@ const userAddAddressPost=async(req,res)=>{
         console.log(addressData,'=======================');
         const addAddress= await addressCollection.create(addressData)
         console.log(addAddress,"addAddress varuninde");
-        res.redirect('/account')
+         return res.json({result:'success'})
         
     } catch (error) {
         console.log(error,'addAddress error');
@@ -310,36 +362,37 @@ const editAddressPost = async (req,res)=>{
           const phoneValid = zerotonine(phone);
   
           if (!nameValid) {
-            req.flash('nameError', 'Name must contain only alphabetic characters.');
-            return res.redirect(`/editAddress?addressId=${addressId}&path=${path}`);
+            const nameError = 'Name must contain only alphabetic characters.'
+            console.log('myr work ayal mathi');
+            return  res.json({error:`${nameError}`});
         }
          if (!countryValid) {
-            req.flash('countryError', 'Country must contain only alphabetic characters.');
-            return res.redirect(`/editAddress?addressId=${addressId}&path=${path}`);
+          const countryError= 'Country must contain only alphabetic characters.';
+            return  res.json({error:`${countryError}`});
         }
         if (!addressValid) {
-            req.flash('addressError', 'Address must contain only alphanumeric characters.');
-            return res.redirect(`/editAddress?addressId=${addressId}&path=${path}`);
+            const addressError = 'Address must contain only alphanumeric characters.';
+            return  res.json({error:`${addressError}`});
         }
         if (!streetValid) {
-            req.flash('streetError', 'Street must contain only alphanumeric characters.');
-            return res.redirect(`/editAddress?addressId=${addressId}&path=${path}`);
+            const streetError = 'Street must contain only alphanumeric characters.';
+            return  res.json({error:`${streetError}`});
         }
         if (!cityValid) {
-            req.flash('cityError', 'City must contain only alphabetic characters.');
-            return res.redirect(`/editAddress?addressId=${addressId}&path=${path}`);
+            const cityError= 'City must contain only alphabetic characters.';
+            return  res.json({error:`${cityError}`});
         }
         if (!stateValid) {
-            req.flash('stateError', 'State must contain only alphabetic characters.');
-            return res.redirect(`/editAddress?addressId=${addressId}&path=${path}`);
+           const stateError = 'State must contain only alphabetic characters.';
+            return  res.json({error:`${stateError}`});
         }
         if (!pincodeValid) {
-            req.flash('pincodeError', 'Pincode must contain only numeric characters.');
-            return res.redirect(`/editAddress?addressId=${addressId}&path=${path}`);
+           const pincodeError = 'Pincode must contain only numeric characters.';
+            return  res.json({error:`${pincodeError}`});
         }
         if (!phoneValid) {
-            req.flash('phoneError', 'Phone must contain only numeric characters.');
-            return res.redirect(`/editAddress?addressId=${addressId}&path=${path}`);
+           const phoneError = 'Phone must contain only numeric characters.';
+            return  res.json({error:`${phoneError}`});
         }
 
         const addressData = {

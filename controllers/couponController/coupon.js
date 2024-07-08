@@ -100,7 +100,7 @@ const coupon = async(req,res)=>{
             discount: Number(discount),
             starting_date: starting_date,
             ending_date: expiry,
-            mininmum_cart_price: Number(minimum_cart_price),
+            minimum_cart_price: Number(minimum_cart_price),
             description: description,
         }
         console.log(updatedCouponData,'coupon Dataa');
@@ -108,11 +108,11 @@ const coupon = async(req,res)=>{
         console.log(couponValid);
         console.log(!couponValid,'not================');
         if(!couponValid || couponValid._id.equals(couponId)){
-            console.log('ullil keri');
-            const newCoupon = await couponCollection.findByIdAndUpdate(couponId,updatedCouponData)
+            console.log('ullil keri',updatedCouponData);
+            const newCoupon = await couponCollection.findByIdAndUpdate(couponId,updatedCouponData,{new:true})
+            console.log(newCoupon,'kitty');
             res.json({ result: 'success'})
         }else{
-            console.log('oombiiiiiiii=============');
             res.json({ result: 'already exists'})
         }
         

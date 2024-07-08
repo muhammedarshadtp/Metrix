@@ -25,7 +25,6 @@ const productsschema= new mongoose.Schema({
     },
     originalPrice:{
         type:Number,
-        required:true,
     },
     status:{
         type:Boolean,

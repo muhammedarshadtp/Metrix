@@ -1,5 +1,6 @@
 const orderCollection = require("../../model/order-schema");
 const productsCollection = require("../../model/products-schema");
+const walletCollection = require("../../model/wallet-schema");
 
 
 
@@ -70,27 +71,39 @@ const orderReturnConformation = async (req, res) => {
                 {
                     arrayFilters: [{ "elem.productId": productId }],
                 })
-                console.log(result,'result kitty');
-                let updateProductStock = Number(product.stock) + Number(quantity);
+            console.log(result, 'result kitty');
+            let updateProductStock = Number(product.stock) + Number(quantity);
 
-                const data = await productsCollection.findByIdAndUpdate(productId,{stock:updateProductStock})
-                console.log(data,'data kitty');
+            const data = await productsCollection.findByIdAndUpdate(productId, { stock: updateProductStock })
+            console.log(data, 'data kitty');
 
-                res.json({ result: 'APPROVE' })
-        }else if(action === 'REJECTED'){
+
+            const amount = product.price * quantity;
+            const walletTransactions = {
+                remarks: 'Admin approved return',
+                date: new Date(),
+                type: 'Credit',
+                amount: amount,
+            }
+            console.log('Processing wallet transaction=====================');
+
+            const wallet = await walletCollection.updateOne({ userId: userId }, { $inc: { wallet: +amount }, $addToSet: { walletTransactions: walletTransactions } }, { upsert: true })
+            console.log(wallet,'wallet updated is showing');
+            res.json({ result: 'APPROVE' })
+        } else if (action === 'REJECTED') {
             const result = await orderCollection.findOneAndUpdate({ orderId: orderId },
                 { $set: { "products.$[elem].returnStatus": 'REJECTED', "products.$[elem].status": "Delivered" } },
                 {
                     arrayFilters: [{ "elem.productId": productId }],
                 })
-                res.json({ result: 'REJECTED' })
+            res.json({ result: 'REJECTED' })
         }
 
 
 
 
     } catch (error) {
-        console.log(error,'orderReturnConformation error');
+        console.log(error, 'orderReturnConformation error');
     }
 }
 

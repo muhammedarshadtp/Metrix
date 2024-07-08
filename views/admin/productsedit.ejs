@@ -90,7 +90,7 @@ include('./partials/header/header.ejs') %>
                   <input
                     placeholder=""
                     type="number"
-                    
+                    min="0" max="100"
                     oninput="validity.valid||(value='')"
                     name="productOffer"
                     value="<%= productsdata.productOffer %>"

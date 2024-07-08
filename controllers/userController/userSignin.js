@@ -31,18 +31,18 @@ const signupPost = async (req, res) => {
 
         const existingUser = await userCollection.findOne({ email: data.email });
         if (existingUser) {
-            req.flash('existingError', 'User with this email already exists');
-            return res.redirect('/signup');
+            const existingError = 'User with this email already exists'
+            return  res.json({error:`${existingError}`});
         }
         if (!validateName(data.username)) {
-            req.flash('userError', 'Username must contain capital letter and small letters, at least 6 characters');
-            return res.redirect('/signup');
+           const userError = 'Username must contain capital letter and small letters, at least 6 characters';
+           return  res.json({error:`${userError}`});
         } else if (!validateEmail(data.email)) {
-            req.flash('emailError', 'Invalid email address. Please enter a valid format (e.g., user@example.com).');
-            return res.redirect('/signup');
+           const emailError = 'Invalid email address. Please enter a valid format (e.g., user@example.com).';
+           return  res.json({error:`${emailError}`});
         } else if (!validatePassword(data.password)) {
-            req.flash('passError', 'Invalid password. It must be at least 6 characters long, contain at least one uppercase letter, one lowercase letter, and one digit.');
-            return res.redirect('/signup');
+           const passError = 'Invalid password. It must be at least 6 characters long, contain at least one uppercase letter, one lowercase letter, and one digit.';
+           return  res.json({error:`${passError}`});
         }
 
         const otp = await otpGenerator()
@@ -52,10 +52,10 @@ const signupPost = async (req, res) => {
         sendMail(data.email, data.username, otp)
         req.session.errorMsg = null; 
 
-        res.redirect('/otpverification');
+        return res.json({result:"success"})
     } catch (error) {
         console.log(error);
-        return res.render('error_page')
+        
     }
 }
 
@@ -63,4 +63,4 @@ const signupPost = async (req, res) => {
 module.exports={
     signup,
     signupPost,
-}
+} 

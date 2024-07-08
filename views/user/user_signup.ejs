@@ -39,7 +39,7 @@
                             <div  class="error-message alter text-danger text-start"><%=existingError%></div>
                 
                         <%}%>
-                        <form action="/signup" method="POST">
+                        <form id="formData" action="/signup" method="POST">
                             <div class="default-form-box">
                                 <label>Username  <span>*</span></label>
                                 <input type="text" class="form-control" placeholder="name" name="username">
@@ -66,7 +66,7 @@
                             <%}%>
                             <div class="default-form-box">
                                 <label> Conform Passwords <span>*</span></label>
-                                <input id="password-field" type="password" class="form-control"  name="Conform password" placeholder="Conform Password">
+                                <input id="password" type="password" class="form-control"  name="ConformPassword" placeholder="Conform Password">
                             </div>
                             <div class="login_submit">
                                 <button class="btn btn-md btn-black-default-hover mb-4" type="submit" style="margin: 0 auto">signup</button>
@@ -110,6 +110,58 @@
     
 
     <%- include('../partials/footer') %>
+    <script src="
+https://cdn.jsdelivr.net/npm/toastr@2.1.4/toastr.min.js
+"></script>
+<link href="
+https://cdn.jsdelivr.net/npm/toastr@2.1.4/build/toastr.min.css
+" rel="stylesheet">
+<script>
+    const form = document.getElementById("formData");
+    form.addEventListener('submit', function (event) {
+            event.preventDefault();
+     const formData = new FormData(form);
+    const data = {
+                username: formData.get('username'),
+                email: formData.get('email'),
+                password: formData.get('password'),
+                ConformPassword:formData.get('ConformPassword'),
+
+                
+            };
+fetch('/signup', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => {
+                console.log('=============');
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    console.log('2========');
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.result === 'success') {
+                        
+                        Swal.fire("New user add successfully").then(() => {
+                            location.href = '/otpverification'
+                        })
+                        // Optionally refresh the page or update the address list dynamically
+                    }else if(data.error){
+                        toastr.error(`${data.error}`)
+                    }
+                })
+                
+                .catch(error => {
+                    console.error('There was a problem with the fetch operation:', error);
+                });
+            });
+        
+</script>
     <script>
         setTimeout(function() {
           let errorMessages = document.querySelectorAll(".error-message");

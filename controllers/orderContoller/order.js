@@ -13,7 +13,7 @@ const order = async(req,res)=>{
 
         const skip = (page - 1) * limit;
         
-        const orderlist = await orderCollection.find().skip(skip).limit(limit).populate('userId').populate('products');
+        const orderlist = await orderCollection.find().skip(skip).limit(limit).populate('userId').populate('products').sort({orderDate:-1})
         res.render('order',{orderlist,page,totalPages,count: TOTAL_COUNT_OF_ORDER})
     } catch (error) {
         console.log(error,'admin eroor coming')

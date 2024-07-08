@@ -32,14 +32,15 @@
                                         </div>
                                         <div class="mb-4">
                                             <label class="form-label">Discount</label>
-                                            <input placeholder="Type here" type="number" max="100" name="discount"
+                                            <input placeholder="Type here" type="number" max="50" name="discount"
                                                 class="form-control" id="discount" required>
                                             <div id="discount-error" class="error"></div>
                                         </div>
                                         <div class="mb-4">
                                             <label class="form-label">Minimum Cart Price</label>
-                                            <input placeholder="Type here" type="number" min="500"
+                                            <input placeholder="Type here" type="number" min="50000"
                                                 name="minimum_cart_price" class="form-control" id="min-cart-price">
+                                                <div id="min-cart-price-error" class="error"></div>
                                         </div>
                                         <!-- <div class="mb-4">
                                             <label class="form-label">Maximum Redeem Price</label>
@@ -226,10 +227,12 @@
                         const discountInput = document.getElementById('discount');
                         const startingDateInput = document.getElementById('starting_date');
                         const expiryDateInput = document.getElementById('expiry_date');
+                        const minCartPriceInput = document.getElementById('min-cart-price');
                         const couponError = document.getElementById('coupon-error');
                         const discountError = document.getElementById('discount-error');
                         const startingDateError = document.getElementById('starting_date-error');
                         const expiryDateError = document.getElementById('expiry_date-error');
+                        const minCartPriceError = document.getElementById('min-cart-price-error');
                         const submitBtn = document.getElementById('submit-btn');
 
                         const validateForm = () => {
@@ -239,6 +242,7 @@
                             discountError.textContent = '';
                             startingDateError.textContent = '';
                             expiryDateError.textContent = '';
+                            minCartPriceError.textContent = '';
 
                             if (!/^[A-Z0-9]{6}$/.test(couponCodeInput.value)) {
                                 couponError.textContent = 'Coupon code must be exactly 6 capital letters or numbers.';
@@ -246,10 +250,15 @@
                             }
 
                             const discountValue = parseInt(discountInput.value, 10);
-                            if (isNaN(discountValue) || discountValue < 1 || discountValue > 5) {
-                                discountError.textContent = 'Discount must be a number between 1 and 5.';
+                            if (isNaN(discountValue) || discountValue < 1 || discountValue > 50) {
+                                discountError.textContent = 'Discount must be a number between 1 and 50.';
                                 valid = false;
                             }
+                            const minCartPriceValue = parseInt(minCartPriceInput.value, 10);
+    if (isNaN(minCartPriceValue) || minCartPriceValue < 1) {
+        minCartPriceError.textContent = 'Minimum cart price give positive number.';
+        valid = false;
+    }
 
                             const startingDate = new Date(startingDateInput.value);
                             const expiryDate = new Date(expiryDateInput.value);
@@ -265,6 +274,7 @@
                         discountInput.addEventListener('input', validateForm);
                         startingDateInput.addEventListener('input', validateForm);
                         expiryDateInput.addEventListener('input', validateForm);
+                        minCartPriceInput.addEventListener('input', validateForm);
 
                         couponForm.addEventListener('submit', async function (event) {
                             event.preventDefault();

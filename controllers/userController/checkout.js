@@ -22,7 +22,16 @@ const checkout = async (req, res) => {
             return res.redirect('/cartpage');
         }
 
-        res.render('checkout', { cart, user,address })
+        res.render('checkout', { cart, user,address,
+            nameError: req.flash('nameError'),
+            countryError: req.flash('countryError'),
+            addressError: req.flash('addressError'),
+            streetError: req.flash('streetError'),
+            cityError: req.flash('cityError'),
+            stateError: req.flash('stateError'),
+            pincodeError: req.flash('pincodeError'),
+            phoneError: req.flash('phoneError'),
+         })
     } catch (error) {
         res.redirect('/error_page', "checkout page error")
     }

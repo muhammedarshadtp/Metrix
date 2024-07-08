@@ -9,6 +9,7 @@ const catagoryCollection = require("../../model/catagory-schema")
 const addcatagory=async(req,res)=>{
     
     try {
+        console.log(req.body,'=========');
         const catagorydata=req.body
  
         
@@ -16,13 +17,13 @@ const addcatagory=async(req,res)=>{
       const validatedDesc = validateName(catagorydata.description)
       console.log(validatedName);
         if(!validatedName){
-            req.flash('error_msg', 'Please enter a valid Category name');
+            req.flash('error_msg', 'Please enter a valid Category name and should be at least 4 characters long ');
             
             return res.redirect('/admin/catagory')
              
         }
         if(!validatedDesc){
-            req.flash('error_msg', 'Please enter a valid Category description');
+            req.flash('error_msg', 'Please enter a valid Category description and should be at least 4 characters long ');
             
              return res.redirect('/admin/catagory')
         }
@@ -38,7 +39,12 @@ const addcatagory=async(req,res)=>{
 
         }else{
             
-            const catagory= await catagoryCollection.create([catagorydata])
+            const catagory= new catagoryCollection({
+                name:catagorydata.name,
+                description:catagorydata.description,
+                catagoryOffer:catagorydata.catagoryOffer || 0,
+            });
+            await catagory.save();
             return res.redirect('/admin/catagory')
         }
         
