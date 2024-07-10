@@ -44,6 +44,13 @@
                                     <li>
                                         <a href="contact-us.html">Contact Us</a>
                                     </li>
+                                    <li>
+                                        <% if (!user) { %>
+                                            <a href="/login" style="color: white;width: 100px; ">Login</a>
+                                        <% } else { %>
+                                            <a href="/logout" style="color: white;">Logout</a>
+                                        <% } %>
+                                    </li>
                                 </ul>
                             </nav>
                         </div>
@@ -51,13 +58,7 @@
     
                         <!-- Start Header Action Link -->
                         <ul style="display: flex;gap: 2rem; ">
-                            <li>
-                                <% if (!user) { %>
-                                    <a href="/login" style="color: white;width: 100px; ">Login</a>
-                                <% } else { %>
-                                    <a href="/logout" style="color: white;">Logout</a>
-                                <% } %>
-                            </li>
+                           
                             <li>
                                 <a href="#offcanvas-wishlish" class="offcanvas-toggle wishlist-link">
                                     <i class="icon-heart wishlist-icon"></i>
@@ -101,14 +102,10 @@
                 <!-- End Mobile Left Side -->
 
                 <!-- Start Mobile Right Side -->
-                <!-- <div class="mobile-right-side">
+                <div class="mobile-right-side">
                     <ul class="header-action-link action-color--white action-hover-color--pink">
-                        <li>
-                            <a href="#search">
-                                <i class="icon-magnifier"></i>
-                            </a>
-                        </li>
-                        <li>
+                        
+                        <!-- <li>
                             <a href="#offcanvas-wishlish" class="offcanvas-toggle">
                                 <i class="icon-heart"></i>
                                 <span class="item-count">3</span>
@@ -119,7 +116,7 @@
                                 <i class="icon-bag"></i>
                                 <span class="item-count">3</span>
                             </a>
-                        </li>
+                        </li> -->
                         <li>
                             <a href="#mobile-menu-offcanvas"
                                 class="offcanvas-toggle offside-menu offside-menu-color--black">
@@ -127,7 +124,7 @@
                             </a>
                         </li>
                     </ul>
-                </div> -->
+                </div>
                 <!-- End Mobile Right Side -->
             </div>
         </div>
@@ -155,8 +152,16 @@
                     <li>
                         <a href="/products"><span>Shop</span></a>
                     </li>
-                    <li><a href="about-us.html">About Us</a></li>
-                    <li><a href="contact-us.html">Contact Us</a></li>
+                    <li><a href="">About Us</a></li>
+                    <li><a href="">Contact Us</a></li>
+
+                    <li>
+                        <% if (!user) { %>
+                            <a href="/login" style="color: white;width: 100px; ">Login</a>
+                        <% } else { %>
+                            <a href="/logout" style="color: white;">Logout</a>
+                        <% } %>
+                    </li>
                 </ul>
             </div> <!-- End Mobile Menu Nav -->
         </div> <!-- End Mobile Menu -->
@@ -164,7 +169,7 @@
         <!-- Start Mobile contact Info -->
         <div class="mobile-contact-info">
             <div class="logo">
-                <a href="index.html"><img src="/assets/images/logo/logo_white.png" alt=""></a>
+                <a href=""><img src="/assets/images/logo/logo_white.png" alt=""></a>
             </div>
 
             <address class="address">
@@ -174,10 +179,10 @@
             </address>
 
             <ul class="social-link">
-                <li><a href="#"><i class="fa fa-facebook"></i></a></li>
-                <li><a href="#"><i class="fa fa-twitter"></i></a></li>
-                <li><a href="#"><i class="fa fa-instagram"></i></a></li>
-                <li><a href="#"><i class="fa fa-linkedin"></i></a></li>
+                <li><a href=""><i class="fa fa-facebook"></i></a></li>
+                <li><a href=""><i class="fa fa-twitter"></i></a></li>
+                <li><a href=""><i class="fa fa-instagram"></i></a></li>
+                <li><a href=""><i class="fa fa-linkedin"></i></a></li>
             </ul>
 
             <!-- <ul class="user-link">
@@ -211,10 +216,10 @@
         </address>
 
         <ul class="social-link">
-            <li><a href="#"><i class="fa fa-facebook"></i></a></li>
-            <li><a href="#"><i class="fa fa-twitter"></i></a></li>
-            <li><a href="#"><i class="fa fa-instagram"></i></a></li>
-            <li><a href="#"><i class="fa fa-linkedin"></i></a></li>
+            <li><a href=""><i class="fa fa-facebook"></i></a></li>
+            <li><a href=""><i class="fa fa-twitter"></i></a></li>
+            <li><a href=""><i class="fa fa-instagram"></i></a></li>
+            <li><a href=""><i class="fa fa-linkedin"></i></a></li>
         </ul>
 
         <!-- <ul class="user-link">

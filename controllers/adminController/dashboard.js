@@ -51,6 +51,59 @@ const dashboard_get=async(req,res)=>{
       }
     }
   ]);
+
+
+
+  const topProduct = await orderCollection.aggregate([
+    {$unwind:'$products'},
+    {
+        $group:{
+            _id:"$products.name",
+            totalQuantity:{$sum:"$products.quantity"}
+
+        }
+    },
+    {$sort:{totalQuantity:-1}},
+    {$limit:10}
+  ]);
+  console.log(topProduct,'edfnaseugh');
+  
+
+  const topCategories = await orderCollection.aggregate([
+    {
+        $unwind:"$products"
+    },
+    {
+        $lookup:{
+            from:"products",
+            localField:"products.productId",
+            foreignField:"_id",
+            as:"productDetails"
+    
+        }
+    },
+    // {
+    //     $unwind:"$productDetails"
+    // },
+    // {
+    //     $group:{
+    //         _id:"$productDetails.catagory",
+    //         totalQuantity:{$sum:"$products.quantity"}
+    //     }
+    // },
+    // {
+    //     $sort:{totalQuantity:-1}
+    // },
+    // {
+    //     $limit:10
+    // }
+    
+  ])
+
+  console.log(topCategories,"kitty mutheee");
+
+
+
   const [orders, products, categories, usersCount] = await Promise.all([
       orderCollection.find(),
         productsCollection.find(),
@@ -63,201 +116,19 @@ const dashboard_get=async(req,res)=>{
     if(deliveredOrders.length > 0){
         totalOrderAmount=deliveredOrders[0].totalOrderAmount
     }
-    console.log(products,"=-=-=-=-=-")
+    // console.log(products,"=-=-=-=-=-")
     const productCount=products.length
     const categoryCount=categories.length
 
 
 
     console.log(orderCount,usersCount,totalOrderAmount,productCount,categoryCount,);
-    console.log(deliveredOrders,'deli order');
-    res.render('dashboard',{orderCount,usersCount,totalOrderAmount,productCount,categoryCount,expressFlash:{derror:req.flash('derror')}})
+    // console.log(deliveredOrders,'deli order');
+    res.render('dashboard',{orderCount,usersCount,topProduct,topCategories,totalOrderAmount,productCount,categoryCount,expressFlash:{derror:req.flash('derror')}})
    } catch (error) {
     console.log(error);
    }
 }
-
-
-// const downloadsales = async (req, res) => {
-//     try {
-//         const { startDate, endDate } = req.body;
-//         console.log('Request body:', req.body);
-
-//         let sdate = isFutureDate(startDate);
-//         let edate = isFutureDate(endDate);
-
-//         if (sdate) {
-//             req.flash('derror', 'invalid date');
-//             return res.redirect('/admin/dashboard');
-//         }
-//         if (edate) {
-//             req.flash('derror', 'invalid date');
-//             return res.redirect('/admin/dashboard');
-//         }
-
-//         const salesData = await orderCollection.aggregate([
-//             {
-//                 $match: {
-//                     orderDate: {
-//                         $gte: new Date(startDate),
-//                         $lt: new Date(endDate),
-//                     },
-//                 },
-//             },
-//             {
-//                 $group: {
-//                     _id: null,
-//                     totalOrders: { $sum: 1 },
-//                     totalAmount: { $sum: '$totalPrice' },
-//                 },
-//             },
-//         ])
-
-//         const products = await orderCollection.aggregate([
-//             {
-//                 $match: {
-//                     orderDate: {
-//                         $gte: new Date(startDate),
-//                         $lt: new Date(endDate),
-//                     },
-//                 },
-//             },
-//             {
-//                 $unwind: '$products',
-//             },
-//             {
-//                 $group: {
-//                     _id: '$products.productId',
-//                     totalSold: { $sum: '$products.quantity' },
-//                 },
-//             },
-//             {
-//                 $addFields: {
-//                     productId: { $toObjectId: '$_id' }
-//                 }
-//             },
-//             {
-//                 $lookup: {
-//                     from: 'products',
-//                     localField: 'productId',
-//                     foreignField: '_id',
-//                     as: 'productDetails',
-//                 },
-//             },
-//             {
-//                 $unwind: '$productDetails',
-//             },
-//             {
-//                 $project: {
-//                     _id: 1,
-//                     totalSold: 1,
-//                     productName: '$productDetails.name',
-//                 },
-//             },
-//             {
-//                 $sort: { totalSold: -1 },
-//             },
-//         ])
-
-//         console.log("Sales data and products:", salesData, products);
-
-//         const htmlContent = `
-//             <!DOCTYPE html>
-//             <html lang="en">
-//             <head>
-//                 <meta charset="UTF-8">
-//                 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-//                 <title>Sales Report</title>
-//                 <style>
-//                     body {
-//                         margin-left: 20px;
-//                     }
-//                 </style>
-//             </head>
-//             <body>
-//                 <h2 align="center"> Sales Report</h2>
-//                 Start Date: ${startDate}<br>
-//                 End Date: ${endDate}<br> 
-//                 <center>
-//                     <table style="border-collapse: collapse;">
-//                         <thead>
-//                             <tr>
-//                                 <th style="border: 1px solid #000; padding: 8px;">Sl N0</th>
-//                                 <th style="border: 1px solid #000; padding: 8px;">Product Name</th>
-//                                 <th style="border: 1px solid #000; padding: 8px;">Quantity Sold</th>
-//                             </tr>
-//                         </thead>
-//                         <tbody>
-//                             ${products
-//                                 .map(
-//                                     (item, index) => `
-//                                     <tr>
-//                                         <td style="border: 1px solid #000; padding: 8px;">${index + 1}</td>
-//                                         <td style="border: 1px solid #000; padding: 8px;">${item.productName}</td>
-//                                         <td style="border: 1px solid #000; padding: 8px;">${item.totalSold}</td>
-//                                     </tr>`
-//                                 )
-//                                 .join("")}
-//                             <tr>
-//                                 <td style="border: 1px solid #000; padding: 8px;"></td>
-//                                 <td style="border: 1px solid #000; padding: 8px;">Total No of Orders</td>
-//                                 <td style="border: 1px solid #000; padding: 8px;">${salesData[0]?.totalOrders || 0}</td>
-//                             </tr>
-//                             <tr>
-//                                 <td style="border: 1px solid #000; padding: 8px;"></td>
-//                                 <td style="border: 1px solid #000; padding: 8px;">Total Revenue</td>
-//                                 <td style="border: 1px solid #000; padding: 8px;">${salesData[0]?.totalAmount || 0}</td>
-//                             </tr>
-//                         </tbody>
-//                     </table>
-//                 </center>
-//             </body>
-//             </html>
-//         `;
-
-//         console.log("Launching Puppeteer...");
-//         const browser = await puppeteer.launch({ headless: true, args: ['--no-sandbox', '--disable-setuid-sandbox'], timeout: 60000 });
-//         console.log("Browser launched.");
-//         const page = await browser.newPage();
-//         console.log("New page created.");
-
-//         await page.setContent(htmlContent, { waitUntil: 'networkidle2' });
-//         console.log("Content set.");
-
-//         // Adding a small delay to ensure content is fully loaded
-//         console.log("Waiting for content to load...");
-
-//         // Generate PDF with enhanced error handling
-//         let pdfBuffer;
-//         try {
-//             console.log("Generating PDF...");
-//             pdfBuffer = await page.pdf({ format: 'A4', timeout: 60000 });
-//             console.log("PDF generated.");
-//         } catch (pdfError) {
-//             console.error("Error generating PDF:", pdfError);
-//             await browser.close();
-//             return res.status(500).send("Error generating PDF.");
-//         }
-
-//         await browser.close();
-//         console.log("Browser closed.");
-
-//         const downloadsPath = path.join(os.homedir(), 'Downloads');
-//         const pdfFilePath = path.join(downloadsPath, 'sales.pdf');
-
-//         // Save the PDF file locally
-//         fs.writeFileSync(pdfFilePath, pdfBuffer);
-
-//         // Send the PDF as a response
-//         res.setHeader('Content-Length', pdfBuffer.length);
-//         res.setHeader('Content-Type', 'application/pdf');
-//         res.setHeader('Content-Disposition', 'attachment; filename=sales.pdf');
-//         res.status(200).end(pdfBuffer);
-//     } catch (err) {
-//         console.error('Error generating sales report:', err);
-//         res.render("users/serverError");
-//     }
-// };
 
 const downloadsales = async (req, res) => {
     try {
@@ -267,35 +138,6 @@ const downloadsales = async (req, res) => {
         console.log("End Date is:", endDate);
 
         console.log('1 ------------------------------------------------------------------------');
-
-        // const Product = await orderModel.aggregate([
-        //     {
-        //         $match: {
-        //             date: {
-        //                 $gte: new Date(startDate),
-        //                 $lte: new Date(endDate),
-        //             },
-        //         },
-        //     },
-        //     {
-        //         $unwind: "$products",
-        //     },
-        //      {
-        //         $match: { "status": "Delivered" },
-        //     },
-        //     {
-        //         $group: {
-        //             _id: "$products.product",
-        //             totalOrders: { $sum: 1 },
-        //         },
-        //     },
-        //     {
-        //         $sort: { totalOrders: -1 },
-        //     },
-        //     {
-        //         $limit: 3,
-        //     },
-        // ]);
         
 
         // console.log("Product details:", Product);

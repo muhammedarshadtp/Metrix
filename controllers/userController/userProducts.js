@@ -95,8 +95,7 @@ const productDetail = async (req, res) => {
         const cartCount = cart !==  null ? cart.items.length : 0
         res.render('productDetail', { data: productDetail, user,cart,cartCount})
     } catch (error) {
-        console.log('productsDetails keri');
-        return res.render(' error_page')
+        console.log(error,'productsDetails keri');
 
     }
 

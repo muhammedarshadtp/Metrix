@@ -441,7 +441,7 @@
 
 
                                 <div id="checkout_coupon" class="collapse checkout_coupon">
-                                    
+
                                     <div class="checkout_info">
 
                                         <input placeholder="Coupon code" id="coupon" type="text">
@@ -453,7 +453,7 @@
                                 </div>
 
 
-                                
+
                                 <div class="container-pay">
                                     <div class="card-pay">
 
@@ -463,9 +463,13 @@
                                             <div class=" d-grid-pay">
                                                 <button id="pay-button" class="btn-pay btn-primary btn-block-pay">Pay
                                                     with Razorpay</button>
-                                                <button class="btn-pay btn-secondary btn-block-pay"
+
+                                                <button id="btn-pay" class="btn-pay btn-secondary btn-block-pay"
                                                     onclick="placeOrder('Cash on Delivery')">Pay with Cash on
                                                     Delivery</button>
+
+
+
                                                 <button onclick="paymentUsingWallet()"
                                                     class="btn-pay btn-dark btn-block-pay">Pay with Wallet</button>
                                             </div>
@@ -491,6 +495,7 @@
 
 
     </body>
+
     <script>
         {
             let modal = document.getElementById('checkout_coupon');
@@ -605,7 +610,7 @@ https://cdn.jsdelivr.net/npm/toastr@2.1.4/build/toastr.min.css
                     amount: orders.amount,
                     currency: orders.currency,
                     orders_id: orders.id,
-                    name: 'Your Company Name',
+                    name: 'METRIX',
                     description: 'Test Payment',
                     image: 'https://via.placeholder.com/150',
                     handler: function (response) {
@@ -620,9 +625,9 @@ https://cdn.jsdelivr.net/npm/toastr@2.1.4/build/toastr.min.css
                         });
                     },
                     prefill: {
-                        name: 'John Doe',
-                        email: 'john.doe@example.com',
-                        contact: '1234567890'
+                        name: 'Arshad T P',
+                        email: 'arshadtp89@gmail.com',
+                        contact: '7909102569'
                     },
                     theme: {
                         color: '#528FF0'
@@ -630,6 +635,19 @@ https://cdn.jsdelivr.net/npm/toastr@2.1.4/build/toastr.min.css
                 };
 
                 const razorpayInstance = new Razorpay(options);
+
+                razorpayInstance.on('payment.failed', function (response) {
+                    Swal.fire({
+                        title: 'Payment Failed',
+                        text: 'There was an error processing your payment. Redirecting to order history...',
+                        icon: 'error',
+                        timer: 3000,
+                        timerProgressBar: true,
+                        willClose: () => {
+                            location.href = '/ordersHistory';
+                        }
+                    });
+                });
                 razorpayInstance.open();
 
                 function razorpaySuccess(orders) {
