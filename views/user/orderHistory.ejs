@@ -362,7 +362,7 @@
 
                 function razorpaySuccess(orderId) {
 
-                    fetch(`/addOrderFailed?orderId=${orderId}`)
+                    fetch(`/addOrderFailedToSuccess?orderId=${orderId}`)
                         .then(response => response.json())
                         .then(data => {
                             if (data.result === 'success') {

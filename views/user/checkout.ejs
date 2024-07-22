@@ -768,6 +768,7 @@ https://cdn.jsdelivr.net/npm/toastr@2.1.4/build/toastr.min.css
                         icon: 'error',
                         timer: 3000,
                         timerProgressBar: true,
+                        showConfirmButton:false,
                         willClose: () => {
                             // location.href = '/retryPayment';
                             razorpayFailed(orders)
@@ -796,16 +797,16 @@ https://cdn.jsdelivr.net/npm/toastr@2.1.4/build/toastr.min.css
                 }
 
                function razorpayFailed(orders) {
-                    fetch(`/addOrderFailed?orderId=${orders.id}`)
+                    fetch(`/addOrderFailed/?cartId=${cartId}&paymentMethod=Online Delivery&addressId=${selectedAddressId}`)
                         .then(response => response.json())
-                        console.log(response,'response is showing -===-=-=-=')
+                        // console.log(response,'response is showing -===-=-=-=')
                         .then(data => {
+                            console.log(data,'data is showing');
                             if (data.result === 'success') {
                                 
                                     location.href = '/retryPayment';
                                
                             } else if (data.result === 'error') {
-                                console.log('========kiyuuuuuuu');
                                 Swal.fire('Stock limit exceeded').then(() => {
                                     location.reload();
                                 });

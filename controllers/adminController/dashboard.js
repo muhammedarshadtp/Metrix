@@ -332,7 +332,7 @@ const downloadsales = async (req, res) => {
                 </html>
             `;
 
-            console.log("Launching Puppeteer...");
+                    console.log("Launching Puppeteer...");
                     const browser = await puppeteer.launch({ headless: true, args: ['--no-sandbox', '--disable-setuid-sandbox'], timeout: 60000 });
                     console.log("Browser launched.");
                     const page = await browser.newPage();

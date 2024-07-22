@@ -147,7 +147,7 @@
     <div class="container-wallet">
         <h1>Wallet</h1>
         <div class="wallet-summary">
-            <div class="wallet-balance">Balance: Rs <%= wallet.wallet %></div>
+            <div class="wallet-balance">Balance: Rs <%= wallet.wallet.toFixed(2) %></div>
         </div>
         <div class="transaction-history">
             <h2>Transaction History</h2>
@@ -160,7 +160,7 @@
                         </div>
                         
                         <div><strong>Reason:</strong><%= transaction.remarks %></div>
-                        <div class="transaction-amount">Rs <%= transaction.amount %></div>
+                        <div class="transaction-amount">Rs <%= transaction.amount.toFixed(2) %></div>
                     </div>
                 <% }) %>
             <% } else { %>

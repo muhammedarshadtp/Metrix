@@ -15,7 +15,7 @@ const otp=require('../controllers/userController/userOtp')
 const {user_auth,status,} = require("../middleware/userAuth");
 
 // const {whishlistcart}= require('../utils/validationNavbar');
-const { user_orderHistory,order_placed, user_addOrder,cancelOrder,orderReturn ,addOrderFailed,addOrderRetry} = require("../controllers/userController/order");
+const { user_orderHistory,order_placed, user_addOrder,cancelOrder,orderReturn ,addOrderFailedToSuccess,user_addOrderFailed,addOrderRetry} = require("../controllers/userController/order");
 const  account  = require("../controllers/userController/accounts");
 const { razorpay,retryPayment } = require("../controllers/userController/razorpay");
 const { wishlist,addToWishlist,Removewishlist } = require("../controllers/userController/wishlist");
@@ -111,7 +111,11 @@ router.get('/ordersHistory',user_auth,user_orderHistory)
 
 router.get('/addOrder',user_auth,user_addOrder)
 
-router.get('/addOrderFailed',user_auth,addOrderFailed)
+router.get('/addOrderFailed',user_auth,user_addOrderFailed)
+
+router.get('/addOrderFailedToSuccess',user_auth,addOrderFailedToSuccess)
+
+
 
 
 router.get('/cancelOrder',user_auth,cancelOrder)

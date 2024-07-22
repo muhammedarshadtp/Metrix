@@ -4,7 +4,7 @@ const productsCollection = require("../../model/products-schema")
 const addressCollection = require("../../model/user-address")
 const userCollection = require("../../model/user-schema")
 const walletCollection = require("../../model/wallet-schema")
-const sendOrderMail = require("../../utils/order-placed-mail")
+const {sendOrderMailFailure,sendOrderMailSuccess} = require("../../utils/order-placed-mail")
 const otpGeneratorUser = require("../../utils/otp_generator")
 
 
@@ -111,7 +111,7 @@ console.log('5=========');
 console.log('6=========');
     await cartCollection.findByIdAndDelete(cartData._id);
 
-    await sendOrderMail(cartData.userId.email, cartData.userId.username, orderId, products, totalPrice);
+    await sendOrderMailSuccess(cartData.userId.email, cartData.userId.username, orderId, products, totalPrice);
 console.log('7========');
     return orderPlace;
 }
@@ -124,7 +124,87 @@ const order_placed = async (req, res) => {
     res.render('orderPlaced', { order, user,cart:'' })
 }
 
-const addOrderFailed = async (req,res)=>{
+// user razorpayment add order failed   = [[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
+
+
+const user_addOrderFailed = async (req, res) => {
+    try {
+
+        // console.log(req.query);
+        const { cartId, addressId, paymentMethod } = req.query;
+
+        const address = await addressCollection.findById(addressId);
+        if (!address) {
+            return res.json({ error: 'Address not found' });
+        }
+        console.log('1====');
+
+        const cartData = await cartCollection.findById(cartId)
+            .populate('items.productId')
+            .populate('userId', 'username email');
+
+        if (!cartData) {
+            return res.status(404).json({ error: 'Cart not found' });
+        }
+        console.log('2==========');
+
+        // Check stock availability
+        for (const item of cartData.items) {
+            if (Number(item.quantity) > Number(item.productId.stock)) {
+                return res.json({ result: 'error', message: 'Insufficient stock' });
+            }
+        }
+        console.log(req.session.dicprice,'3=========');
+         const discPrice =   req.session.dicprice==undefined?0:Number(req.session.dicprice)
+         
+
+        // If all items have sufficient stock, place the order
+        const orderPlace = await OrderPlaceFailed(cartData, address, paymentMethod, req.session.finalprice || cartData.Total,discPrice);
+
+        // req.session.ORDER_PLACED = orderPlace
+        res.json({ result: "success" });
+
+    } catch (error) {
+        console.error(error, 'error is showing');
+        return res.status(500).json({ error: 'Internal server error' });
+    }
+}
+
+async function OrderPlaceFailed(cartData, address, paymentMethod, totalPrice,discPrice) {
+    const products = cartData.items.map(item => ({
+        productId: item.productId._id,
+        status: 'Payment Failed',
+        name: item.productId.name,
+        price: item.price,
+        quantity: item.quantity,
+        images: item.images,
+    }));
+    console.log('4========');
+
+    const orderId = await otpGeneratorUser();
+
+    const orderPlace = await orderCollection.create({
+        userId: cartData.userId,
+        orderId: orderId,
+        products: products,
+        totalPrice: totalPrice,
+        address: address,
+        paymentMethod: paymentMethod,
+        discountAmount : discPrice,
+    });
+console.log('5=========');
+    
+
+    await cartCollection.findByIdAndDelete(cartData._id);
+
+    await sendOrderMailFailure(cartData.userId.email, cartData.userId.username, orderId, products, totalPrice);
+console.log('7========');
+    return orderPlace;
+}
+
+
+
+const addOrderFailedToSuccess = async (req,res)=>{
     try {
         console.log(req.query);
         const { orderId} = req.query;
@@ -165,38 +245,6 @@ const addOrderFailed = async (req,res)=>{
 
 
 
-
-async function OrderPlaceFailed(cartData, address, paymentMethod, totalPrice,discPrice) {
-    const products = cartData.items.map(item => ({
-        productId: item.productId._id,
-        status: 'Payment Failed',
-        name: item.productId.name,
-        price: item.price,
-        quantity: item.quantity,
-        images: item.images,
-    }));
-    console.log('4========');
-
-    const orderId = await otpGeneratorUser();
-
-    const orderPlace = await orderCollection.create({
-        userId: cartData.userId,
-        orderId: orderId,
-        products: products,
-        totalPrice: totalPrice,
-        address: address,
-        paymentMethod: paymentMethod,
-        discountAmount : discPrice,
-    });
-console.log('5=========');
-    
-
-    await cartCollection.findByIdAndDelete(cartData._id);
-
-    await sendOrderMail(cartData.userId.email, cartData.userId.username, orderId, products, totalPrice);
-console.log('7========');
-    return orderPlace;
-}
 
 
 
@@ -239,12 +287,21 @@ const cancelOrder = async (req, res) => {
         console.log('above if case of wallet');
         if(order.paymentMethod !=='Cash on Delivery' && currentStatus !== 'Order Cancelled'){
             console.log('inside if case wallet ');
-            const amount = productItem.price * quantity;
+            // let discountAmount = order.discountAmount / order.products.length
+
+            let amount
+            if(order.discountAmount){
+                let discountAmount = order.discountAmount / order.products.length
+                amount = (productItem.price * quantity ) - discountAmount
+            }else{
+                amount = productItem.price * quantity;
+            }
+            // const amount = productItem.price * quantity;
             const  walletTransactions = {
                 remarks:'User cancel a order',
                 date:new Date(),
                 type:'Credit',
-                amount:amount,
+                amount:amount.toFixed(2),
             }
               console.log('Processing wallet transaction=====================');
 
@@ -289,7 +346,8 @@ module.exports = {
     user_orderHistory,
     order_placed,
     user_addOrder,
-    addOrderFailed,
+    addOrderFailedToSuccess,
     cancelOrder,
     orderReturn,
+    user_addOrderFailed,
 }
