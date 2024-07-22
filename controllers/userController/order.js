@@ -166,6 +166,40 @@ const addOrderFailed = async (req,res)=>{
 
 
 
+async function OrderPlaceFailed(cartData, address, paymentMethod, totalPrice,discPrice) {
+    const products = cartData.items.map(item => ({
+        productId: item.productId._id,
+        status: 'Payment Failed',
+        name: item.productId.name,
+        price: item.price,
+        quantity: item.quantity,
+        images: item.images,
+    }));
+    console.log('4========');
+
+    const orderId = await otpGeneratorUser();
+
+    const orderPlace = await orderCollection.create({
+        userId: cartData.userId,
+        orderId: orderId,
+        products: products,
+        totalPrice: totalPrice,
+        address: address,
+        paymentMethod: paymentMethod,
+        discountAmount : discPrice,
+    });
+console.log('5=========');
+    
+
+    await cartCollection.findByIdAndDelete(cartData._id);
+
+    await sendOrderMail(cartData.userId.email, cartData.userId.username, orderId, products, totalPrice);
+console.log('7========');
+    return orderPlace;
+}
+
+
+
 
 const cancelOrder = async (req, res) => {
     try {
