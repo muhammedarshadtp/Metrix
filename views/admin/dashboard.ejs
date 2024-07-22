@@ -58,7 +58,7 @@
                 <div class="row">
                   <div class="col-sm-7">
                     <h5>Business Survey</h5>
-                    <p class="text-muted"> Show overview jan 2018 - Dec 2019 <a class="text-muted font-weight-medium pl-2" href="#"><u>See Details</u></a>
+                    <p class="text-muted"> <a class="text-muted font-weight-medium pl-2" href="#"></a>
                     </p>
                   </div>
                   <div class="col-sm-5 text-md-right">
@@ -140,10 +140,28 @@
 
         <div class="container-fluid">
             <div class="row">
-              <div class="col-lg-6">
-                <div class="top-products block">
-                  <div class="title"><strong>Best Selling Products</strong></div>
-                  <div class="products">
+                <div class="col-lg-4">
+                    <div class="top-categories block" style="border: 1px solid #ddd;">
+                      <div class="title" style="margin:1rem;">
+                        <h5>Best Selling Brand</h5></div>
+                      <div class="categories" style="margin:1rem;">
+                        <ul>
+                          <% for( let i = 0; i < topCategories.length; i++ ) { %>
+                          
+                          
+                          <li>
+                            <span><%= topCategories[i].catagoryName  %> <%= - topCategories[i].totalQuantity %></span><br>
+                          </li>
+                          <% } %>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+              <div class="col-lg-4">
+                <div class="top-products block"  style="border: 1px solid #ddd;">
+                  <div class="title" style="margin:1rem;">
+                    <h5>Best Selling Products</h5></div>
+                  <div class="products" style="margin:1rem;">
                     <ul>
                       <% for (i=0;i<topProduct.length;i++) { %>
                        
@@ -157,22 +175,24 @@
                   </div>
                 </div>
               </div>
-              <div class="col-lg-6">
-                <div class="top-categories block">
-                  <div class="title"><strong>Best Selling Categories</strong></div>
-                  <div class="categories">
+              <div class="col-lg-4">
+                <div class="top-categories block" style="border: 1px solid #ddd;">
+                  <div class="title" style="margin:1rem;">
+                    <h5>Best Selling Categories</h5></div>
+                  <div class="categories" style="margin:1rem;">
                     <ul>
                       <% for( let i = 0; i < topCategories.length; i++ ) { %>
                       
                       
                       <li>
-                        <span><%= topCategories[i]._id %></span><br>
+                        <span><%= topCategories[i].catagoryName  %> <%= - topCategories[i].totalQuantity %></span><br>
                       </li>
                       <% } %>
                     </ul>
                   </div>
                 </div>
               </div>
+              
             </div>
           </div>
 

@@ -24,6 +24,7 @@ const addproductspost = async (req, res) => {
 
     try {
         const catagory= await catagoryCollection.findOne({_id:req.body.catagory})
+        let catagoryOffer=catagory.catagoryOffer
        const data = req.body;
     
         console.log(data,'data kitty');
@@ -69,16 +70,21 @@ const addproductspost = async (req, res) => {
 
         const {productOffer,price} = req.body
         let productOfferPrice = price
-        if(productOffer){
+        let catagoryOfferPrice
+        if(productOffer || catagoryOffer){
             productOfferPrice = Number(price) - ( Number(price) * Number(productOffer) /100)
+            catagoryOfferPrice = Number(price) - ( Number(price) * Number(catagoryOffer) /100)
+
+            updatedPrice = productOfferPrice < catagoryOfferPrice ? productOfferPrice : catagoryOfferPrice
         }
+        console.log(catagoryOfferPrice,'cata offer');
         console.log(productOfferPrice,'product offer price showing ');
         const productsdatas = {
             name: req.body.name,
             catagory:catagory,
             description: req.body.description,
             stock: req.body.stock,
-            price: productOfferPrice,
+            price: updatedPrice,
             images: imageMultiple,
             originalPrice:req.body.price
         }

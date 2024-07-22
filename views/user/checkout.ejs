@@ -124,6 +124,58 @@
         .btn-primary:hover {
             background-color: #0056b3;
         }
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        .cupon_area {
+            padding: 20px;
+        }
+
+        .check_title {
+            margin-bottom: 20px;
+        }
+
+        .check_title a {
+            text-decoration: none;
+            color: #333;
+        }
+
+        .check_title a:hover {
+            color: #007BFF;
+        }
+
+        .coupon-table {
+            display: none;
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .coupon-table th,
+        .coupon-table td {
+            padding: 12px;
+            text-align: center;
+            border: 1px solid #ddd;
+        }
+
+        .coupon-table th {
+            background-color: #f8f8f8;
+            color: #333;
+        }
+
+        .coupon-table tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        .coupon-table tr:hover {
+            background-color: #eaeaea;
+        }
+
+        .coupon-table td {
+            color: #555;
+      }
+
     </style>
 
     <body>
@@ -160,29 +212,65 @@
                 <div class="container">
                     <div class="row">
                         <!-- User Quick Action Form -->
-                        <!-- <div class="col-12">
+                        <div class="col-12">
                             <div class="user-actions accordion" data-aos="fade-up" data-aos-delay="200">
-                                <h3>
+                                <!-- <h3>
                                     <i class="fa fa-file-o" aria-hidden="true"></i>
                                     Have a coupon?
                                     <a class="Returning" href="#" data-bs-toggle="collapse"
                                         data-bs-target="#checkout_coupon" aria-expanded="true">Click here to enter your
                                         code</a>
 
-                                </h3>
-                                <div id="checkout_coupon" class="collapse checkout_coupon"
+                                </h3> -->
+                                <div class="cupon_area">
+                                    <div class="check_title">
+                                        <a href="" id="couponLink">
+                                            <h2>Have a coupon?</h2>
+                                        </a>
+                                    </div>
+                                    <table class="coupon-table" id="couponTable">
+                                        <thead>
+                                            <tr>
+                                                <th>COUPON</th>
+                                                <th>DISCOUNT</th>
+                                                <th>MIN CART VALUE</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <% for ( let i=0; i < coupon.length; i++ ) { %>
+                                                <tr>
+                                                    <td>
+                                                        <%= coupon[i].name %>
+                                                    </td>
+                
+                                                    <!-- </tr>
+                                            <tr> -->
+                                                    <td>
+                                                        <%= coupon[i].discount %>%
+                                                    </td>
+                                                    <!-- </tr>
+                                            <tr> -->
+                                                    <td>
+                                                       RS: <%= coupon[i].minimum_cart_price %>
+                                                    </td>
+                                                </tr>
+                                        </tbody>
+                                        <% } %>
+                                    </table>
+                
+                             </div> 
+                                <!-- <div id="checkout_coupon" class="collapse checkout_coupon"
                                     data-parent="#checkout_coupon">
                                     <div class="checkout_info">
 
                                         <input placeholder="Coupon code" id="coupon" type="text">
-                                        <button class="btn btn-md btn-black-default-hover" type="button"
-                                            onclick="applyCoupon()">Apply
+                                        <button class="btn btn-md btn-black-default-hover" type="button">Apply
                                             coupon</button>
 
                                     </div>
-                                </div>
+                                </div> -->
                             </div>
-                        </div> -->
+                        </div>
                         <!-- User Quick Action Form -->
                     </div>
 
@@ -435,8 +523,24 @@
 
                                                                 </td>
                                                             </tr>
+                                                            <% if (wallet) { %>
+
+
+
+
+                                                                <tr>
+                                                                    <th colspan="2">Wallet Total</th>
+                                                                    <td colspan="2">
+                                                                        <strong>RS: <span id="walletTotal">
+                                                                                <%= wallet && wallet.wallet ?
+                                                                                    wallet.wallet : '0.00' %>
+                                                                            </span></strong>
+                                                                    </td>
+                                                                </tr>
+                                                                <% } %>
                                                         </tfoot>
                                     </table>
+
                                 </div>
 
 
@@ -463,6 +567,7 @@
                                             <div class=" d-grid-pay">
                                                 <button id="pay-button" class="btn-pay btn-primary btn-block-pay">Pay
                                                     with Razorpay</button>
+
 
                                                 <button id="btn-pay" class="btn-pay btn-secondary btn-block-pay"
                                                     onclick="placeOrder('Cash on Delivery')">Pay with Cash on
@@ -496,6 +601,7 @@
 
     </body>
 
+
     <script>
         {
             let modal = document.getElementById('checkout_coupon');
@@ -503,6 +609,15 @@
                 modal.classList.toggle('collapse'); // Remove 'collapse' class to show the modal
             }
         }
+        document.getElementById('couponLink').addEventListener('click', function (event) {
+            event.preventDefault();
+            var couponTable = document.getElementById('couponTable');
+            if (couponTable.style.display === 'none' || couponTable.style.display === '') {
+                couponTable.style.display = 'table';
+            } else {
+                couponTable.style.display = 'none';
+            }
+        });
 
     </script>
 
@@ -591,7 +706,7 @@ https://cdn.jsdelivr.net/npm/toastr@2.1.4/build/toastr.min.css
         const cartId = document.getElementById('cartId').value;
         const amount = document.getElementById('amount').innerText;
 
-        document.getElementById('pay-button').onclick = async function (e) {
+         document.getElementById('pay-button').onclick = async function (e) {
             e.preventDefault();
             if (!selectedAddressId) {
                 Swal.fire('Address not found');
@@ -599,11 +714,21 @@ https://cdn.jsdelivr.net/npm/toastr@2.1.4/build/toastr.min.css
             }
 
             try {
+        //         const stockCheckResponse = await fetch(`/checkStockLimit?cartId=${cartId}`);
+        // const stockCheckData = await stockCheckResponse.json();
+
+        // if (!stockCheckResponse.ok || stockCheckData.result === 'error') {
+        //     Swal.fire('Stock limit exceeded').then(() => {
+        //         location.reload();
+        //     });
+        //     return;
+        // }
                 const response = await fetch(`/razorpay?amount=${amount}`);
                 if (!response.ok) {
                     throw new Error('Failed to create order');
                 }
 
+                
                 const orders = await response.json();
                 const options = {
                     key: 'rzp_test_vaUKH55kwbh0HR',
@@ -644,7 +769,8 @@ https://cdn.jsdelivr.net/npm/toastr@2.1.4/build/toastr.min.css
                         timer: 3000,
                         timerProgressBar: true,
                         willClose: () => {
-                            location.href = '/ordersHistory';
+                            // location.href = '/retryPayment';
+                            razorpayFailed(orders)
                         }
                     });
                 });
@@ -668,6 +794,27 @@ https://cdn.jsdelivr.net/npm/toastr@2.1.4/build/toastr.min.css
                             console.error('There was a problem with the fetch operation:', error);
                         });
                 }
+
+               function razorpayFailed(orders) {
+                    fetch(`/addOrderFailed?orderId=${orders.id}`)
+                        .then(response => response.json())
+                        console.log(response,'response is showing -===-=-=-=')
+                        .then(data => {
+                            if (data.result === 'success') {
+                                
+                                    location.href = '/retryPayment';
+                               
+                            } else if (data.result === 'error') {
+                                console.log('========kiyuuuuuuu');
+                                Swal.fire('Stock limit exceeded').then(() => {
+                                    location.reload();
+                                });
+                            }
+                        })
+                        .catch(error => {
+                            console.error('There was a problem with the fetch operation:', error);
+                        });
+                }
             } catch (error) {
                 console.log(error, 'error is showing');
             }
@@ -678,23 +825,53 @@ https://cdn.jsdelivr.net/npm/toastr@2.1.4/build/toastr.min.css
                 Swal.fire('Address not found');
                 return;
             }
+            const subtotal = document.getElementById('amount').innerText
+            console.log(subtotal, 'sub');
+            // if (paymentMethod === 'wallet' )
+                if (paymentMethod === 'Cash on Delivery' && Number(subtotal) >= 1000) {
+                    Swal.fire('Cash on delivery is below 1000')
+                } else {
+                    fetch(`/addOrder?cartId=${cartId}&paymentMethod=${paymentMethod}&addressId=${selectedAddressId}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.result === 'success') {
+                                Swal.fire("Order placed successfully").then(() => {
+                                    location.href = '/orderPlaced';
+                                });
+                            } else if (data.result === 'error') {
+                                Swal.fire('Stock limit exceeded').then(() => {
+                                    location.reload();
+                                });
+                            }
+                        })
+                        .catch(error => {
+                            console.error('There was a problem with the fetch operation:', error);
+                        });
 
-            fetch(`/addOrder?cartId=${cartId}&paymentMethod=${paymentMethod}&addressId=${selectedAddressId}`)
-                .then(response => response.json())
-                .then(data => {
-                    if (data.result === 'success') {
-                        Swal.fire("Order placed successfully").then(() => {
-                            location.href = '/orderPlaced';
-                        });
-                    } else if (data.result === 'error') {
-                        Swal.fire('Stock limit exceeded').then(() => {
-                            location.reload();
-                        });
-                    }
-                })
-                .catch(error => {
-                    console.error('There was a problem with the fetch operation:', error);
-                });
+                }
+            }
+       async function paymentUsingWallet() {
+            const walletAmount = parseFloat (document.getElementById('walletTotal').innerHTML)
+            console.log('fgfgcfccgcgcgc');
+            const response = await fetch('/wallet',{
+                method:'POST',
+                headers:{
+                    'Content-Type':'application/json'
+                },
+                body:JSON.stringify({walletAmount:walletAmount})
+            })
+            console.log('gfgfgfgfgfgf');
+            if(!response.ok){
+                console.log('Some error occured');
+            }
+            console.log("qqqqqqqqqq");
+            const data = await response.json()
+            if(data.result==='Within Limit'){
+                console.log(data,"ashfgwejhgh");
+                placeOrder('wallet');
+            }else{
+                Swal.fire("wallet doesn't have enough money")
+            }
         }
 
         const form = document.getElementById("formData");
@@ -820,5 +997,3 @@ https://cdn.jsdelivr.net/npm/toastr@2.1.4/build/toastr.min.css
 
         }
     </script>
-
-    </html>

@@ -1,0 +1,61 @@
+<%- include('../partials/head') %>
+    <style>
+
+.payment-failed-container {
+    text-align: center;
+    background-color: #fff;
+    margin: 60px;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    color: #e74c3c;
+}
+
+p {
+    color: #333;
+}
+
+button {
+    background-color: #3498db;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    margin: 10px;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+button:hover {
+    background-color: #2980b9;
+}
+
+    </style>
+      <%- include('../partials/header') %>
+      <div class="container">
+    <div class="payment-failed-container">
+        <h1>Payment Failed</h1>
+        <p>We're sorry, but your payment could not be processed at this time.</p>
+        <p>Please try again or contact our support team if the problem persists.</p>
+        <button onclick="retryPayment()">Try Again</button>
+       
+    </div>
+</div>    
+  <%- include('../partials/footer') %>
+
+  <script>
+     function retryPayment(){
+        try {
+            console.log('hello');
+          window.location.href = '/ordersHistory'
+        } catch (error) {
+            console.log(error);
+        }
+
+    }
+  </script>
+

@@ -89,11 +89,14 @@ const productDetail = async (req, res) => {
         const user = req.session.isAuth
         const userId=req.session.userId
         const productData = req.params.id
+
         let cart  = await cartCollection.findOne({userId:userId}).populate("items.productId");
         const productDetail = await productsCollection.findOne({ _id: productData }).populate("catagory")
         console.log(productDetail, '---------------------------data is founded...');
+        const relatedProduct = await productsCollection.find({catagory:productDetail.catagory._id})
+        console.log(relatedProduct,"123456789");
         const cartCount = cart !==  null ? cart.items.length : 0
-        res.render('productDetail', { data: productDetail, user,cart,cartCount})
+        res.render('productDetail', { data: productDetail, user,cart,cartCount,relatedProduct})
     } catch (error) {
         console.log(error,'productsDetails keri');
 

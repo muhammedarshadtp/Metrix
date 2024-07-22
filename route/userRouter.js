@@ -12,15 +12,16 @@ const logout=require('../controllers/userController/userLogout')
 const forRe = require('../controllers/userController/userForgotpassword')
 const checkout=require('../controllers/userController/checkout')
 const otp=require('../controllers/userController/userOtp')
-const {user_auth,status} = require("../middleware/userAuth");
+const {user_auth,status,} = require("../middleware/userAuth");
 
 // const {whishlistcart}= require('../utils/validationNavbar');
-const { user_orderHistory,order_placed, user_addOrder,cancelOrder,orderReturn } = require("../controllers/userController/order");
+const { user_orderHistory,order_placed, user_addOrder,cancelOrder,orderReturn ,addOrderFailed,addOrderRetry} = require("../controllers/userController/order");
 const  account  = require("../controllers/userController/accounts");
-const { razorpay } = require("../controllers/userController/razorpay");
+const { razorpay,retryPayment } = require("../controllers/userController/razorpay");
 const { wishlist,addToWishlist,Removewishlist } = require("../controllers/userController/wishlist");
 const { ApplyCoupon,removeCoupon } = require("../controllers/userController/coupon");
 const { wallet,walletPost } = require("../controllers/userController/wallet");
+const { invoice } = require("../controllers/userController/invoice");
 
 // router.use(whishlistcart)
 
@@ -110,6 +111,9 @@ router.get('/ordersHistory',user_auth,user_orderHistory)
 
 router.get('/addOrder',user_auth,user_addOrder)
 
+router.get('/addOrderFailed',user_auth,addOrderFailed)
+
+
 router.get('/cancelOrder',user_auth,cancelOrder)
 
 router.post('/orderReturn',user_auth,orderReturn)
@@ -136,6 +140,10 @@ router.get('/wallet',user_auth,wallet)
 
 router.post('/wallet',user_auth,walletPost)
 
+// -----------Invoice-----------------//
+
+router.get('/invoice',user_auth,invoice)
+
 
 
 
@@ -154,6 +162,10 @@ router.get('/error_page',errorpage.error_page)
 // --------------razorpay-----------//
 
 router.get('/razorpay',razorpay)
+
+router.get('/retryPayment',user_auth,retryPayment)
+
+
 
 
 

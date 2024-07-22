@@ -50,6 +50,19 @@
             border-bottom: 1px solid #eee;
             padding-bottom: 10px;
         }
+        .order-header .order-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .order-header .order-actions {
+            display: flex;
+            align-items: center; /* Align items to center */
+        }
+
+        .order-header .order-actions .btn {
+            margin-left: 10px;
+        }
 
         .order-header span {
             font-weight: bold;
@@ -121,6 +134,54 @@
             text-decoration: none;
             cursor: pointer;
         }
+
+        .order-card {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    padding: 15px;
+}
+
+.order-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 15px;
+}
+
+.product-row {
+    display: flex;
+    margin-bottom: 15px;
+}
+
+.product-image {
+    flex: 0 0 100px;
+    margin-right: 15px;
+}
+
+.product-image img {
+    max-width: 100%;
+    height: auto;
+}
+
+.product-info {
+    flex: 1;
+}
+
+.product-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 10px;
+}
+
+.btn {
+    margin-left: 10px;
+}
+
+.order-summary {
+    margin-top: 20px;
+    border-top: 1px solid #ddd;
+    padding-top: 15px;
+}
     </style>
 </head>
 
@@ -129,57 +190,75 @@
         <h1>Order History</h1>
     </header>
     <main>
-        <% if (order.length === 0) { %>
-            <p>No orders found.</p>
-        <% } else { %>
+        <% if (order && order.length > 0) { %>
             <% order.forEach(order => { %>
                 <div class="order-card">
                     <div class="order-header">
                         <span class="order-number">Order #<%= order.orderId %></span>
                         <span class="order-date"><%= new Date(order.orderDate).toLocaleString('en-GB') %></span>
                     </div>
-                    <div class="order-details">
-                        <p><strong>User Name:</strong> <%= order.address.name %></p>
+                   
+                    <% let delStatus = order.products.some(product => { %>
+                        <%return product.status === 'Delivered' %>
+                        <% }) %>
+                        <% let paymentFailed = order.products.some(product => product.status === 'Payment Failed') %>
+                        <%= console.log(delStatus,'del status'); %>
+                        <%= console.log(paymentFailed, 'Payment Failed'); %>
+                        <% if(delStatus){ %>
+                            <a class="btn btn-outline-warning" href="/invoice?id=<%= order.orderId %>">Invoice</a>
+                            <% } %>
+                        <div class="order-details">
+                            <% if (paymentFailed) { %>
+                                <button class="btn btn-outline-warning" onclick="retry('<%= order.orderId %>','<%= order.totalPrice %>')">Retry Payment</button>
+                            <% } %>
+                        <p class="user-name"><strong>User Name:</strong> <%= order.address.name %></p>
+                        
                         <% order.products.forEach(product => { %>
-                            <div class="row align-items-center mb-3">
-                                <div class="col-md-2">
-                                    <img class="img-thumbnail" style="height: 8rem;" src="/productsImages/<%= product.images %>"
-                                        alt="Product Image">
+                            <div class="product-row">
+                                <div class="product-image">
+                                    <img class="img-fluid" src="/productsImages/<%= product.images %>" alt="Product Image">
                                 </div>
-                                <div class="col-md-10">
+                                <div class="product-info">
                                     <p><strong>Product Name:</strong> <%= product.name %></p>
                                     <p><strong>Item:</strong> ₹ <%= product.price %></p>
                                     <p><strong>Quantity:</strong> <%= product.quantity %></p>
                                     <p><strong>Total:</strong> ₹ <%= product.price * product.quantity %></p>
-                                    <% if (product.status === 'Order Cancelled') { %>
-                                        <p><strong>Status:</strong> <span class="text-danger"><%= product.status %></span></p>
-                                        <% } else { %>
-                                            <p ><strong >Status:</strong> <%= product.status %></p>
-                                            <% } %>
-                                        </div>
-                                    </div>
-                                    <div class="d-flex justify-content-end">
-                                        <% if (product.status === 'Returned' && product.returnStatus === 'APPROVE') { %>
-                                    <h4 class="text-success">Product returned successfully</h4>
+                                    <p><strong>Status:</strong> 
+                                        <span class="<%= product.status === 'Order Cancelled' ? 'text-danger' : '' %>">
+                                            <%= product.status %>
+                                        </span>
+                                    </p>
+                                </div>
+                            </div>
+                            
+                            <div class="product-actions">
+                                <% if (product.status === 'Returned' && product.returnStatus === 'APPROVE') { %>
+                                    <h4 class="text-success">Product Returned Successfully</h4>
                                 <% } else if (product.status === 'Delivered' && product.returnStatus === 'REJECTED') { %>
-                                    <h4 class="text-danger">Product rejected</h4>
+                                    <h4 class="text-danger">Product Rejected</h4>
+                                    <!-- <a class="btn btn-outline-warning" href="/invoice?id=<%#= order.orderId %>">Invoice</a> -->
                                 <% } else if (product.status === 'Delivered') { %>
-                                    <button class="btn btn-danger" onclick="showReturnModal('<%= order.orderId %>','<%= product.productId %>')">Return Order</button>
-                                    <% } else if (product.status === 'Order Placed' || product.status === 'Shipping') { %>
-                                        <button class="btn btn-danger" onclick="cancelOrder('<%= order.orderId %>','<%= product.productId %>')">Cancel Order</button>
-                                        <% } %>
-                                    </div>
-                                    <% }) %>
-                                    <p><strong>Delivery Address:</strong> <%= order.address.address %>, <%= order.address.city %></p>
-                                    <p><strong>Payment method:</strong> <%= order.paymentMethod %></p>
-                                    <p><strong>Grand Total:</strong> ₹ <%= order.totalPrice %></p>
-                                    <% if (order.discountAmount) { %>
-                                     
-                                        <p><strong>Discount Amount:</strong> ₹ <%= order.discountAmount %></p>
-                                    <% } %>
+                                    <button class="btn btn-danger" onclick="showReturnModal('<%= order.orderId %>', '<%= product.productId %>')">Return Order</button>
+                                    <!-- <a class="btn btn-outline-warning" href="/invoice?id=<%#= order.orderId %>&productId=<%= product.productId %>">Invoice</a> -->
+                                <% } else if (product.status === 'Order Placed' || product.status === 'Shipping') { %>
+                                    <button class="btn btn-danger" onclick="cancelOrder('<%= order.orderId %>', '<%= product.productId %>')">Cancel Order</button>
+                                <% } %>
+                            </div>
+                        <% }) %>
+                        
+                        <div class="order-summary">
+                            <p><strong>Delivery Address:</strong> <%= order.address.address %>, <%= order.address.city %></p>
+                            <p><strong>Payment method:</strong> <%= order.paymentMethod %></p>
+                            <p><strong>Grand Total:</strong> ₹ <%= order.totalPrice %></p>
+                            <% if (order.discountAmount) { %>
+                                <p><strong>Discount Amount:</strong> ₹ <%= order.discountAmount %></p>
+                            <% } %>
+                        </div>
                     </div>
                 </div>
             <% }) %>
+        <% } else { %>
+            <p>No orders found.</p>
         <% } %>
 
         <!-- Pagination -->
@@ -221,10 +300,109 @@
     </div>
 
     <%- include('../partials/footer') %>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+8vLvZG8+2e5UzH3cgTk6tIQJp7tS"
         crossorigin="anonymous"></script>
 </body>
+<script>
+  async  function retry(orderId,orderAmount){
+        try {
+                const response = await fetch(`/razorpay?amount=${orderAmount}`);
+                if (!response.ok) {
+                    throw new Error('Failed to create order');
+                }
+
+                const orders = await response.json();
+                const options = {
+                    key: 'rzp_test_vaUKH55kwbh0HR',
+                    amount: orders.amount,
+                    currency: orders.currency,
+                    orders_id: orders.id,
+                    name: 'METRIX',
+                    description: 'Test Payment',
+                    image: 'https://via.placeholder.com/150',
+                    handler: function (response) {
+                        Swal.fire({
+                            title: 'Payment Successful!',
+                            html: `<p>Payment ID: <strong>${response.razorpay_payment_id}</strong></p>
+                                 <p>Amount: <strong>${orders.amount / 100}</strong> ${orders.currency}</p>`,
+                            icon: 'success',
+                            timer: 3500,
+                        }).then(() => {
+                            razorpaySuccess(orderId,orders);
+                        });
+                    },
+                    prefill: {
+                        name: 'Arshad T P',
+                        email: 'arshadtp89@gmail.com',
+                        contact: '7909102569'
+                    },
+                    theme: {
+                        color: '#528FF0'
+                    }
+                };
+
+                const razorpayInstance = new Razorpay(options);
+
+                razorpayInstance.on('payment.failed', function (response) {
+                    Swal.fire({
+                        title: 'Payment Failed',
+                        text: 'There was an error processing your payment. Redirecting to order history...',
+                        icon: 'error',
+                        timer: 3000,
+                        timerProgressBar: true,
+                        willClose: () => {
+                            // location.href = '/ordersHistory';
+                            razorpayFailed(orders)
+                        }
+                    });
+                });
+                razorpayInstance.open();
+
+                function razorpaySuccess(orderId) {
+
+                    fetch(`/addOrderFailed?orderId=${orderId}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.result === 'success') {
+                                Swal.fire("Order placed successfully").then(() => {
+                                    location.href = '/orderPlaced';
+                                });
+                            } else if (data.result === 'error') {
+                                Swal.fire('Stock limit exceeded').then(() => {
+                                    location.reload();
+                                });
+                            }
+                        })
+                        .catch(error => {
+                            console.error('There was a problem with the fetch operation:', error);
+                        });
+                }
+
+                // function razorpayFailed(orders) {
+                //     fetch(`/addOrderFailed?cartId=${cartId}&paymentMethod=Online Delivery&addressId=${selectedAddressId}`)
+                //         .then(response => response.json())
+                //         .then(data => {
+                //             if (data.result === 'success') {
+                                
+                //                     location.href = '/retryPayment';
+                               
+                //             } else if (data.result === 'error') {
+                //                 Swal.fire('Stock limit exceeded').then(() => {
+                //                     location.reload();
+                //                 });
+                //             }
+                //         })
+                //         .catch(error => {
+                //             console.error('There was a problem with the fetch operation:', error);
+                //         });
+                // }
+            } catch (error) {
+                console.log(error, 'error is showing');
+            }
+    }
+</script>
 <script>
     async function cancelOrder(orderId, productId) {
         const confirmation = await Swal.fire({

@@ -124,6 +124,48 @@ const order_placed = async (req, res) => {
     res.render('orderPlaced', { order, user,cart:'' })
 }
 
+const addOrderFailed = async (req,res)=>{
+    try {
+        console.log(req.query);
+        const { orderId} = req.query;
+
+        const orderData = await orderCollection.findOne({orderId:orderId})
+
+        console.log(orderData,'orderdata is showing')
+        // Check stock availability
+        for (const item of orderData.products) {
+            if (Number(item.quantity) > Number(item.productId.stock)) {
+                return res.json({ result: 'error', message: 'Insufficient stock' });
+            }
+        }
+        let products = orderData.products
+        // If all items have sufficient stock, place the order
+        await orderCollection.updateOne({ orderId }, {$set:{ 'products.$[].status': 'Order Placed' }});
+
+        for (const product of products) {
+            const productDoc = await productsCollection.findById(product.productId);
+            if (productDoc && productDoc.stock >= product.quantity) {
+                // productDoc.stock -= product.quantity;
+                // await productDoc.save();
+                await productsCollection.updateOne({_id:product.productId},{$inc:{stock:-product.quantity}})
+            }
+        }
+
+        const orderPlace = await orderCollection.findOne({orderId})
+
+        req.session.ORDER_PLACED = orderPlace
+        res.json({ result: "success", order: orderPlace });
+
+
+
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+
+
+
 
 const cancelOrder = async (req, res) => {
     try {
@@ -213,6 +255,7 @@ module.exports = {
     user_orderHistory,
     order_placed,
     user_addOrder,
+    addOrderFailed,
     cancelOrder,
-    orderReturn
+    orderReturn,
 }

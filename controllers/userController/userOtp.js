@@ -8,12 +8,20 @@ const sendMail = require("../../utils/otp_nodemailer")
 const otpverification = async (req, res) => {
 
     console.log(req.session.userdata);
+    const currentDate = new Date();
+    let remainingTime =0;
+    if(req.session.time){
+        const differenceInSeconds = (currentDate - new Date(req.session.time))/1000;
+        remainingTime = 30 - Math.floor(differenceInSeconds);
+        remainingTime = remainingTime > 0 ? remainingTime :0;
+    }
 
     // const { email } = req.session.userdata.email
     res.render('user_otpverification',{
 
         otpexp: req.flash('otpexp'),
         errorOtp: req.flash('errorOtp'),
+        remainingTime:remainingTime,
     })
 }
 

@@ -6,6 +6,18 @@ const user_auth = async (req,res,next)=>{
         res.render('user_login')
     }
 }
+
+// const auth = async (req,res,next)=>{
+//     if(!req.session.isAuth){
+//         console.log('keri');
+//         next()
+        
+//     }else{
+//         res.render('user_home')
+//     }
+// }
+
+
 const status=async(req,res,next)=>{
     try {
         const id =req.session.userid
@@ -22,4 +34,4 @@ const status=async(req,res,next)=>{
     }
 }
 
-module.exports = {user_auth,status}
+module.exports = {user_auth,status,}

@@ -9,6 +9,7 @@ const home = async (req, res) => {
         const user = req.session.isAuth
         const id = req.session.userid
         const userDetail = await userCollection.find({ _id: id })
+
     
             let cart=await cartCollection.findOne({userId:id}).populate("items.productId");
             // console.log(cart.items.length,'length');

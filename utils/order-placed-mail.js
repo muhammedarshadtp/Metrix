@@ -27,9 +27,9 @@ const sendOrderMail = async (email, name, orderId, products, totalPrice) => {
         from: '"arshad " <arshadtp89@gmail.com>', // sender address
         to: email, // list of receivers
         subject: `Hi ${name}`, // Subject line
-        text: `Your product place successfully`, // plain text body
+        text: `Your order failed kindly reorder`, // plain text body
         html: `
-        <h1>Order Confirmation</h1>
+        <h1>Order Failed</h1>
         <p>Hi ${name},</p>
         <p>Thank you for your order. Your order ID is <strong>${orderId}</strong>.</p>
         <h2>Order Details:</h2>
@@ -46,8 +46,6 @@ const sendOrderMail = async (email, name, orderId, products, totalPrice) => {
           </tbody>
         </table>
         <h3>Total Price: Rs${totalPrice}</h3>
-        <p>We will notify you once your order is shipped.</p>
-        <p>Thank you for shopping with us!</p>
       `, // html body
     });
 };

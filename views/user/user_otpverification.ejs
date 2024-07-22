@@ -57,7 +57,7 @@
 									color: #333;
 								}
 							</style>
-							<p id="countdown">Waiting for OTP...</p>
+							<p id="countdown"  data-remaining="<%= remainingTime %>">Waiting for OTP...</p>
                         </form>
 						<button id="resendButton"  class="btn btn-primary" onclick="resendOTP()" disabled>Resend OTP</button>
                     </div>
@@ -102,7 +102,8 @@
 			countdownValue = 29; // Reset countdown value
 			startCountdown();
 		}
-		startCountdown()
+		countdownValue = parseInt(document.getElementById('countdown').dataset.remaining,10);
+        startCountdown();
 
 	</script>
 <script>

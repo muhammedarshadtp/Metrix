@@ -1,4 +1,6 @@
 const Razorpay = require('razorpay')
+const userCollection = require('../../model/user-schema')
+const cartCollection = require('../../model/cart-schema')
 const dotenv = require('dotenv').config()
 
 
@@ -35,6 +37,21 @@ const razorpay = async (req, res) => {
     }
 }
 
+const retryPayment = async (req,res)=>{
+    try {
+
+        const userId = req.session.userId
+
+        const user = await userCollection.find()
+        const cart = await cartCollection.find()
+        
+        res.render('retryPayment',{user,cart})
+    } catch (error) {
+        console.log(error);
+    }
+}
+
 module.exports = {
     razorpay,
+    retryPayment,
 }

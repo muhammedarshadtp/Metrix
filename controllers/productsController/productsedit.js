@@ -79,7 +79,7 @@ const productseditPost = async (req, res) => {
         console.log(product,'products kitty');
         const catagory = await catagoryCollection.findOne({ name: req.body.catagory });
         console.log(catagory,'catagory kitty');
-        
+        let catagoryOffer= catagory.catagoryOffer
 
         let updatedImages = req.body.old_images || product.images;
 
@@ -90,12 +90,11 @@ const productseditPost = async (req, res) => {
         }
 
          const {productOffer,price} = req.body
-       
-         const realprice = price !=product.originalPrice? price:product.originalPrice
-
-            productOfferPrice = Number(realprice) - ( Number(realprice) * Number(productOffer) /100)
-        
-           
+        console.log('price =================== ',price,productOffer,'product offer is showing');
+         let productOfferPrice = Number(product.originalPrice) - ( Number(product.originalPrice) * Number(productOffer) /100)
+         let catagoryOfferPrice = Number(product.originalPrice) - ( Number(product.originalPrice) * Number(catagoryOffer) /100)
+        console.log('cata offer price',catagoryOfferPrice,'product offer price',productOfferPrice);
+         let updatedPrice = productOfferPrice < catagoryOfferPrice ? productOfferPrice : catagoryOfferPrice
         
         console.log(productOfferPrice,'product offer price showing ');
 
@@ -104,9 +103,8 @@ const productseditPost = async (req, res) => {
             catagory: catagory,
             description: req.body.description,
             stock: Number(req.body.stock),
-            price: productOfferPrice,
+            price: updatedPrice,
             images: updatedImages,
-             originalPrice:realprice,
              productOffer: req.body.productOffer
         };
 

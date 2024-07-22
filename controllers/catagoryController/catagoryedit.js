@@ -50,16 +50,25 @@ const updatecatagory = async (req, res) => {
         else if(existingcatagoryname&&existingcatagoryname._id.toString()=== id){
 
           console.log('inside else case');
-          const catagorydata= await catagoryCollection.findOne({name:data.name})
-          console.log(catagorydata);
+          await catagoryCollection.updateOne(
+            { _id: id },
+            { name: data.name, description: data.description,catagoryOffer:data.catagoryOffer }
+            )
+            const catagorydata= await catagoryCollection.findOne({name:data.name})
+            console.log(catagorydata);
           const products = await productsCollection.find({ catagory: catagorydata._id });
           console.log(products,'products is showing ==================');
+
+
           for (const product of products) {
             console.log(product,'product is showing');
-            const originalPrice = Number(product.originalPrice);
+            const productPrice = Number(product.originalPrice);
             const catagoryOffer = Number(catagorydata.catagoryOffer);
 
-            const amount = originalPrice - (originalPrice * catagoryOffer / 100) 
+            let catagoryPrice = Number(productPrice) - ( Number(productPrice) * Number(catagoryOffer) /100)
+            console.log(catagoryPrice,'hgcfgg');
+            let amount = productPrice < catagoryPrice ? productPrice : catagoryPrice
+
             console.log(amount, "amount is showing ");
             const result = await productsCollection.findByIdAndUpdate(product._id, {
               price: amount,
@@ -67,10 +76,7 @@ const updatecatagory = async (req, res) => {
             console.log(result, "result is showing put hand in mine");
   
           }
-            await catagoryCollection.updateOne(
-                { _id: id },
-                { name: data.name, description: data.description,catagoryOffer:data.catagoryOffer }
-              )
+          
             return res.redirect("/admin/catagory");
         }
         else if(existingcatagoryname){

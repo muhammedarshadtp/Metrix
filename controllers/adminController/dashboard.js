@@ -64,39 +64,63 @@ const dashboard_get=async(req,res)=>{
         }
     },
     {$sort:{totalQuantity:-1}},
-    {$limit:10}
+    {$limit:6}
   ]);
   console.log(topProduct,'edfnaseugh');
   
 
   const topCategories = await orderCollection.aggregate([
     {
-        $unwind:"$products"
+        $unwind: "$products"
     },
     {
-        $lookup:{
-            from:"products",
-            localField:"products.productId",
-            foreignField:"_id",
-            as:"productDetails"
-    
+        $addFields: {
+            "products.productId": { $toObjectId: "$products.productId" }
         }
     },
-    // {
-    //     $unwind:"$productDetails"
-    // },
-    // {
-    //     $group:{
-    //         _id:"$productDetails.catagory",
-    //         totalQuantity:{$sum:"$products.quantity"}
-    //     }
-    // },
-    // {
-    //     $sort:{totalQuantity:-1}
-    // },
-    // {
-    //     $limit:10
-    // }
+    {
+        $lookup: {
+            from: "products",
+            localField: "products.productId",
+            foreignField: "_id",
+            as: "productDetails"
+        }
+    },
+    {
+        $unwind: "$productDetails"
+    },
+    {
+        $lookup: {
+            from: "catagories", // Assuming your  collection is named "categories"
+            localField: "productDetails.catagory",
+            foreignField: "_id",
+            as: "catagoryDetails"
+        }
+    },
+    {
+        $unwind: "$catagoryDetails"
+    },
+    {
+        $group: {
+            _id: "$productDetails.catagory", // Group by category ID
+            totalQuantity: { $sum: "$products.quantity" },
+            catagoryName: { $first: "$catagoryDetails.name" } // Assuming the category name field is "name"
+        }
+    },
+    {
+        $sort: { totalQuantity: -1 }
+    },
+    {
+        $limit: 10 // Adjust the limit as needed
+    },
+    {
+        $project: {
+            _id: 0,
+            catagory: "$_id",
+            catagoryName: 1,
+            totalQuantity: 1
+        }
+    }
     
   ])
 
@@ -229,7 +253,7 @@ const downloadsales = async (req, res) => {
                 <head>
                     <meta charset="UTF-8">
                     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                    <title>Sales Report - Bagdot</title>
+                    <title>Sales Report - METRIX</title>
                     <style>
                         body {
                             margin-right: 20px;
@@ -350,7 +374,7 @@ const downloadsales = async (req, res) => {
     } catch (e) {
         console.log('error in the salesReport:', e);
         res.redirect('/admin/error');
-    }
+    }
 }
 
 

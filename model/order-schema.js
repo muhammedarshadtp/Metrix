@@ -21,7 +21,7 @@ const orderschema = new mongoose.Schema({
           },
           status: {
             type: String,
-            enum: ['Order Placed','Order Cancelled', 'Shipped', 'Delivered','Return Requested','Returned'],
+            enum: ['Order Placed','Order Cancelled','Payment Failed', 'Shipped', 'Delivered','Return Requested','Returned'],
             default: 'Order Placed',
           },
           returnStatus:{
