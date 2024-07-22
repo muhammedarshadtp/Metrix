@@ -78,17 +78,17 @@
                             <ul class="pagination justify-content-start">
                                 <% if (page > 1) { %>
                                     <li class="page-item">
-                                        <a class="page-link" href="/admin/return-order-details/?page=<%= page - 1 %>">Prev</a>
+                                        <a class="page-link" href="/admin/orderReturn?page=<%= page - 1 %>">Prev</a>
                                     </li>
                                 <% } %>
                                 <% for (let i = 1; i <= totalPages; i++) { %>
                                     <li class="page-item <%= page === i ? 'active' : '' %>">
-                                        <a class="page-link" href="/admin/return-order-details/?page=<%= i %>"><%= i %></a>
+                                        <a class="page-link" href="/admin/orderReturn?page=<%= i %>"><%= i %></a>
                                     </li>
                                 <% } %>
                                 <% if (page < totalPages) { %>
                                     <li class="page-item">
-                                        <a class="page-link btn btn-primary" href="/admin/return-order-details/?page=<%= page + 1 %>">Next</a>
+                                        <a class="page-link btn btn-primary" href="/admin/orderReturn?page=<%= page + 1 %>">Next</a>
                                     </li>
                                 <% } %>
                             </ul>

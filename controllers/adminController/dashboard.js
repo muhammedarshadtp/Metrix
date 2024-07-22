@@ -332,44 +332,24 @@ const downloadsales = async (req, res) => {
                 </html>
             `;
 
-                    console.log("Launching Puppeteer...");
-                    const browser = await puppeteer.launch({ headless: true, args: ['--no-sandbox', '--disable-setuid-sandbox'], timeout: 60000 });
-                    console.log("Browser launched.");
-                    const page = await browser.newPage();
-                    console.log("New page created.");
-            
-                    await page.setContent(htmlContent, { waitUntil: 'networkidle2' });
-                    console.log("Content set.");
-            
-                    // Adding a small delay to ensure content is fully loaded
-                    console.log("Waiting for content to load...");
-            
-                    // Generate PDF with enhanced error handling
-                    let pdfBuffer;
-                    try {
-                        console.log("Generating PDF...");
-                        pdfBuffer = await page.pdf({ format: 'A4', timeout: 60000 });
-                        console.log("PDF generated.");
-                    } catch (pdfError) {
-                        console.error("Error generating PDF:", pdfError);
-                        await browser.close();
-                        return res.status(500).send("Error generating PDF.");
-                    }
-            
-                    await browser.close();
-                    console.log("Browser closed.");
-            
-                    const downloadsPath = path.join(os.homedir(), 'Downloads');
-                    const pdfFilePath = path.join(downloadsPath, 'sales.pdf');
-            
-                    // Save the PDF file locally
-                    fs.writeFileSync(pdfFilePath, pdfBuffer);
-            
-                    // Send the PDF as a response
-                    res.setHeader('Content-Length', pdfBuffer.length);
-                    res.setHeader('Content-Type', 'application/pdf');
-                    res.setHeader('Content-Disposition', 'attachment; filename=sales.pdf');
-                    res.status(200).end(pdfBuffer);
+            const browser = await puppeteer.launch({
+                executablePath: "/usr/bin/chromium-browser",
+              });
+              const page = await browser.newPage();
+              await page.setContent(htmlContent);
+          
+              const pdfBuffer = await page.pdf();
+          
+              await browser.close();
+          
+              res.setHeader("Content-Length", pdfBuffer.length);
+              res.setHeader("Content-Type", "application/pdf");
+              res.setHeader(
+                "Content-Disposition",
+                "attachment; filename=Bagdot-Sales.pdf"
+              );
+              res.status(200).end(pdfBuffer);
+           
 
     } catch (e) {
         console.log('error in the salesReport:', e);

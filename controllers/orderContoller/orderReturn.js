@@ -7,7 +7,7 @@ const walletCollection = require("../../model/wallet-schema");
 const orderReturn = async (req, res) => {
     try {
         const limit = 6;
-        let page = Number(req.query.page) || 1;
+        let page = Number (req.query.page) || 1;
 
         const TOTAL_COUNT_OF_ORDERS = await orderCollection.countDocuments({
             $or: [
@@ -23,13 +23,14 @@ const orderReturn = async (req, res) => {
 
 
         const skip = (page - 1) * limit;
+        console.log(skip,'skip=======');
         const orders = await orderCollection.find({
             $or: [
                 { products: { $elemMatch: { status: "Return Requested" } } },
                 { products: { $elemMatch: { returnStatus: "APPROVE" } } },
                 { products: { $elemMatch: { returnStatus: "REJECTED" } } }
             ]
-        }).skip(skip).limit(limit)
+        }).skip(skip).limit(limit).sort({orderDate:-1})
         res.render('orderReturn', { orders, page, totalPages, count: TOTAL_COUNT_OF_ORDERS })
 
     } catch (error) {

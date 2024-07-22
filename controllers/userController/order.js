@@ -325,14 +325,33 @@ const cancelOrder = async (req, res) => {
 const orderReturn = async (req,res)=>{
     try {
         const {orderId,productId,reason}= req.body
-
+        const userId = req.session.userId
         const order = await orderCollection.findOne({orderId:orderId,'products.productId':productId})
 
         if(order){
-            const product = order.products.find(p => p.productId === productId)
+            const product = order.products.find(p => p.productId === productId);
+            const quantity = product.quandity
+
+            let amount
+
+            if(order.discountAmount){
+                let discountAmount = order.discountAmount / order.products.length
+                amount = (productItem.price * quantity) - discountAmount
+            }else{
+                amount =  productItem.price * quantity
+            }
             product.status = 'Return Requested';
             product.returnReason = reason;
              await order.save()
+
+             const  walletTransactions = {
+                remarks:'User returned an order',
+                date:new Date(),
+                type:'Credit',
+                amount:amount.toFixed(2),
+            }
+            const wallet = await walletCollection.updateOne({userId:userId},{$inc:{wallet:+amount},$addToSet:{walletTransactions:walletTransactions}},{upsert:true})
+             
              res.json({ result: 'success' }); 
         }
 
