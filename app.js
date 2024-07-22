@@ -71,4 +71,4 @@ app.use('/admin',adminRouter)
 app.use('/auth',authRouter)
 
 
-app.listen(port,()=>console.log(`server started ${port}`))
+app.listen(port,()=>console.log(`server started ayyi ${port}`))
