@@ -2,6 +2,7 @@ const { validatePassword } = require("../../config/validation");
 const cartCollection = require("../../model/cart-schema");
 const addressCollection = require("../../model/user-address");
 const userCollection = require("../../model/user-schema");
+const wishlistCollection = require("../../model/wishlist-schema");
 const { alphanumValid,AlphaOnly, zerotonine } = require("../../utils/validation/adminValidation");
 
 
@@ -16,8 +17,10 @@ const { alphanumValid,AlphaOnly, zerotonine } = require("../../utils/validation/
 const account = async (req,res) => {
     try {
         const user = req.session.isAuth
-        const cart = await cartCollection.find()
-        res.render('account',{user,cart})
+        const userId = req.session.userId
+        const cart = await cartCollection.findOne({userId:userId}).populate("items.productId");
+        const wishlist =await wishlistCollection.findOne({userId:userId}).populate("item.productId")
+        res.render('account',{user,cart,wishlist})
     } catch (error) {
         console.log(error,'account error');
         res.render('error_page')
@@ -32,8 +35,9 @@ const userAddress=async(req,res)=>{
         const userId=req.session.userId
         const userdata= await userCollection.findById(userId)
         const address = await addressCollection.find({userId:userId})
-        const cart = await cartCollection.find()
-        res.render('userAddress',{user,userdata,address,cart,
+        const cart = await cartCollection.findOne({userId:userId}).populate('items.productId')
+        const wishlist = await wishlistCollection.findOne({userId:userId}).populate('item.productId')
+        res.render('userAddress',{user,wishlist,userdata,address,cart,
             nameError: req.flash('nameError'),
             countryError: req.flash('countryError'),
             addressError: req.flash('addressError'),
@@ -138,9 +142,10 @@ const profile = async(req,res)=>{
         const user = req.session.isAuth
         const userId = req.session.userId
         const userdata= await userCollection.findById(userId)
-        const cart = await cartCollection.findOne({userId:userId})
+        const cart = await cartCollection.findOne({userId:userId}).populate('items.productId')
+        const wishlist = await wishlistCollection.findOne({userId:userId}).populate('item.productId')
 
-        res.render('profile',{user,cart,userdata,
+        res.render('profile',{user,cart,userdata,wishlist,
             nameError:req.flash('nameError')
         })
     } catch (error) {
@@ -152,8 +157,10 @@ const profile = async(req,res)=>{
 const changepassword = async(req,res)=>{
     try {
         const user = req.session.isAuth
-        const cart = await cartCollection.find()
-        res.render('changepassword',{user,cart});
+        const userId = req.session.userId
+        const cart = await cartCollection.findOne({userId:userId}).populate('items.productId')
+        const wishlist = await wishlistCollection.findOne({userId:userId}).populate('item.productId')
+        res.render('changepassword',{user,cart,wishlist});
     } catch (error) {
         console.log(error);
         res.render('error_page')
@@ -233,9 +240,10 @@ const userAddAddress=async(req,res)=>{
         const user = req.session.isAuth
         const userId=req.session.userId
         const userdata= await userCollection.findById(userId)
-        const cart = await cartCollection.find()
+        const cart = await cartCollection.findOne({userId:userId}).populate('items.productId')
+        const wishlist = await wishlistCollection.findOne({userId:userId}).populate('item.productId')
         const address = await addressCollection.findOne({userId:userId})
-        res.render('userAddAddress',{user,address,cart,
+        res.render('userAddAddress',{user,address,cart,wishlist,
             nameError: req.flash('nameError'),
             countryError: req.flash('countryError'),
             addressError: req.flash('addressError'),
@@ -322,14 +330,15 @@ const userAddAddressPost=async(req,res)=>{
 
 const editAddress = async (req,res)=>{
     try {
-        const user = req.session.userId
-        
-        const cart = await cartCollection.findOne({userId:user})
+        const userId = req.session.userId
+        const user = await userCollection.findOne({userId:userId})
+        const cart = await cartCollection.findOne({userId:userId}).populate('items.productId')
+        const wishlist = await wishlistCollection.findOne({userId:userId}).populate('item.productId')
         const {addressId,path}  = req.query
         console.log(path,'path is showing -=======================================');
         const address = await addressCollection.findById(addressId)
         console.log(address,'address is showing successfully =========');   
-        res.render("userAddressEdit",{address,user,cart,path,addressId,
+        res.render("userAddressEdit",{address,user,cart,path,addressId,wishlist,
             nameError: req.flash('nameError'),
             countryError: req.flash('countryError'),
             addressError: req.flash('addressError'),

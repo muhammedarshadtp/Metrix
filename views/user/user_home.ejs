@@ -581,7 +581,10 @@
                             title: "Add to wishlist Successfully",
                             showConfirmButton: false,
                             timer: 2500
+                        }).then(()=>{
+                            location.reload()
                         })
+
                 } else if(data.result === 'failure') {
                     Swal.fire({
                             position: "center",

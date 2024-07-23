@@ -18,6 +18,10 @@ const wishlistschema = new mongoose.Schema({
             ref: productsCollection,
             required: true,
         },
+        images:{
+            type: String,
+            required: true,
+        },
         
         },
     ],

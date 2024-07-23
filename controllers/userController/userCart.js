@@ -1,6 +1,7 @@
 const { ObjectId } = require("mongodb");
 const cartCollection = require("../../model/cart-schema");
 const productsCollection = require("../../model/products-schema");
+const wishlistCollection = require("../../model/wishlist-schema");
 
 
 
@@ -12,14 +13,14 @@ const showcart = async (req, res) => {
     try {
         
       // Extract user ID and session ID from the request session
-      const id = req.session.userId;
+      const userId = req.session.userId;
       const sessionId = req.session.id;
       const user = req.session.isAuth
       let cart;
-      console.log(id === new ObjectId(id),'id is showing');
+      
       // If user is logged in, find their cart and populate it with product details
-      if (id) {
-        cart = await cartCollection.findOne({ userId: new ObjectId(id) }).populate("items.productId");
+      if (userId) {
+        cart = await cartCollection.findOne({ userId: userId }).populate("items.productId");
       } else if (!cart || !cart.items) { // If user is not logged in or cart doesn't exist, create a new cart
         cart = new cartCollection({
           sessionId: req.session.id,
@@ -29,8 +30,9 @@ const showcart = async (req, res) => {
       }
 
       console.log(cart,"ithu cart from cart");
+      const wishlist =await wishlistCollection.findOne({userId:userId}).populate("item.productId")
       
-      res.render("cart", { cart,user });
+      res.render("cart", { cart,user ,wishlist});
     } catch (error) {
       // If an error occurs, render a server error page
       console.log(error);

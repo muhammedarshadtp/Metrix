@@ -42,7 +42,7 @@
                                         <a href="/account">Account</a>
                                     </li>
                                     <li>
-                                        <a href="contact-us.html">Contact Us</a>
+                                        <a href="/cart">Cart</a>
                                     </li>
                                     <li>
                                         <% if (!user) { %>
@@ -91,9 +91,9 @@
                 <div class="mobile-header-left">
                     <ul class="mobile-menu-logo">
                         <li>
-                            <a href="index.html">
+                            <a href="/">
                                 <div class="logo">
-                                    <img src="/assets/images/logo/logo_white.png" alt="">
+                                    <img src="/accountImages/metrixlogo.new.png" alt="">
                                 </div>
                             </a>
                         </li>
@@ -152,8 +152,8 @@
                     <li>
                         <a href="/products"><span>Shop</span></a>
                     </li>
-                    <li><a href="">About Us</a></li>
-                    <li><a href="">Contact Us</a></li>
+                    <li><a href="/account">Account</a></li>
+                    <li><a href="/cartpage">Cart</a></li>
 
                     <li>
                         <% if (!user) { %>
@@ -169,13 +169,13 @@
         <!-- Start Mobile contact Info -->
         <div class="mobile-contact-info">
             <div class="logo">
-                <a href=""><img src="/assets/images/logo/logo_white.png" alt=""></a>
+                <a href="/"><img src="/accountImages/metrixlogo.new.png" alt=""></a>
             </div>
 
             <address class="address">
-                <span>Address: Your address goes here.</span>
-                <span>Call Us: 0123456789, 0123456789</span>
-                <span>Email: demo@example.com</span>
+                <!-- <span>Address: Your address goes here.</span> -->
+                <span>Call Us: 7909102569</span>
+                <span>Email: arshadtp89@gmail.com</span>
             </address>
 
             <ul class="social-link">
@@ -185,11 +185,11 @@
                 <li><a href=""><i class="fa fa-linkedin"></i></a></li>
             </ul>
 
-            <!-- <ul class="user-link">
-                <li><a href="wishlist.html">Wishlist</a></li>
-                <li><a href="cart.html">Cart</a></li>
-                <li><a href="checkout.html">Checkout</a></li>
-            </ul> -->
+            <ul class="user-link">
+                <li><a href="/wishlist">Wishlist</a></li>
+                <li><a href="/cartpage">Cart</a></li>
+                <li><a href="/checkout">Checkout</a></li>
+            </ul>
         </div>
         <!-- End Mobile contact Info -->
 
@@ -206,13 +206,13 @@
     <!-- Start Mobile contact Info -->
     <div class="mobile-contact-info">
         <div class="logo">
-            <a href="index.html"><img src="/assets/images/logo/logo_white.png" alt=""></a>
+            <a href="/"><img src="/accountImages/metrixlogo.new.png" alt=""></a>
         </div>
 
         <address class="address">
-            <span>Address: Your address goes here.</span>
-            <span>Call Us: 0123456789, 0123456789</span>
-            <span>Email: demo@example.com</span>
+           
+            <span>Call Us: 7909102569</span>
+            <span>Email: arshadtp89@gmail.com</span>
         </address>
 
         <ul class="social-link">
@@ -222,11 +222,11 @@
             <li><a href=""><i class="fa fa-linkedin"></i></a></li>
         </ul>
 
-        <!-- <ul class="user-link">
-            <li><a href="wishlist.html">Wishlist</a></li>
-            <li><a href="cart.html">Cart</a></li>
-            <li><a href="checkout.html">Checkout</a></li>
-        </ul> -->
+        <ul class="user-link">
+            <li><a href="/wishlist">Wishlist</a></li>
+            <li><a href="/cartpage">Cart</a></li>
+            <li><a href="/checkout">Checkout</a></li>
+        </ul>
     </div>
     <!-- End Mobile contact Info -->
 </div> <!-- ...:::: End Offcanvas Mobile Menu Section:::... -->
@@ -291,22 +291,32 @@
     <div class="offcanvas-wishlist-wrapper">
         <h4 class="offcanvas-title">Wishlist</h4>
         <ul class="offcanvas-wishlist">
+            <% if (wishlist && wishlist.item && wishlist.item.length > 0) { %>
+             
+            
+            <% for( let i = 0; i < wishlist.item.length; i++ ) { %>
+            
+            
             <li class="offcanvas-wishlist-item-single">
                 <div class="offcanvas-wishlist-item-block">
                     <a href="#" class="offcanvas-wishlist-item-image-link">
-                        <img src="/assets/images/product/default/home-3/default-1.jpg" alt=""
+                        <img src="/productsImages/<%= wishlist.item[i].images %>" alt=""
                             class="offcanvas-wishlist-image">
                     </a>
                     <div class="offcanvas-wishlist-item-content">
-                        <a href="#" class="offcanvas-wishlist-item-link">Car Wheel</a>
+                        <a href="" class="offcanvas-wishlist-item-link"><%= wishlist.item[i].productId.name %></a>
                         <div class="offcanvas-wishlist-item-details">
-                            <span class="offcanvas-wishlist-item-details-quantity">1 x </span>
-                            <span class="offcanvas-wishlist-item-details-price">$49.00</span>
+                            <span class="offcanvas-wishlist-item-details-quantity"><%= wishlist.item[i].quantity %></span>
+                            <span class="offcanvas-wishlist-item-details-price"><%= wishlist.item[i].price %></span>
                         </div>
                     </div>
                 </div>
             </li>
         </ul>
+        <% } %>
+        <% } else {%>
+             <li>No items in the wishlist.</li>
+            <% } %>
         <ul class="offcanvas-wishlist-action-button">
             <li><a href="/wishlist" class="btn btn-block btn-pink">View wishlist</a></li>
         </ul>

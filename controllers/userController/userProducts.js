@@ -1,6 +1,7 @@
 const cartCollection = require("../../model/cart-schema");
 const catagoryCollection = require("../../model/catagory-schema");
 const productsCollection = require("../../model/products-schema");
+const wishlistCollection = require("../../model/wishlist-schema");
 
 
 const products = async (req, res) => {
@@ -74,8 +75,8 @@ const products = async (req, res) => {
         }
         const products = product.filter(product => product.catagory.status === true)
         const cartCount = cart !== null ? cart.items.length : 0;
-
-        res.render('products', { data: products, user, cart, cartCount,sort,catagory,page,totalPages,count:TOTAL_COUNT_OF_PRODUCT,search });
+        const wishlist =await wishlistCollection.findOne({userId:userId}).populate("item.productId")
+        res.render('products', { data: products, user, cart, cartCount,sort,catagory,page,totalPages,count:TOTAL_COUNT_OF_PRODUCT,search,wishlist });
     } catch (error) {
         console.log(error,'products keri');
         return res.render('error_page');
@@ -95,8 +96,10 @@ const productDetail = async (req, res) => {
         console.log(productDetail, '---------------------------data is founded...');
         const relatedProduct = await productsCollection.find({catagory:productDetail.catagory._id})
         console.log(relatedProduct,"123456789");
+
+        const wishlist = await wishlistCollection.find()
         const cartCount = cart !==  null ? cart.items.length : 0
-        res.render('productDetail', { data: productDetail, user,cart,cartCount,relatedProduct})
+        res.render('productDetail', { data: productDetail, user,cart,cartCount,relatedProduct,wishlist})
     } catch (error) {
         console.log(error,'productsDetails keri');
 

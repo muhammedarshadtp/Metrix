@@ -34,28 +34,28 @@
                 <!--login area start-->
                 <div id="login-start" class="col-lg-6 col-md-6 text-center"> <!-- Added text-center class here -->
                     <div class="account_form mx-auto" data-aos="fade-up" data-aos-delay="0">
-                        <% if(locals.statusError){%>
-                            <div   class="error-message alter text-danger text-start"><%= statusError%></div>
+                        <%# if(statusError && statusError.length){%>
+                            <div   class="error-message alter text-danger text-start"><%#= statusError%></div>
                 
-                        <%}%>
+                        <%#}%>
                         <h3>login</h3>
-                        <form action="/login" method="POST">
+                        <form id="formData" action="/login" method="POST">
                             <div class="default-form-box">
                                 <label>Username or email <span>*</span></label>
                                 <input type="email" class="form-control" placeholder="email" name="email">
                             </div>
-                            <% if(locals.emailError){%>
-                                <div   class="error-message alter text-danger text-start"><%=emailError%></div>
+                            <%# if(emailError){%>
+                                <div   class="error-message alter text-danger text-start"><%#=emailError%></div>
                     
-                            <%}%>
+                            <%#}%>
                             <div class="default-form-box">
                                 <label>Passwords <span>*</span></label>
-                                <input id="password-field" type="password" class="form-control"  name="password" placeholder="Password">
+                                <input type="password" class="form-control"  name="password" placeholder="Password">
                             </div>
-                            <% if(locals.passError){%>
-                                <div   class="error-message alter text-danger text-start"><%=passError%></div>
+                            <%# if(passError){%>
+                                <div   class="error-message alter text-danger text-start"><%#=passError%></div>
                     
-                            <%}%>
+                            <%#}%>
                             
                             
                             <div class="login_submit">
@@ -87,7 +87,7 @@
                                 
                                
                                 <a style="color: black;" href="/user_forgotpassword">Lost your password?</a><br>
-                                <a style="color: black;" href="/signup">Do you have an account? press Me</a>
+                                <a style="color: black;" href="/signup"> you have an account? press Me</a>
                             </div>
                         </form>
                     </div>
@@ -123,13 +123,65 @@
     
 
     <%- include('../partials/footer') %>
+    <script src="
+https://cdn.jsdelivr.net/npm/toastr@2.1.4/toastr.min.js
+"></script>
+<link href="
+https://cdn.jsdelivr.net/npm/toastr@2.1.4/build/toastr.min.css
+" rel="stylesheet">
+<script>
+    const form = document.getElementById("formData");
+    form.addEventListener('submit', function (event) {
+            event.preventDefault();
+     const formData = new FormData(form);
+    const data = {
+               
+                email: formData.get('email'),
+                password: formData.get('password'),
+               
+
+                
+            };
+fetch('/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => {
+                console.log('=============');
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    console.log('2========');
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.result === 'success') {
+                            location.href = '/'
+                        
+                        // Optionally refresh the page or update the address list dynamically
+                    }else if(data.error){
+                        toastr.error(`${data.error}`)
+                    }
+                })
+                
+                .catch(error => {
+                    console.error('There was a problem with the fetch operation:', error);
+                });
+            });
+        
+</script>
+
+
     <script>
    setTimeout(function() {
   const errMsg = document.querySelectorAll('.error-message');
   errMsg.forEach(function(message) {
     message.innerHTML = '';
   });
-}, 4000);
+}, 5000);
 
     </script>
    

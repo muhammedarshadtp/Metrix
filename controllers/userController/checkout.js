@@ -3,6 +3,7 @@ const cartCollection = require("../../model/cart-schema");
 const addressCollection = require("../../model/user-address");
 const walletCollection = require("../../model/wallet-schema");
 const couponCollection = require("../../model/coupon-schema");
+const wishlistCollection = require("../../model/wishlist-schema");
 
 
 
@@ -11,16 +12,18 @@ const checkout = async (req, res) => {
 
 
         const user = req.session.isAuth
-        const Id = req.session.userId
+        const userId = req.session.userId
 
-        const cart = await cartCollection.findOne({ userId: new ObjectId(Id) }).populate("items.productId")
+        const cart = await cartCollection.findOne({ userId: userId }).populate("items.productId")
       
-        const address = await addressCollection.find({userId:Id}) 
+        const address = await addressCollection.find({userId:userId}) 
         
 
-        const wallet = await walletCollection.findOne({userId:Id})
+        const wallet = await walletCollection.findOne({userId:userId})
 
         const coupon = await couponCollection.find()
+
+        const wishlist =await wishlistCollection.findOne({userId:userId}).populate("item.productId")
        
        
 
@@ -30,7 +33,7 @@ const checkout = async (req, res) => {
             return res.redirect('/cartpage');
         }
 
-        res.render('checkout', { cart, user,address,wallet,coupon,
+        res.render('checkout', { cart, user,address,wallet,coupon,wishlist,
             nameError: req.flash('nameError'),
             countryError: req.flash('countryError'),
             addressError: req.flash('addressError'),

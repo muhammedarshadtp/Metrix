@@ -1,5 +1,6 @@
 const cartCollection = require("../../model/cart-schema");
-const walletCollection = require("../../model/wallet-schema")
+const walletCollection = require("../../model/wallet-schema");
+const wishlistCollection = require("../../model/wishlist-schema");
 
 
 
@@ -11,8 +12,9 @@ const wallet = async (req,res)=>{
         const user = req.session.isAuth
         
 
-        const cart = await cartCollection.find({userId:userId})
+        const cart = await cartCollection.find({userId:userId}).populate("items.productId")
        
+        const wishlist =await wishlistCollection.findOne({userId:userId}).populate("item.productId")
 
         const wallet = await walletCollection.findOne({userId:userId})
 
@@ -21,7 +23,7 @@ const wallet = async (req,res)=>{
        
 
 
-        res.render('wallet',{wallet,user,cart})
+        res.render('wallet',{wallet,user,cart,wishlist})
 
     } catch (error) {
         console.log(error,'----------------');

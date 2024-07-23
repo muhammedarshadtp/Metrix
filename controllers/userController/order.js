@@ -4,6 +4,7 @@ const productsCollection = require("../../model/products-schema")
 const addressCollection = require("../../model/user-address")
 const userCollection = require("../../model/user-schema")
 const walletCollection = require("../../model/wallet-schema")
+const wishlistCollection = require("../../model/wishlist-schema")
 const {sendOrderMailFailure,sendOrderMailSuccess} = require("../../utils/order-placed-mail")
 const otpGeneratorUser = require("../../utils/otp_generator")
 
@@ -22,9 +23,10 @@ const user_orderHistory = async (req, res) => {
 
     const order = await orderCollection.find({ userId: userId }).populate("userId").sort({ createdAt: -1  }).skip(startIndex).limit(limit)
     const cart = await cartCollection.find({userId:userId})
+    const wishlist =await wishlistCollection.findOne({userId:userId}).populate("item.productId")
 
     console.log(order, 'order kitty');
-    res.render('orderHistory', { order, user, cart,limit,
+    res.render('orderHistory', { order, user, cart,limit,wishlist,
         currentPage: page, 
         totalPages: Math.ceil(totalOrders / limit)})
     } catch (error) {

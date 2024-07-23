@@ -35,29 +35,29 @@ const loginpost = async (req, res) => {
         const emailcollect = await userCollection.findOne({ email: data.email });
 
         if (!emailcollect) {
-            req.flash('emailError', 'Email not found.'); // Set specific error message
-            return res.redirect('/login');
+            const emailError = 'Email not found.' // Set specific error message
+            return res.json({error:`${emailError}`});
         }
 
         if (!emailcollect.status) {
-            req.flash('statusError', 'Your account has been disabled. Please contact support for assistance.');
-            return res.redirect('/login');
+            const statusError= 'Your account has been disabled. Please contact support for assistance.';
+            return res.json({error:`${statusError}`});
         }
 
         if (emailcollect.password !== data.password) {
-            req.flash('passError', 'Invalid password.');
-            console.log('Flash message:', req.flash('error'));
-            return res.redirect('/login');
+            const passError = 'Invalid password.';
+            
+            return res.json({error:`${passError}`});
         }
 
         // Successful login logic
         req.session.isAuth = true;
         req.session.userId = emailcollect._id.toString();
         req.session.errorMsg = null; // Clear any previous error messages
-        res.redirect('/');
+        return res.json({result:"success"})
     } catch (error) {
         req.flash('error', 'An error occurred during login. Please try again later.');
-        res.redirect('/login');
+        console.log(error);
     }
 };
 
