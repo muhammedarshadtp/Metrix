@@ -144,8 +144,13 @@
     <!-- end breadcrumb section -->
 
     <% if (wallet) { %>
-    <div class="container-wallet">
-        <h1>Wallet</h1>
+        <div class="container-wallet">
+            <div class="wallet-header">
+                <a href="javascript:history.back()" class="back-button btn btn-secondary">
+                   Go Back
+                </a>
+                <h1>Wallet</h1>
+            </div>
         <div class="wallet-summary">
             <div class="wallet-balance">Balance: Rs <%= wallet.wallet.toFixed(2) %></div>
         </div>

@@ -533,7 +533,7 @@
                                                                     <td colspan="2">
                                                                         <strong>RS: <span id="walletTotal">
                                                                                 <%= wallet && wallet.wallet ?
-                                                                                    wallet.wallet : '0.00' %>
+                                                                                    wallet.wallet.toFixed(2) : '0.00' %>
                                                                             </span></strong>
                                                                     </td>
                                                                 </tr>
