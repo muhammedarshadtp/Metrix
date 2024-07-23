@@ -69,14 +69,15 @@ const addproductspost = async (req, res) => {
         console.log(imageMultiple,'imageMultiple is shiwubg');
 
         const {productOffer,price} = req.body
-        let productOfferPrice = price
-        let catagoryOfferPrice
-        if(productOffer || catagoryOffer){
-            productOfferPrice = Number(price) - ( Number(price) * Number(productOffer) /100)
-            catagoryOfferPrice = Number(price) - ( Number(price) * Number(catagoryOffer) /100)
-
-            updatedPrice = productOfferPrice < catagoryOfferPrice ? productOfferPrice : catagoryOfferPrice
+        let productOfferPrice = Number(price)
+        let catagoryOfferPrice = Number(price)
+        if(productOffer){
+            productOfferPrice -= ( Number(price) * Number(productOffer) /100)
         }
+        if(catagoryOffer){
+            catagoryOfferPrice -= ( Number(price) * Number(catagoryOffer) /100)
+        }
+        updatedPrice =  Math.min(productOfferPrice,catagoryOfferPrice)
         console.log(catagoryOfferPrice,'cata offer');
         console.log(productOfferPrice,'product offer price showing ');
         const productsdatas = {
