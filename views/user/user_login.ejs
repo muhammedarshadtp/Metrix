@@ -34,28 +34,19 @@
                 <!--login area start-->
                 <div id="login-start" class="col-lg-6 col-md-6 text-center"> <!-- Added text-center class here -->
                     <div class="account_form mx-auto" data-aos="fade-up" data-aos-delay="0">
-                        <%# if(statusError && statusError.length){%>
-                            <div   class="error-message alter text-danger text-start"><%#= statusError%></div>
-                
-                        <%#}%>
+                        
                         <h3>login</h3>
                         <form id="formData" action="/login" method="POST">
                             <div class="default-form-box">
                                 <label>Username or email <span>*</span></label>
                                 <input type="email" class="form-control" placeholder="email" name="email">
                             </div>
-                            <%# if(emailError){%>
-                                <div   class="error-message alter text-danger text-start"><%#=emailError%></div>
-                    
-                            <%#}%>
+                           
                             <div class="default-form-box">
                                 <label>Passwords <span>*</span></label>
                                 <input type="password" class="form-control"  name="password" placeholder="Password">
                             </div>
-                            <%# if(passError){%>
-                                <div   class="error-message alter text-danger text-start"><%#=passError%></div>
-                    
-                            <%#}%>
+                            
                             
                             
                             <div class="login_submit">
