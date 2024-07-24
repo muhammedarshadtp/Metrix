@@ -278,30 +278,22 @@ const invoice = async (req, res) => {
         }
 
         const browser = await puppeteer.launch({
-            headless: true,
-            args: ['--no-sandbox', '--disable-setuid-sandbox']
-        });
-
-        const page = await browser.newPage();
-        await page.setContent(htmlContent, { waitUntil: 'domcontentloaded' });
-        await page.emulateMediaType('screen');
-        // Path to save the PDF
-        const pdfPath = 'report.pdf'
-
-        await page.pdf({
-            path: pdfPath,
-            format: 'A4',
-            printBackground: true,
-            margin: { top: '100px', right: '50px', bottom: '100px', left: '50px' }
-        });
-
-
-        await browser.close();
-
-        // Send the PDF as a response
-        res.setHeader('Content-Type', 'application/pdf');
-        res.setHeader('Content-Disposition', `attachment; filename=invoice-${req.query.id}.pdf`);
-        fs.createReadStream(pdfPath).pipe(res);
+            executablePath: "/usr/bin/chromium-browser",
+          });
+          const page = await browser.newPage();
+          await page.setContent(htmlContent);
+      
+          const pdfBuffer = await page.pdf();
+      
+          await browser.close();
+      
+          res.setHeader("Content-Length", pdfBuffer.length);
+          res.setHeader("Content-Type", "application/pdf");
+          res.setHeader(
+            "Content-Disposition",
+            "attachment; filename=Bagdot-Sales.pdf"
+          );
+          res.status(200).end(pdfBuffer);
         
         // Clean up the temporary PDF file
         try {
