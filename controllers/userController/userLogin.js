@@ -16,7 +16,7 @@ const login = async (req, res) => {
 
             })
         } else {
-            res.redirect('/home')
+            res.redirect('/')
         }
     } catch (error) {
         console.log(error);
