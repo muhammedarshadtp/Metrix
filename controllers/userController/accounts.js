@@ -207,7 +207,7 @@ const changePassword = async (req,res)=>{
 
     } catch (error) {
         console.error(error);
-        res.redirect('/changepassword');
+        return res.redirect('/error_page')
     }
 }
 
@@ -230,6 +230,7 @@ const updateUser=async(req,res)=>{
         res.redirect('/account')
     } catch (error) {
         console.log(error);
+        return res.redirect('/error_page')
     }
 }
 
@@ -255,6 +256,7 @@ const userAddAddress=async(req,res)=>{
         })
     } catch (error) {
         console.log(error,'user Address error');
+        return res.redirect('/error_page')
     }
 
 }
@@ -324,6 +326,7 @@ const userAddAddressPost=async(req,res)=>{
         
     } catch (error) {
         console.log(error,'addAddress error');
+        return res.redirect('/error_page')
     }
 }
 
@@ -350,6 +353,7 @@ const editAddress = async (req,res)=>{
         })
     } catch (error) {
         console.log(error,'error in edit address post page');
+        return res.redirect('/error_page')
     }
 }
 
@@ -420,6 +424,7 @@ const editAddressPost = async (req,res)=>{
         res.json({result:'success',path})
     } catch (error) {
         console.log(error,'edit address post error');
+        return res.redirect('/error_page')
     }
 }
 

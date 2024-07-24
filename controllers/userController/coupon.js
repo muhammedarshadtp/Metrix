@@ -40,6 +40,7 @@ const ApplyCoupon = async (req, res) => {
 
     } catch (error) {
         console.log(error, 'coupon error');
+        return res.redirect('/error_page')
     }
 }
 
@@ -59,7 +60,7 @@ const removeCoupon = async (req, res) => {
         res.json({success:true,price})
 
     } catch (error) {
-
+        return res.redirect('/error_page')
     }
 }
 

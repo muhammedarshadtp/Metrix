@@ -58,6 +58,7 @@ const loginpost = async (req, res) => {
     } catch (error) {
         req.flash('error', 'An error occurred during login. Please try again later.');
         console.log(error);
+        return res.redirect('/error_page')
     }
 };
 

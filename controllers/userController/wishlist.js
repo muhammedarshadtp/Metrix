@@ -45,6 +45,7 @@ const addToWishlist = async (req, res) => {
         }
     } catch (error) {
         console.error('Add to wishlist error:', error);
+        return res.redirect('/error_page')
        
     }
 };
@@ -61,6 +62,7 @@ const Removewishlist = async (req, res) => {
         res.redirect('/wishlist');
     } catch (error) {
         console.error('Remove from wishlist error:', error);
+        return res.redirect('/error_page')
         
     }
 };

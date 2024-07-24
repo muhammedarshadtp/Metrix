@@ -102,6 +102,7 @@ const productDetail = async (req, res) => {
         res.render('productDetail', { data: productDetail, user,cart,cartCount,relatedProduct,wishlist})
     } catch (error) {
         console.log(error,'productsDetails keri');
+        return res.redirect('/error_page')
 
     }
 

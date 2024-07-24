@@ -41,6 +41,7 @@ const user_forgotpasswordPost = async (req, res) => {
         }
     } catch (error) {
         console.log(error);
+        return res.redirect('/error_page')
     }
 
 }
@@ -52,6 +53,7 @@ const resetPassword = async (req, res) => {
         res.render('resetPassword')
     } catch (error) {
         console.log(error);
+        return res.redirect('/error_page')
     }
 }
 
@@ -72,6 +74,7 @@ const resetPasswordPost = async (req, res) => {
 
     } catch (error) {
         console.log(error);
+        return res.redirect('/error_page')
     }
 
 }

@@ -27,6 +27,7 @@ const wallet = async (req,res)=>{
 
     } catch (error) {
         console.log(error,'----------------');
+        return res.redirect('/error_page')
     }
 }
 
@@ -59,6 +60,7 @@ const wallet = async (req,res)=>{
             }
         } catch (error) {
             console.log(error,'wallet error coming');
+            return res.redirect('/error_page')
         }
     }
 

@@ -31,6 +31,7 @@ const user_orderHistory = async (req, res) => {
         totalPages: Math.ceil(totalOrders / limit)})
     } catch (error) {
         console.log(error,'orderHistory error');
+        return res.redirect('/error_page')
     }
 }
 
@@ -73,7 +74,7 @@ const user_addOrder = async (req, res) => {
 
     } catch (error) {
         console.error(error, 'error is showing');
-        return res.status(500).json({ error: 'Internal server error' });
+        return res.redirect('/error_page')
     }
 }
 
@@ -168,7 +169,7 @@ const user_addOrderFailed = async (req, res) => {
 
     } catch (error) {
         console.error(error, 'error is showing');
-        return res.status(500).json({ error: 'Internal server error' });
+        return res.redirect('/error_page')
     }
 }
 
@@ -242,6 +243,7 @@ const addOrderFailedToSuccess = async (req,res)=>{
 
     } catch (error) {
         console.log(error);
+        return res.redirect('/error_page')
     }
 }
 
@@ -320,6 +322,7 @@ const cancelOrder = async (req, res) => {
 
     } catch (error) {
         console.log(error,'cancelOrder page error');
+        return res.redirect('/error_page')
 
     }
 }
@@ -360,6 +363,7 @@ const orderReturn = async (req,res)=>{
         res.json({result})
     } catch (error) {
         console.log(error,'return order errror');
+        return res.redirect('/error_page')
     }
 }
 

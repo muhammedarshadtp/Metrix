@@ -34,6 +34,7 @@ const razorpay = async (req, res) => {
         res.json(orders)
     } catch (error) {
         console.log(error, 'razorpay error is showing ');
+        return res.redirect('/error_page')
     }
 }
 
@@ -48,6 +49,7 @@ const retryPayment = async (req,res)=>{
         res.render('retryPayment',{user,cart})
     } catch (error) {
         console.log(error);
+        return res.redirect('/error_page')
     }
 }
 
