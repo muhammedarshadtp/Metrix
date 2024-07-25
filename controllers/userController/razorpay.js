@@ -1,6 +1,7 @@
 const Razorpay = require('razorpay')
 const userCollection = require('../../model/user-schema')
 const cartCollection = require('../../model/cart-schema')
+const wishlistCollection = require('../../model/wishlist-schema')
 const dotenv = require('dotenv').config()
 
 
@@ -45,8 +46,9 @@ const retryPayment = async (req,res)=>{
 
         const user = await userCollection.find()
         const cart = await cartCollection.find()
+        const wishlist = await wishlistCollection.findOne({userId:userId})
         
-        res.render('retryPayment',{user,cart})
+        res.render('retryPayment',{user,cart,wishlist})
     } catch (error) {
         console.log(error);
         return res.redirect('/error_page')
