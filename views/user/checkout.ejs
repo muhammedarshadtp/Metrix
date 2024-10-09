@@ -761,7 +761,7 @@ https://cdn.jsdelivr.net/npm/toastr@2.1.4/build/toastr.min.css
 
                 const razorpayInstance = new Razorpay(options);
 
-                razorpayInstance.on('payment.failed', function (response) {
+                  razorpayInstance.on('payment.failed', function (response) {
                     Swal.fire({
                         title: 'Payment Failed',
                         text: 'There was an error processing your payment. Redirecting to order history...',
